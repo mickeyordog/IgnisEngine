@@ -13,47 +13,93 @@ bool init();
 bool loadMedia();
 void close();
 
-int main(int argc, char* args[])
+SDL_Window* gWindow = NULL;
+SDL_Surface* gScreenSurface = NULL;
+SDL_Surface* gHelloWorld = NULL;
+
+bool init()
 {
-	//The window we'll be rendering to
-	SDL_Window* window = NULL;
+	bool success = true;
 
-	//The surface contained by the window
-	SDL_Surface* screenSurface = NULL;
-
-	//Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		success = false;
 	}
 	else
 	{
-		//Create window
-		window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		if (window == NULL)
+		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		if (gWindow == NULL)
 		{
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			success = false;
 		}
 		else
 		{
-			//Get window surface
-			screenSurface = SDL_GetWindowSurface(window);
-
-			//Fill the surface white
-			SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
-
-			//Update the surface
-			SDL_UpdateWindowSurface(window);
-			//Hack to get window to stay up
-			SDL_Event e; bool quit = false; while (quit == false) { while (SDL_PollEvent(&e)) { if (e.type == SDL_QUIT) quit = true; } }
+			gScreenSurface = SDL_GetWindowSurface(gWindow);
 		}
 	}
 
-	//Destroy window
-	SDL_DestroyWindow(window);
+	return success;
+}
 
-	//Quit SDL subsystems
+bool loadMedia()
+{
+	//Loading success flag
+	bool success = true;
+
+	//Load splash image
+	gHelloWorld = SDL_LoadBMP("hello_world.bmp");
+	if (gHelloWorld == NULL)
+	{
+		printf("Unable to load image %s! SDL Error: %s\n", "hello_world.bmp", SDL_GetError());
+		success = false;
+	}
+
+	return success;
+}
+
+void close()
+{
+	SDL_FreeSurface(gHelloWorld);
+	gHelloWorld = NULL;
+
+	SDL_DestroyWindow(gWindow);
+	gWindow = NULL;
+
 	SDL_Quit();
+}
 
+int main(int argc, char* args[])
+{
+	if (!init())
+	{
+		printf("Failed to initialize!\n");
+	}
+	else
+	{
+		if (!loadMedia())
+		{
+			printf("Failed to load media!\n");
+		}
+		else
+		{
+			bool quit = false;
+			SDL_Event e;
+			while (!quit)
+			{
+				while (SDL_PollEvent(&e) != 0)
+				{
+					if (e.type == SDL_QUIT)
+					{
+						quit = true;
+					}
+				}
+				SDL_BlitSurface(gHelloWorld, NULL, gScreenSurface, NULL);
+				SDL_UpdateWindowSurface(gWindow);
+			}
+		}
+	}
+	close();
 	return 0;
 }
