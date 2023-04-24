@@ -92,7 +92,6 @@ IgnisEngine_EXTERNAL_OBJECTS =
 
 IgnisEngine: CMakeFiles/IgnisEngine.dir/src/main.cpp.o
 IgnisEngine: CMakeFiles/IgnisEngine.dir/build.make
-IgnisEngine: /opt/homebrew/lib/libSDL2.dylib
 IgnisEngine: CMakeFiles/IgnisEngine.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/mickey/Documents/GitHub/IgnisEngine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable IgnisEngine"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/IgnisEngine.dir/link.txt --verbose=$(VERBOSE)

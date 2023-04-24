@@ -4,9 +4,9 @@
 # compile CXX with /Library/Developer/CommandLineTools/usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/opt/homebrew/include -isystem /opt/homebrew/include/SDL2
+CXX_INCLUDES = -isystem /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers -iframework /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS
 
-CXX_FLAGSarm64 =  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
+CXX_FLAGSarm64 = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -F /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/
 
-CXX_FLAGS =  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
+CXX_FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -F /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/
 

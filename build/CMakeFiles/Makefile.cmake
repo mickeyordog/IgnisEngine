@@ -11,6 +11,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.26.3/CMakeCCompiler.cmake"
   "CMakeFiles/3.26.3/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.26.3/CMakeSystem.cmake"
+  "/Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Resources/CMake/sdl2-config-version.cmake"
+  "/Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Resources/CMake/sdl2-config.cmake"
   "/opt/homebrew/Cellar/cmake/3.26.3/share/cmake/Modules/CMakeCInformation.cmake"
   "/opt/homebrew/Cellar/cmake/3.26.3/share/cmake/Modules/CMakeCXXInformation.cmake"
   "/opt/homebrew/Cellar/cmake/3.26.3/share/cmake/Modules/CMakeCommonLanguageInclude.cmake"
@@ -33,8 +35,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/opt/homebrew/Cellar/cmake/3.26.3/share/cmake/Modules/Platform/Darwin-Initialize.cmake"
   "/opt/homebrew/Cellar/cmake/3.26.3/share/cmake/Modules/Platform/Darwin.cmake"
   "/opt/homebrew/Cellar/cmake/3.26.3/share/cmake/Modules/Platform/UnixPaths.cmake"
-  "/opt/homebrew/lib/cmake/SDL2/sdl2-config-version.cmake"
-  "/opt/homebrew/lib/cmake/SDL2/sdl2-config.cmake"
   )
 
 # The corresponding makefile is:

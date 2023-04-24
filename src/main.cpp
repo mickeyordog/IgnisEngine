@@ -89,6 +89,8 @@ void close()
 
 int main( int argc, char* args[] )
 {
+	printf("CacheLineSize = %d",SDL_GetCPUCacheLineSize());
+
 	//Start up SDL and create window
 	if( !init() )
 	{

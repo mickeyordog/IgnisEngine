@@ -1,16 +1,18 @@
 CMakeFiles/IgnisEngine.dir/src/main.cpp.o: \
   /Users/mickey/Documents/GitHub/IgnisEngine/src/main.cpp \
-  /opt/homebrew/include/SDL2/SDL.h /opt/homebrew/include/SDL2/SDL_main.h \
-  /opt/homebrew/include/SDL2/SDL_stdinc.h \
-  /opt/homebrew/include/SDL2/SDL_config.h \
-  /opt/homebrew/include/SDL2/SDL_platform.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_main.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_stdinc.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_config.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_platform.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/AvailabilityMacros.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/Availability.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/AvailabilityVersions.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/AvailabilityInternal.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/TargetConditionals.h \
-  /opt/homebrew/include/SDL2/begin_code.h \
-  /opt/homebrew/include/SDL2/close_code.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/begin_code.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/close_code.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_config_macosx.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/sys/types.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/sys/appleapiopts.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/sys/cdefs.h \
@@ -129,22 +131,14 @@ CMakeFiles/IgnisEngine.dir/src/main.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/string.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/string.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/strings.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/wchar.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/wchar.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_mbstate_t.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/time.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_timespec.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/_wctype.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/__wctype.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_wint_t.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/_types/_wctype_t.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/inttypes.h \
+  /Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include/inttypes.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/inttypes.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/ctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/ctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/_ctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/runetype.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/inttypes.h \
-  /Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include/inttypes.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/inttypes.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_wint_t.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/math.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/math.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__type_traits/promote.h \
@@ -273,47 +267,47 @@ CMakeFiles/IgnisEngine.dir/src/main.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/float.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include/float.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/float.h \
-  /opt/homebrew/include/SDL2/SDL_assert.h \
-  /opt/homebrew/include/SDL2/SDL_atomic.h \
-  /opt/homebrew/include/SDL2/SDL_audio.h \
-  /opt/homebrew/include/SDL2/SDL_error.h \
-  /opt/homebrew/include/SDL2/SDL_endian.h \
-  /opt/homebrew/include/SDL2/SDL_mutex.h \
-  /opt/homebrew/include/SDL2/SDL_thread.h \
-  /opt/homebrew/include/SDL2/SDL_rwops.h \
-  /opt/homebrew/include/SDL2/SDL_clipboard.h \
-  /opt/homebrew/include/SDL2/SDL_cpuinfo.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_assert.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_atomic.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_audio.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_error.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_endian.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_mutex.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_thread.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_rwops.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_clipboard.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_cpuinfo.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include/arm_neon.h \
-  /opt/homebrew/include/SDL2/SDL_events.h \
-  /opt/homebrew/include/SDL2/SDL_video.h \
-  /opt/homebrew/include/SDL2/SDL_pixels.h \
-  /opt/homebrew/include/SDL2/SDL_rect.h \
-  /opt/homebrew/include/SDL2/SDL_surface.h \
-  /opt/homebrew/include/SDL2/SDL_blendmode.h \
-  /opt/homebrew/include/SDL2/SDL_keyboard.h \
-  /opt/homebrew/include/SDL2/SDL_keycode.h \
-  /opt/homebrew/include/SDL2/SDL_scancode.h \
-  /opt/homebrew/include/SDL2/SDL_mouse.h \
-  /opt/homebrew/include/SDL2/SDL_joystick.h \
-  /opt/homebrew/include/SDL2/SDL_guid.h \
-  /opt/homebrew/include/SDL2/SDL_gamecontroller.h \
-  /opt/homebrew/include/SDL2/SDL_sensor.h \
-  /opt/homebrew/include/SDL2/SDL_quit.h \
-  /opt/homebrew/include/SDL2/SDL_gesture.h \
-  /opt/homebrew/include/SDL2/SDL_touch.h \
-  /opt/homebrew/include/SDL2/SDL_filesystem.h \
-  /opt/homebrew/include/SDL2/SDL_haptic.h \
-  /opt/homebrew/include/SDL2/SDL_hidapi.h \
-  /opt/homebrew/include/SDL2/SDL_hints.h \
-  /opt/homebrew/include/SDL2/SDL_loadso.h \
-  /opt/homebrew/include/SDL2/SDL_log.h \
-  /opt/homebrew/include/SDL2/SDL_messagebox.h \
-  /opt/homebrew/include/SDL2/SDL_metal.h \
-  /opt/homebrew/include/SDL2/SDL_power.h \
-  /opt/homebrew/include/SDL2/SDL_render.h \
-  /opt/homebrew/include/SDL2/SDL_shape.h \
-  /opt/homebrew/include/SDL2/SDL_system.h \
-  /opt/homebrew/include/SDL2/SDL_timer.h \
-  /opt/homebrew/include/SDL2/SDL_version.h \
-  /opt/homebrew/include/SDL2/SDL_locale.h \
-  /opt/homebrew/include/SDL2/SDL_misc.h
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_events.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_video.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_pixels.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_rect.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_surface.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_blendmode.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_keyboard.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_keycode.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_scancode.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_mouse.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_joystick.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_guid.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_gamecontroller.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_sensor.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_quit.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_gesture.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_touch.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_filesystem.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_haptic.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_hidapi.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_hints.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_loadso.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_log.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_messagebox.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_metal.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_power.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_render.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_shape.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_system.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_timer.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_version.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_locale.h \
+  /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers/SDL_misc.h
