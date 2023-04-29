@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/Users/mickey/Documents/GitHub/IgnisEngine/build",
-  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -isystem /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/SDL2.framework/Headers -iframework /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -F /Users/mickey/Documents/GitHub/IgnisEngine/libraries/MacOS/ -o CMakeFiles/IgnisEngine.dir/src/main.cpp.o -c /Users/mickey/Documents/GitHub/IgnisEngine/src/main.cpp",
-  "file": "/Users/mickey/Documents/GitHub/IgnisEngine/src/main.cpp",
-  "output": "CMakeFiles/IgnisEngine.dir/src/main.cpp.o"
-}
-]
