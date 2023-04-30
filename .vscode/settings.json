@@ -67,7 +67,7 @@
     // be careful, I think lldb is Mac specific
     "cmake.debugConfig": {
         "stopAtEntry": false,
-        "MIMode": "lldb",
+        "MIMode": "lldb", // TODO: have this be lldb on Mac, gdb on Windows
         // "miDebuggerPath": "/Users/mickey/.vscode/extensions/ms-vscode.cpptools-0.20.1/debugAdapters/lldb/bin/lldb-mi",
         // "logging": {
         //         "trace": true,
