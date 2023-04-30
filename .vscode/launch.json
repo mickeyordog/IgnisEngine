@@ -1,7 +1,19 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": []
+    "configurations": [
+        // Adapted from https://github.com/microsoft/vscode-cmake-tools/issues/506
+        // {
+        //     "name": "(lldb) Launch",
+        //     "type": "cppdbg",
+        //     "request": "launch",
+        //     "program": "${command:cmake.launchTargetPath}",
+        //     "args": [],
+        //     "stopAtEntry": false,
+        //     "cwd": "${config:cmake.buildDirectory}",
+        //     "environment": [],
+        //     "externalConsole": false,
+        //     "MIMode": "lldb",
+        //     "setupCommands": [{ "description": "Enable pretty-printing for lldb", "text": "-enable-pretty-printing", "ignoreFailures": true } ]
+        // }
+    ]
 }

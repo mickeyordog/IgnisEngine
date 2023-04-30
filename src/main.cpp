@@ -5,6 +5,8 @@ and may not be redistributed without written permission.*/
 #include <SDL.h>
 #include <stdio.h>
 
+
+int test = 1;
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -63,10 +65,10 @@ bool loadMedia()
 	bool success = true;
 
 	//Load splash image
-	gHelloWorld = SDL_LoadBMP( "assets/hello_world.bmp" );
+	gHelloWorld = SDL_LoadBMP( "../assets/hello_world.bmp" );
 	if( gHelloWorld == NULL )
 	{
-		printf( "Unable to load image %s! SDL Error: %s\n", "02_getting_an_image_on_the_screen/hello_world.bmp", SDL_GetError() );
+		printf( "Unable to load image %s! SDL Error: %s\n", "assets/hello_world.bmp", SDL_GetError() );
 		success = false;
 	}
 
@@ -89,6 +91,8 @@ void close()
 
 int main( int argc, char* args[] )
 {
+	printf("CPUCount = %d",SDL_GetCPUCount());
+	printf("SystemRAM = %d",SDL_GetSystemRAM());
 	printf("CacheLineSize = %d",SDL_GetCPUCacheLineSize());
 
 	//Start up SDL and create window

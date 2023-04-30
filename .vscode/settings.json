@@ -62,5 +62,16 @@
         "compare": "cpp",
         "concepts": "cpp",
         "algorithm": "cpp"
+    },
+    // Adapted from https://github.com/microsoft/vscode-cmake-tools/issues/506
+    "cmake.debugConfig": {
+        "stopAtEntry": false,
+        "MIMode": "lldb",
+        // "miDebuggerPath": "/Users/mickey/.vscode/extensions/ms-vscode.cpptools-0.20.1/debugAdapters/lldb/bin/lldb-mi",
+        // "logging": {
+        //         "trace": true,
+        //         "engineLogging": false,
+        //         "traceResponse": false
+        // }
     }
 }
