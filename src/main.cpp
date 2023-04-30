@@ -91,10 +91,9 @@ void close()
 
 int main( int argc, char* args[] )
 {
-	printf("Reached");
-	printf("CPUCount = %d",SDL_GetCPUCount());
-	printf("SystemRAM = %d",SDL_GetSystemRAM());
-	printf("CacheLineSize = %d",SDL_GetCPUCacheLineSize());
+	printf("CPUCount = %d\n",SDL_GetCPUCount());
+	printf("SystemRAM = %d\n",SDL_GetSystemRAM());
+	printf("CacheLineSize = %d\n",SDL_GetCPUCacheLineSize());
 
 	//Start up SDL and create window
 	if( !init() )
