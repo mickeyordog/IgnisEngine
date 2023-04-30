@@ -64,6 +64,7 @@
         "algorithm": "cpp"
     },
     // Adapted from https://github.com/microsoft/vscode-cmake-tools/issues/506
+    // be careful, I think lldb is Mac specific
     "cmake.debugConfig": {
         "stopAtEntry": false,
         "MIMode": "lldb",
