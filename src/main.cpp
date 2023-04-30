@@ -91,6 +91,7 @@ void close()
 
 int main( int argc, char* args[] )
 {
+	printf("Reached");
 	printf("CPUCount = %d",SDL_GetCPUCount());
 	printf("SystemRAM = %d",SDL_GetSystemRAM());
 	printf("CacheLineSize = %d",SDL_GetCPUCacheLineSize());
