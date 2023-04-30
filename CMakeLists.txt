@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.26.3)
 
 project(IgnisEngine)
-set(SOURCE src/main.cpp src/test.cpp)
-add_library(myLib "")
-add_subdirectory(src)
+set(SOURCE src/main.cpp)
+
+set(SRC_DIRECTORIES window)
+add_subdirectory(src/${SRC_DIRECTORIES})
 
 # not positive why I need to do this, look for better solution in future
 # TODO: prob change these to {PROJECT_SOURCE_DIR}
@@ -17,12 +18,19 @@ elseif (WIN32)
 endif()
 
 add_executable(${PROJECT_NAME} ${SOURCE})
-# add_executable(${PROJECT_NAME} myLib)
 
 find_package(SDL2 REQUIRED)
-target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
-
+target_include_directories(
+    ${PROJECT_NAME} 
+    PUBLIC 
+        ${SDL2_INCLUDE_DIRS} 
+        ${PROJECT_SOURCE_DIR}/src/window)
+target_link_libraries(
+    ${PROJECT_NAME} 
+    PUBLIC 
+        ${SDL2_LIBRARIES} 
+        window
+)
 
 if (WIN32)
     # from https://stackoverflow.com/questions/10671916/how-to-copy-dll-files-into-the-same-folder-as-the-executable-using-cmake
@@ -33,5 +41,5 @@ if (WIN32)
             $<TARGET_FILE_DIR:${PROJECT_NAME}>)                                            # <--this is out-file path
 endif()
 
-# include(CMakePrintHelpers)
-# cmake_print_variables(PROJECT_NAME)
+include(CMakePrintHelpers)
+cmake_print_variables(myLib)
