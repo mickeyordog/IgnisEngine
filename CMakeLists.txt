@@ -1,35 +1,38 @@
 cmake_minimum_required(VERSION 3.26.3)
 
 project(IgnisEngine)
-set(SOURCE src/main.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp)
 
-set(SRC_DIRECTORIES window)
-add_subdirectory(src/${SRC_DIRECTORIES})
+# set(SRC_DIRECTORIES window audio)
+
+list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
+foreach(DIR ${SRC_PATHS})
+    add_subdirectory(${DIR})
+endforeach()
 
 # not positive why I need to do this, look for better solution in future
 # TODO: prob change these to {PROJECT_SOURCE_DIR}
 if (APPLE)
-    set(CMAKE_BUILD_RPATH ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/MacOS/)
-    set(LIB_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/MacOS/)
+    set(CMAKE_BUILD_RPATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/MacOS/)
+    set(LIB_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/libraries/MacOS/)
 elseif (WIN32)
     # Not sure why this is different on Windows
     # set(LIB_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/libraries/Windows/)
-    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/Windows/)
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/Windows/)
 endif()
-
-add_executable(${PROJECT_NAME} ${SOURCE})
 
 find_package(SDL2 REQUIRED)
 target_include_directories(
     ${PROJECT_NAME} 
     PUBLIC 
         ${SDL2_INCLUDE_DIRS} 
-        ${PROJECT_SOURCE_DIR}/src/window)
+        # ${SRC_PATHS}
+)
 target_link_libraries(
-    ${PROJECT_NAME} 
-    PUBLIC 
-        ${SDL2_LIBRARIES} 
-        window
+    ${PROJECT_NAME}
+    PUBLIC
+        ${SDL2_LIBRARIES}
+        # ${SRC_DIRECTORIES}
 )
 
 if (WIN32)
@@ -37,9 +40,12 @@ if (WIN32)
     # see if can find a better solution than this bc now I need to manually specify every dll
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD                                   # Adds a post-build event to MyTest
         COMMAND ${CMAKE_COMMAND} -E copy_if_different                                      # which executes "cmake - E copy_if_different..."
-            "${CMAKE_CURRENT_SOURCE_DIR}/Libraries/Windows/SDL2-2.26.5/lib/x64/SDL2.dll"   # <--this is in-file
+            "${CMAKE_CURRENT_SOURCE_DIR}/libraries/Windows/SDL2-2.26.5/lib/x64/SDL2.dll"   # <--this is in-file
             $<TARGET_FILE_DIR:${PROJECT_NAME}>)                                            # <--this is out-file path
 endif()
 
-include(CMakePrintHelpers)
-cmake_print_variables(myLib)
+# include(CMakePrintHelpers)
+# cmake_print_variables(SRC_PATHS)
+
+# get_target_property(OUT ${PROJECT_NAME} INCLUDE_DIRECTORIES)
+# message(STATUS ${OUT})
