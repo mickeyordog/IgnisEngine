@@ -4,9 +4,8 @@
 #include <math.h>
 #include "window.h"
 #include "gameObject.h"
+#include "timer.h"
 
-
-void close();
 
 bool init()
 {
@@ -44,12 +43,16 @@ int main( int argc, char* args[] )
 		return -1;
 	}
 
-	Window window("Ignis Engine", 640, 480);
+	Window window("Engine", 640, 480);
 	Sprite* sprite = window.loadSprite("../assets/texture.png");
-	GameObject gameObject = GameObject(sprite);
+	GameObject gameObject = GameObject(sprite, 100, 100, 640/2, 480/2);
 
 	bool quit = false;
 	SDL_Event e;
+
+
+	Timer frameTimer;
+	float deltaTime = 0;
 
 	while(!quit)
 	{
@@ -60,14 +63,18 @@ int main( int argc, char* args[] )
 				quit = true;
 			}
 		}
+		deltaTime = frameTimer.read();
+		frameTimer.reset();
+		// printf("deltaTime: %f\n", deltaTime);
+		// printf("Frame rate: %f\n", 1.0/deltaTime);
 
+		gameObject.update(deltaTime);
 		window.clearRenderer();
 
-		window.renderSprite(sprite, 100 + 100 * cos(SDL_GetTicks() / 1000.0), 100 + 100 * sin(SDL_GetTicks() / 1000.0), 640/2, 480/2);
+		gameObject.render(&window);
 		window.presentRenderer();
 	}
 
-	delete(sprite);
 	close();
 
 	return 0;

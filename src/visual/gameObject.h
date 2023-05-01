@@ -4,11 +4,15 @@
 
 class GameObject {
 public:
-    GameObject(Sprite* sprite);
+    GameObject(Sprite* sprite, int x, int y, int width, int height);
     ~GameObject();
     void update(float dt);
     void render(Window* window);
 
 private:
     Sprite* sprite;
+    int x;
+    int y;
+    int width;
+    int height;
 };

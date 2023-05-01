@@ -26,7 +26,7 @@ endif()
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 
-set(SRC_DIRECTORIES visual audio)
+set(SRC_DIRECTORIES visual util audio)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
 foreach(DIR ${SRC_PATHS})
     add_subdirectory(${DIR})
@@ -42,7 +42,7 @@ target_include_directories(
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
-        ${SDL2_LIBRARIES}
+        SDL2::SDL2
         SDL2_image::SDL2_image # TODO: why can't this be ${SDL2_IMAGE_LIBRARIES}
         ${SRC_DIRECTORIES}
 )

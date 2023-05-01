@@ -1,11 +1,9 @@
-add_library(visual
-    window.cpp
-    sprite.cpp
-    gameObject.cpp
+add_library(util
+    timer.cpp
 )
 
 target_link_libraries(
-    visual
+    util
     PUBLIC
         SDL2::SDL2
         SDL2_image::SDL2_image
