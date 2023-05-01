@@ -1,130 +1,70 @@
-/*This source code copyrighted by Lazy Foo' Productions (2004-2022)
-and may not be redistributed without written permission.*/
-
-//Using SDL and standard IO
 #include <SDL.h>
+#include <SDL_image.h>
 #include <stdio.h>
-#include "test.h"
-#include "test2.h"
+#include "window.h"
 
 
-int test = 1;
-//Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-
-//Starts up SDL and creates window
-bool init();
-
-//Loads media
-bool loadMedia();
-
-//Frees media and shuts down SDL
 void close();
-
-//The window we'll be rendering to
-SDL_Window* gWindow = NULL;
-	
-//The surface contained by the window
-SDL_Surface* gScreenSurface = NULL;
-
-//The image we will load and show on the screen
-SDL_Surface* gHelloWorld = NULL;
 
 bool init()
 {
-	//Initialization flag
 	bool success = true;
 
-	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	if( SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 		success = false;
 	}
-	else
+	int imgFlags = IMG_INIT_PNG;
+	if(!(IMG_Init(imgFlags) & imgFlags))
 	{
-		//Create window
-		gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-		if( gWindow == NULL )
-		{
-			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-			success = false;
-		}
-		else
-		{
-			//Get window surface
-			gScreenSurface = SDL_GetWindowSurface( gWindow );
-		}
-	}
-
-	return success;
-}
-
-bool loadMedia()
-{
-	//Loading success flag
-	bool success = true;
-
-	//Load splash image
-	gHelloWorld = SDL_LoadBMP( "../assets/hello_world.bmp" );
-	if( gHelloWorld == NULL )
-	{
-		printf( "Unable to load image %s! SDL Error: %s\n", "assets/hello_world.bmp", SDL_GetError() );
+		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 		success = false;
 	}
 
 	return success;
 }
+
+
 
 void close()
 {
-	//Deallocate surface
-	SDL_FreeSurface( gHelloWorld );
-	gHelloWorld = NULL;
-
-	//Destroy window
-	SDL_DestroyWindow( gWindow );
-	gWindow = NULL;
-
-	//Quit SDL subsystems
+	IMG_Quit();
 	SDL_Quit();
 }
 
+
 int main( int argc, char* args[] )
 {
-	printf("%d\n",testFun(5));
-	printf("%d\n",hehe());
-	printf("CPUCount = %d\n",SDL_GetCPUCount());
-	printf("SystemRAM = %d\n",SDL_GetSystemRAM());
-	printf("CacheLineSize = %d\n",SDL_GetCPUCacheLineSize());
-
-	//Start up SDL and create window
-	if( !init() )
+	if(!init())
 	{
-		printf( "Failed to initialize!\n" );
-	}
-	else
-	{
-		//Load media
-		if( !loadMedia() )
-		{
-			printf( "Failed to load media!\n" );
-		}
-		else
-		{
-			//Apply the image
-			SDL_BlitSurface( gHelloWorld, NULL, gScreenSurface, NULL );
-			
-			//Update the surface
-			SDL_UpdateWindowSurface( gWindow );
-
-            //Hack to get window to stay up
-            SDL_Event e; bool quit = false; while( quit == false ){ while( SDL_PollEvent( &e ) ){ if( e.type == SDL_QUIT ) quit = true; } }
-		}
+		printf("Failed to initialize!\n");
+		return -1;
 	}
 
-	//Free resources and close SDL
+	Window window("Ignis Engine", 640, 480);
+	Sprite* sprite = window.loadSprite("../assets/texture.png");
+
+	bool quit = false;
+	SDL_Event e;
+
+	while(!quit)
+	{
+		while(SDL_PollEvent(&e) != 0)
+		{
+			if( e.type == SDL_QUIT )
+			{
+				quit = true;
+			}
+		}
+
+		window.clearRenderer();
+
+		window.renderSprite(sprite, 0, 0, 640, 480);
+		window.presentRenderer();
+	}
+
+	delete(sprite);
 	close();
 
 	return 0;

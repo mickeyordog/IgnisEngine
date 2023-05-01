@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.26.3)
 project(IgnisEngine)
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-set(SRC_DIRECTORIES window audio)
+set(SRC_DIRECTORIES visual audio)
 
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
 foreach(DIR ${SRC_PATHS})
@@ -15,6 +15,8 @@ endforeach()
 if (APPLE)
     # TODO: how to specify path to framework when it's not in default location
     # outside the project??
+    include(CMakePrintHelpers)
+    cmake_print_variables(CMAKE_CURRENT_SOURCE_DIR)
     set(CMAKE_MACOSX_RPATH 1)
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
     set(CMAKE_FRAMEWORK_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/MacOS/)
@@ -27,16 +29,19 @@ elseif (WIN32)
 endif()
 
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
 target_include_directories(
     ${PROJECT_NAME} 
     PUBLIC 
-        ${SDL2_INCLUDE_DIRS} 
+        ${SDL2_INCLUDE_DIRS}
+        # ${SDL2_INCLUDE_DIRS} TODO: add this in once stuff works
         ${SRC_PATHS}
 )
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
         ${SDL2_LIBRARIES}
+        SDL2_image::SDL2_image # TODO: should be ${SDL2_IMAGE_LIBRARIES}
         ${SRC_DIRECTORIES}
 )
 
@@ -49,8 +54,7 @@ if (WIN32)
             $<TARGET_FILE_DIR:${PROJECT_NAME}>)                                            # <--this is out-file path
 endif()
 
-include(CMakePrintHelpers)
-cmake_print_variables(CMAKE_FIND_PACKAGE_REDIRECTS_DIR)
+
 
 # get_target_property(OUT ${PROJECT_NAME} INCLUDE_DIRECTORIES)
 # message(STATUS ${OUT})
