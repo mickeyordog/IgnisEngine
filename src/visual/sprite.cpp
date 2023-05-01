@@ -3,7 +3,7 @@
 
 // TODO: not a fan of how this needs a low level object passed to it
 //       don't like how Window::loadSprite() has to allocate memory
-Sprite::Sprite(char* path, SDL_Renderer* initRenderer)
+Sprite::Sprite(const char* path, SDL_Renderer* initRenderer)
 {
     this->texture = IMG_LoadTexture(initRenderer, path);
     if(this->texture == NULL)

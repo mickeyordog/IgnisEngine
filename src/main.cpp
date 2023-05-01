@@ -1,7 +1,9 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
+#include <math.h>
 #include "window.h"
+#include "gameObject.h"
 
 
 void close();
@@ -44,6 +46,7 @@ int main( int argc, char* args[] )
 
 	Window window("Ignis Engine", 640, 480);
 	Sprite* sprite = window.loadSprite("../assets/texture.png");
+	GameObject gameObject = GameObject(sprite);
 
 	bool quit = false;
 	SDL_Event e;
@@ -60,7 +63,7 @@ int main( int argc, char* args[] )
 
 		window.clearRenderer();
 
-		window.renderSprite(sprite, 0, 0, 640, 480);
+		window.renderSprite(sprite, 100 + 100 * cos(SDL_GetTicks() / 1000.0), 100 + 100 * sin(SDL_GetTicks() / 1000.0), 640/2, 480/2);
 		window.presentRenderer();
 	}
 

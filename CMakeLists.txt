@@ -3,12 +3,7 @@ cmake_minimum_required(VERSION 3.26.3)
 project(IgnisEngine)
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-set(SRC_DIRECTORIES visual audio)
-
-list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
-foreach(DIR ${SRC_PATHS})
-    add_subdirectory(${DIR})
-endforeach()
+include_directories(${CMAKE_CURRENT_LIST_DIR}/src)
 
 # not positive why I need to do this, look for better solution in future
 # TODO: prob change these to {PROJECT_SOURCE_DIR}
@@ -30,18 +25,25 @@ endif()
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
+
+set(SRC_DIRECTORIES visual audio)
+list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
+foreach(DIR ${SRC_PATHS})
+    add_subdirectory(${DIR})
+endforeach()
+
 target_include_directories(
     ${PROJECT_NAME} 
     PUBLIC 
         ${SDL2_INCLUDE_DIRS}
-        # ${SDL2_INCLUDE_DIRS} TODO: add this in once stuff works
+        # ${SDL2_IMAGE_INCLUDE_DIRS} TODO: why not needed?
         ${SRC_PATHS}
 )
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
         ${SDL2_LIBRARIES}
-        SDL2_image::SDL2_image # TODO: should be ${SDL2_IMAGE_LIBRARIES}
+        SDL2_image::SDL2_image # TODO: why can't this be ${SDL2_IMAGE_LIBRARIES}
         ${SRC_DIRECTORIES}
 )
 

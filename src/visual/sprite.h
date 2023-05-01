@@ -4,7 +4,7 @@
 
 class Sprite {
 public:
-    Sprite(char* path, SDL_Renderer* renderer);
+    Sprite(const char* path, SDL_Renderer* renderer);
     ~Sprite();
     SDL_Texture* getTexture();
 private:

@@ -1,7 +1,7 @@
 #include <SDL.h>
 #include "window.h"
 
-Window::Window(char* name, int width, int height)
+Window::Window(const char* name, int width, int height)
 {
     this->window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
 	if(this->window == NULL)
@@ -38,7 +38,7 @@ void Window::presentRenderer()
     SDL_RenderPresent(this->renderer);
 }
 
-Sprite *Window::loadSprite(char *path)
+Sprite *Window::loadSprite(const char *path)
 {
     return new Sprite(path, this->renderer);
 }

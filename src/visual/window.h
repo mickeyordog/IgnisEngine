@@ -5,11 +5,11 @@
 
 class Window {
 public:
-    Window(char* name, int width, int height);
+    Window(const char* name, int width, int height);
     ~Window();
     void clearRenderer();
     void presentRenderer();
-    Sprite* loadSprite(char* path);
+    Sprite* loadSprite(const char* path);
     void renderSprite(Sprite* sprite, int x, int y, int width, int height);
 
 private:
