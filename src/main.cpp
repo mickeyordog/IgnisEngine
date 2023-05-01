@@ -4,8 +4,8 @@ and may not be redistributed without written permission.*/
 //Using SDL and standard IO
 #include <SDL.h>
 #include <stdio.h>
-// #include "test.h"
-// #include "test2.h"
+#include "test.h"
+#include "test2.h"
 
 
 int test = 1;
@@ -93,8 +93,8 @@ void close()
 
 int main( int argc, char* args[] )
 {
-	// printf("%d\n",testFun(5));
-	// printf("%d\n",hehe());
+	printf("%d\n",testFun(5));
+	printf("%d\n",hehe());
 	printf("CPUCount = %d\n",SDL_GetCPUCount());
 	printf("SystemRAM = %d\n",SDL_GetSystemRAM());
 	printf("CacheLineSize = %d\n",SDL_GetCPUCacheLineSize());
