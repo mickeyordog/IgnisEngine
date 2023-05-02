@@ -15,8 +15,8 @@ target_link_libraries(
         # input
 )
 
-# target_include_directories(
-#     visual
-#     PUBLIC 
-#         input
-# )
+target_include_directories(
+    visual
+    PUBLIC 
+        ../input # need it like this bc it's relative to current. To fix could take reddit advice and move all into root
+)
