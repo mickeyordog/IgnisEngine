@@ -31,6 +31,7 @@ endif()
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 
 set(SRC_DIRECTORIES input visual util audio)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
@@ -50,6 +51,7 @@ target_link_libraries(
     PUBLIC
         SDL2::SDL2
         SDL2_image::SDL2_image # TODO: why can't this be ${SDL2_IMAGE_LIBRARIES}
+        SDL2_ttf::SDL2_ttf
         ${SRC_DIRECTORIES}
 )
 

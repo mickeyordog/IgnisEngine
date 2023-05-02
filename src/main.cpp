@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <stdio.h>
 #include <math.h>
 #include "window.h"
@@ -24,6 +25,11 @@ bool init()
 		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 		success = false;
 	}
+	if( TTF_Init() == -1 )
+	{
+		printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+		success = false;
+	}
 
 	return success;
 }
@@ -45,6 +51,8 @@ int main( int argc, char* args[] )
 		return -1;
 	}
 
+
+
 	Window window("Engine", 640, 480);
 	Renderer renderer(window.getWindow());
 	Sprite sprite("../assets/texture.png", renderer.getRenderer());
@@ -55,6 +63,12 @@ int main( int argc, char* args[] )
 
 	Timer frameTimer;
 	float deltaTime = 0;
+
+	// test stuff
+	TTF_Font* font = TTF_OpenFont("../assets/mechanical.ttf", 28);
+	SDL_Surface* surface = TTF_RenderUTF8_Solid_Wrapped(font, "Hello World!", SDL_Color{0, 0, 0, 255}, 640);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer.getRenderer(), surface);
+	SDL_FreeSurface(surface);
 
 	while(!quit)
 	{
@@ -77,6 +91,7 @@ int main( int argc, char* args[] )
 
 		gameObject.update(deltaTime);
 		renderer.clear();
+		SDL_RenderCopy(renderer.getRenderer(), texture, NULL, NULL);
 
 		gameObject.render(&renderer);
 		renderer.present();
