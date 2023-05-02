@@ -87,7 +87,7 @@ int main( int argc, char* args[] )
 		deltaTime = frameTimer.read();
 		frameTimer.reset();
 		// printf("deltaTime: %f\n", deltaTime);
-		printf("Frame rate: %f\n", 1.0/deltaTime);
+		// printf("Frame rate: %f\n", 1.0/deltaTime);
 
 		gameObject.update(deltaTime);
 		renderer.clear();

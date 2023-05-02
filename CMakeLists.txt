@@ -9,7 +9,7 @@ project(IgnisEngine VERSION 0.1
                     LANGUAGES CXX)
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-include_directories(${CMAKE_CURRENT_LIST_DIR}/src)
+# include_directories(${CMAKE_CURRENT_LIST_DIR}/src)
 
 # not positive why I need to do this, look for better solution in future
 # TODO: prob change these to {PROJECT_SOURCE_DIR}
@@ -29,9 +29,22 @@ elseif (WIN32)
     list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/Windows/)
 endif()
 
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(SDL2_ttf REQUIRED)
+find_package(SDL2 CONFIG REQUIRED)
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+    )
+    find_package(SDL2_image CONFIG REQUIRED)
+    target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>)
+    find_package(SDL2_ttf CONFIG REQUIRED)
+    target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)
+
+# find_package(SDL2 REQUIRED)
+# find_package(SDL2_image REQUIRED)
+# find_package(SDL2_ttf REQUIRED)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+# find_package(MONO REQUIRED)
 
 set(SRC_DIRECTORIES input visual util audio)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
@@ -42,18 +55,22 @@ endforeach()
 target_include_directories(
     ${PROJECT_NAME} 
     PUBLIC 
-        ${SDL2_INCLUDE_DIRS}
+        # ${SDL2_INCLUDE_DIRS}
         # ${SDL2_IMAGE_INCLUDE_DIRS} TODO: why not needed?
+        # ${MONO_INCLUDE_DIRS}
         ${SRC_PATHS}
 )
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
-        SDL2::SDL2
-        SDL2_image::SDL2_image # TODO: why can't this be ${SDL2_IMAGE_LIBRARIES}
-        SDL2_ttf::SDL2_ttf
+        # SDL2::SDL2
+        # SDL2_image::SDL2_image # TODO: why can't this be ${SDL2_IMAGE_LIBRARIES}
+        # SDL2_ttf::SDL2_ttf
+        # ${MONO_LIBRARIES}
         ${SRC_DIRECTORIES}
 )
+
+
 
 if (WIN32)
     # from https://stackoverflow.com/questions/10671916/how-to-copy-dll-files-into-the-same-folder-as-the-executable-using-cmake
