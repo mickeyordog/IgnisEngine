@@ -17,8 +17,8 @@ GameObject::~GameObject()
 void GameObject::update(float dt)
 {
     // x += InputHandler::getInstance().queryKeyPressed(SDLK_d) ? 10 * dt : 0;
-    // x = 100 + 100 * cos(SDL_GetTicks() / 1000.0);
-    // y = 100 + 100 * sin(SDL_GetTicks() / 1000.0);
+    x = 100 + 100 * cos(SDL_GetTicks() / 1000.0);
+    y = 100 + 100 * sin(SDL_GetTicks() / 1000.0);
 }
 
 void GameObject::render(Renderer* renderer)

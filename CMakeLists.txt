@@ -1,9 +1,12 @@
 # I just realized, why don't I just manually specify the locations of all
 # my libraries? I know exactly where they are
-cmake_minimum_required(VERSION 3.4)
+# if you use a path like ${} you should always surround in quotes as it won't work if it has spaces and is unquoted
+cmake_minimum_required(VERSION 3.26.3)
 set (CMAKE_CXX_STANDARD 11)
 
-project(IgnisEngine)
+project(IgnisEngine VERSION 0.1
+                    DESCRIPTION "Game engine"
+                    LANGUAGES CXX)
 add_executable(${PROJECT_NAME} src/main.cpp)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/src)
