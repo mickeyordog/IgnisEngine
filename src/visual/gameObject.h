@@ -7,7 +7,7 @@ public:
     GameObject(Sprite* sprite, int x, int y, int width, int height);
     ~GameObject();
     void update(float dt);
-    void render(Window* window);
+    void render(Renderer* renderer);
 
 private:
     Sprite* sprite;

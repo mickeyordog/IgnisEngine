@@ -1,12 +1,11 @@
-add_library(visual
-    window.cpp
-    sprite.cpp
-    gameObject.cpp
+add_library(input
+    inputHandler.cpp
 )
 
 target_link_libraries(
-    visual
+    input
     PUBLIC
         SDL2::SDL2
         SDL2_image::SDL2_image
+        visual
 )

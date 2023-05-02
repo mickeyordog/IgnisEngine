@@ -2,17 +2,14 @@
 
 #include <SDL.h>
 #include "sprite.h"
+#include "renderer.h"
 
 class Window {
 public:
     Window(const char* name, int width, int height);
     ~Window();
-    void clearRenderer();
-    void presentRenderer();
-    Sprite* loadSprite(const char* path);
-    void renderSprite(Sprite* sprite, int x, int y, int width, int height);
 
+    SDL_Window* getWindow();
 private:
     SDL_Window* window;
-    SDL_Renderer* renderer;
 };

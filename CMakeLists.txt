@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.26.3)
+# I just realized, why don't I just manually specify the locations of all
+# my libraries? I know exactly where they are
+cmake_minimum_required(VERSION 3.4)
+set (CMAKE_CXX_STANDARD 11)
 
 project(IgnisEngine)
 add_executable(${PROJECT_NAME} src/main.cpp)
@@ -26,7 +29,7 @@ endif()
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 
-set(SRC_DIRECTORIES visual util audio)
+set(SRC_DIRECTORIES input visual util audio)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
 foreach(DIR ${SRC_PATHS})
     add_subdirectory(${DIR})

@@ -3,8 +3,10 @@
 #include <stdio.h>
 #include <math.h>
 #include "window.h"
+#include "renderer.h"
 #include "gameObject.h"
 #include "timer.h"
+#include "inputHandler.h"
 
 
 bool init()
@@ -44,35 +46,40 @@ int main( int argc, char* args[] )
 	}
 
 	Window window("Engine", 640, 480);
-	Sprite* sprite = window.loadSprite("../assets/texture.png");
-	GameObject gameObject = GameObject(sprite, 100, 100, 640/2, 480/2);
+	Renderer renderer(window.getWindow());
+	Sprite sprite("../assets/texture.png", renderer.getRenderer());
+	GameObject gameObject = GameObject(&sprite, 100, 100, 640/2, 480/2);
 
 	bool quit = false;
 	SDL_Event e;
-
 
 	Timer frameTimer;
 	float deltaTime = 0;
 
 	while(!quit)
 	{
+		InputHandler::getInstance().reset();
 		while(SDL_PollEvent(&e) != 0)
 		{
-			if( e.type == SDL_QUIT )
+			if(e.type == SDL_QUIT)
 			{
 				quit = true;
+			}
+			else if(e.type == SDL_KEYDOWN)
+			{
+				InputHandler::getInstance().addCurrentKey(e.key.keysym.sym);
 			}
 		}
 		deltaTime = frameTimer.read();
 		frameTimer.reset();
 		// printf("deltaTime: %f\n", deltaTime);
-		// printf("Frame rate: %f\n", 1.0/deltaTime);
+		printf("Frame rate: %f\n", 1.0/deltaTime);
 
 		gameObject.update(deltaTime);
-		window.clearRenderer();
+		renderer.clear();
 
-		gameObject.render(&window);
-		window.presentRenderer();
+		gameObject.render(&renderer);
+		renderer.present();
 	}
 
 	close();
