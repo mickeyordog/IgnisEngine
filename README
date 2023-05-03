@@ -1,0 +1,15 @@
+# Setup Info
+
+Install vcpkg
+
+Run the following commands:
+- git clone https://github.com/Microsoft/vcpkg.git
+- ./vcpkg/bootstrap-vcpkg.sh
+- vcpkg install sdl2 sdl2-image sld2-ttf
+
+Install cmake, navigate to project root
+
+Run:
+- cmake -S . -B build/ 
+- make -C build 
+- ./build/IgnisEngine
