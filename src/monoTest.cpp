@@ -1,6 +1,6 @@
-#include <mono/jit/jit.h>
-#include <mono/metadata/assembly.h>
+// #include <mono/jit/jit.h>
+// #include <mono/metadata/assembly.h>
 
-MonoDomain *domain;
+// MonoDomain *domain;
 
-domain = mono_jit_init (domain_name);
+// domain = mono_jit_init (domain_name);

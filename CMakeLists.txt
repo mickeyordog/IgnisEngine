@@ -16,8 +16,6 @@ add_executable(${PROJECT_NAME} src/main.cpp)
 if (APPLE)
     # TODO: how to specify path to framework when it's not in default location
     # outside the project??
-    include(CMakePrintHelpers)
-    cmake_print_variables(CMAKE_CURRENT_SOURCE_DIR)
     set(CMAKE_MACOSX_RPATH 1)
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
     set(CMAKE_FRAMEWORK_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/MacOS/)
@@ -29,6 +27,23 @@ elseif (WIN32)
     list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/Windows/)
 endif()
 
+# from reddit
+# set(PKGNAME MONO)
+# include(FindPkgConfig)
+# pkg_search_module(${PKGNAME} REQUIRED ${PKGNAME})
+# mark_as_advanced(${PKGNAME}_FOUND ${PKGNAME}_CFLAGS ${PKGNAME}_STATIC_LDFLAGS)
+# find_package_handle_standard_args(${PKGNAME} ${PKGNAME}_FOUND ${PKGNAME}_CFLAGS ${PKGNAME}_STATIC_LDFLAGS)
+
+# list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}) # needed to find mono in root
+# find_package(MONO REQUIRED) # this line I added, plus below
+# target_compile_options(${PROJECT_NAME} PRIVATE ${${PKGNAME}_CFLAGS})
+# target_link_options(${PROJECT_NAME} PRIVATE ${${PKGNAME}_STATIC_LDFLAGS})
+# target_compile_options(${PROJECT_NAME} PRIVATE "pkg-config --cflags mono-2")
+# target_link_options(${PROJECT_NAME} PRIVATE "pkg-config --libs mono-2")
+set(CMAKE_FRAMEWORK_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/MacOS/)
+target_link_libraries(${PROJECT_NAME} PRIVATE "-framework Mono")
+
+# target_link_libraries(${PROJECT_NAME} PRIVATE "-framework SDL2")
 find_package(SDL2 CONFIG REQUIRED)
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
@@ -43,7 +58,6 @@ find_package(SDL2 CONFIG REQUIRED)
 # find_package(SDL2 REQUIRED)
 # find_package(SDL2_image REQUIRED)
 # find_package(SDL2_ttf REQUIRED)
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 # find_package(MONO REQUIRED)
 
 set(SRC_DIRECTORIES input visual util audio)
@@ -85,3 +99,5 @@ endif()
 
 # get_target_property(OUT ${PROJECT_NAME} INCLUDE_DIRECTORIES)
 # message(STATUS ${OUT})
+include(CMakePrintHelpers)
+cmake_print_variables(SDL2_INCLUDE_DIRS)
