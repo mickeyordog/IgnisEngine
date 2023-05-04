@@ -8,7 +8,9 @@
 #include "gameObject.h"
 #include "timer.h"
 #include "inputHandler.h"
-// #include <mono/jit/jit.h>
+#include <mono/jit/jit.h>
+#include <mono/metadata/assembly.h>
+// #include <mono/mono-2.0/mono/jit/jit.h>
 
 bool init()
 {
@@ -45,6 +47,10 @@ void close()
 
 int main( int argc, char* args[] )
 {
+	MonoDomain *domain;
+
+	domain = mono_jit_init ("test.cs");
+
 	if(!init())
 	{
 		printf("Failed to initialize!\n");
