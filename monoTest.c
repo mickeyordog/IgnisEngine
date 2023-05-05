@@ -3,9 +3,14 @@
 #include <mono/metadata/debug-helpers.h>
 #include <mono/metadata/mono-config.h>
 
+// IMPORTANT, BASICALLY EVERY MONO OBJECT POINTER MUST BE FREED TOO
+// e.g. mono_method_desc_free
+// can raise exception with mono_error_raise_exception (&error);
+
 // need __stdcall before * on windows
 typedef int (*GetNumber) (int, MonoException**);
-typedef void (*UpdateObject) (MonoObject*, int, MonoException**);
+typedef void (*ObjectConstructor) (MonoObject*, const char*, float, MonoException**);
+typedef void (*UpdateObject) (MonoObject*, float, MonoException**);
 
 // gint32 HashCode(MonoObject *obj) {
 //     return 0;
@@ -40,6 +45,7 @@ int main( int argc, char* argv[] ) {
     // remember to set env var for pkg config path too, prob do that in code
     // didn't need this
     // mono_set_dirs ("/Library/Frameworks/Mono.framework/Versions/6.12.0/lib", "/Library/Frameworks/Mono.framework/Versions/6.12.0/etc");
+    // mono_set_assemblies_path is a very bad idea as it prevents gac from working, src: http://docs.go-mono.com/?link=xhtml%3adeploy%2fmono-api-assembly.html
     mono_set_assemblies_path("/Library/Frameworks/Mono.framework/Versions/6.12.0/lib"); // this was what fixed it, had wrong path
     mono_config_parse("/Library/Frameworks/Mono.framework/Versions/6.12.0/etc/mono/config");
     mono_config_parse (NULL);
@@ -53,7 +59,6 @@ int main( int argc, char* argv[] ) {
     assembly = mono_domain_assembly_open (domain, "test.exe");
     if (!assembly)
         printf("Assembly not found.\n");
-
 
 
     /*
@@ -103,19 +108,31 @@ int main( int argc, char* argv[] ) {
         printf("Object not created.\n");
     }
 
-    MonoMethodDesc* methodDesc = mono_method_desc_new ("GameObject:Update(int)", 0);
+    MonoMethodDesc* methodDesc = mono_method_desc_new (":.ctor()", 0);
     if (!methodDesc)
         printf("mono_method_desc_new failed\n");
-    MonoMethod* method = mono_method_desc_search_in_image(methodDesc, image);
+    MonoMethod* method = mono_class_get_method_from_name(my_class, "Update", 1);
     if (!method) {
         printf("mono_method_desc_search_in_image failed\n");
     }
+    mono_method_desc_free(methodDesc);
+    printf("Here\n");
+    ObjectConstructor objectConstructor = mono_method_get_unmanaged_thunk(method);
+    MonoException* exception;
+    objectConstructor(my_class_instance, "My GameObject", 10.5f, &exception);
+
+    methodDesc = mono_method_desc_new ("GameObject:Update(single)", 0);
+    if (!methodDesc)
+        printf("mono_method_desc_new failed\n");
+    method = mono_method_desc_search_in_image(methodDesc, image);
+    if (!method) {
+        printf("mono_method_desc_search_in_image failed\n");
+    }
+    mono_method_desc_free(methodDesc);
 
     UpdateObject updateObject = mono_method_get_unmanaged_thunk(method);
-    MonoException* exception;
-    updateObject(my_class_instance, 5, &exception);
-    updateObject(my_class_instance, 5, &exception);
-
+    updateObject(my_class_instance, 5.5, &exception);
+    updateObject(my_class_instance, 50.5, &exception);
 
     // MonoMethodDesc* methodDesc = mono_method_desc_new ("HelloWorld:GetNumber(int)", 0);
     // if (!methodDesc)

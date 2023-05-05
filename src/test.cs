@@ -31,16 +31,22 @@ public class HelloWorld
 public class GameObject {
     public string name;
     private float x;
-    public GameObject() {
-        this.name = "No name";
-        x = 0;
+    public GameObject(): this("No name", 0) {
+
     }
-    public GameObject(string name) {
+    public GameObject(string name): this(name, 0) {
+
+    }
+    public GameObject(float x): this("No name", x) {
+
+    }
+    public GameObject(string name, float x) {
         this.name = name;
+        this.x = x;
     }
-    public void Update(int dt) {
+    public void Update(float dt) {
         x += dt;
-        Console.WriteLine($"updating by {dt} seconds and is now {x}");
+        Console.WriteLine($"{name} updating by {dt} seconds and is now {x}");
         Console.WriteLine($"{(float)dt}");
     }
 }
