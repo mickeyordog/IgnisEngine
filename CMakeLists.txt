@@ -6,7 +6,7 @@ project(IgnisEngine VERSION 0.1
                     LANGUAGES C)
 add_executable(${PROJECT_NAME} src/monoTest.c)
 
-# clang src/monoTest.c -I libraries/MacOS/Mono.framework/Headers/mono-2.0 -L libraries/MacOS/Mono.framework/Libraries -lmono-2.0 
+# clang src/monoTest.c -I libraries/MacOS/Mono.framework/Headers/mono-2.0 -L libraries/MacOS/Mono.framework/Libraries -l mono-2.0 
 find_package(PkgConfig REQUIRED)
 set(ENV{PKG_CONFIG_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/libraries/MacOS/Mono.framework/Versions/Current/lib/pkgconfig")
 pkg_check_modules(MONO REQUIRED mono-2)

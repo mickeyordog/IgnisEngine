@@ -7,3 +7,10 @@ public class HelloWorld
         Console.WriteLine ("Hello Mono World");
     }
 }
+// public class Dog
+// {
+//     static public void Type()
+//     {
+//         // Console.WriteLine("a Dog!");
+//     }
+// }
