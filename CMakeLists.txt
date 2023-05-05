@@ -19,3 +19,5 @@ target_link_options(${PROJECT_NAME} PRIVATE ${MONO_STATIC_LDFLAGS})
 
 include(CMakePrintHelpers)
 cmake_print_variables(MONO_INCLUDE_DIRS MONO_LIBRARY_DIRS MONO_LIBRARIES MONO_CFLAGS MONO_STATIC_LDFLAGS)
+
+# Mono integration example: https://stackoverflow.com/questions/75711515/embedded-mono-runtime-unable-to-print-float-from-managed-assembly

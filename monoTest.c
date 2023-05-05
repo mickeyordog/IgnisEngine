@@ -3,7 +3,9 @@
 #include <mono/metadata/debug-helpers.h>
 #include <mono/metadata/mono-config.h>
 
+// need __stdcall before * on windows
 typedef int (*GetNumber) (int, MonoException**);
+typedef void (*UpdateObject) (MonoObject*, int, MonoException**);
 
 // gint32 HashCode(MonoObject *obj) {
 //     return 0;
@@ -24,8 +26,13 @@ char* PassString(char* str) {
 
 MonoObject* createObject(MonoDomain* domain, MonoImage* image, const char* namespace, const char* className) {
     MonoClass *my_class = mono_class_from_name (image, namespace, className);
+    if (!my_class)
+        printf("Class not created.\n");
     MonoObject *my_class_instance = mono_object_new (domain, my_class);
+    if (!my_class_instance)
+        printf("Class instance not created.\n");
     mono_runtime_object_init (my_class_instance);
+    return my_class_instance;
 }
 
 int main( int argc, char* argv[] ) {
@@ -35,6 +42,7 @@ int main( int argc, char* argv[] ) {
     // mono_set_dirs ("/Library/Frameworks/Mono.framework/Versions/6.12.0/lib", "/Library/Frameworks/Mono.framework/Versions/6.12.0/etc");
     mono_set_assemblies_path("/Library/Frameworks/Mono.framework/Versions/6.12.0/lib"); // this was what fixed it, had wrong path
     mono_config_parse("/Library/Frameworks/Mono.framework/Versions/6.12.0/etc/mono/config");
+    mono_config_parse (NULL);
     MonoDomain *domain;
 
     domain = mono_jit_init ("Testing Mono");
@@ -46,7 +54,7 @@ int main( int argc, char* argv[] ) {
     if (!assembly)
         printf("Assembly not found.\n");
 
-    
+
 
     /*
     //Build a method description object
@@ -83,6 +91,31 @@ int main( int argc, char* argv[] ) {
     MonoImage* image;
 	image = mono_assembly_get_image(assembly);
 
+    // MonoObject* object = createObject(domain, image, "", "GameObject");
+    MonoClass *my_class = mono_class_from_name (image, "", "GameObject");
+    if (!my_class)
+        printf("Class not created.\n");
+    MonoObject *my_class_instance = mono_object_new (domain, my_class);
+    if (!my_class_instance)
+        printf("Class instance not created.\n");
+    mono_runtime_object_init (my_class_instance);
+    if (!my_class_instance) {
+        printf("Object not created.\n");
+    }
+
+    MonoMethodDesc* methodDesc = mono_method_desc_new ("GameObject:Update(int)", 0);
+    if (!methodDesc)
+        printf("mono_method_desc_new failed\n");
+    MonoMethod* method = mono_method_desc_search_in_image(methodDesc, image);
+    if (!method) {
+        printf("mono_method_desc_search_in_image failed\n");
+    }
+
+    UpdateObject updateObject = mono_method_get_unmanaged_thunk(method);
+    MonoException* exception;
+    updateObject(my_class_instance, 5, &exception);
+    updateObject(my_class_instance, 5, &exception);
+
 
     // MonoMethodDesc* methodDesc = mono_method_desc_new ("HelloWorld:GetNumber(int)", 0);
     // if (!methodDesc)
@@ -111,7 +144,7 @@ int main( int argc, char* argv[] ) {
     // printf("GetNumber(%d): %d\n", val, int_result);
 
     mono_jit_cleanup (domain);
-    // printf("End\n");
+    printf("End\n");
 }
 // are we looking for mono-2.0.a? or something else like .dylib
 // if we need the .dylib, how could I fix that file universal problem?

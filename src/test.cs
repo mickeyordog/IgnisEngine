@@ -30,14 +30,18 @@ public class HelloWorld
 
 public class GameObject {
     public string name;
+    private float x;
     public GameObject() {
         this.name = "No name";
+        x = 0;
     }
     public GameObject(string name) {
         this.name = name;
     }
-    public void Update(float dt) {
-        Console.WriteLine($"{this.name} updating by {dt} seconds");
+    public void Update(int dt) {
+        x += dt;
+        Console.WriteLine($"updating by {dt} seconds and is now {x}");
+        Console.WriteLine($"{(float)dt}");
     }
 }
 // public class Dog
