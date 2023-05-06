@@ -1,8 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
 
-
-
 public class HelloWorld
 {
     [DllImport ("__Internal", EntryPoint=nameof(DoSomething))]
@@ -31,18 +29,27 @@ public class HelloWorld
 public class GameObject {
     public string name;
     private float x;
-    public GameObject(): this("No name", 0) {
-
+    public GameObject() {
+        name = "no name";
+        x = 5.3f;
     }
-    public GameObject(string name): this(name, 0) {
-
+    public GameObject(string name) {
+        this.name = name;
+        x = 0;
     }
-    public GameObject(float x): this("No name", x) {
-
+    public GameObject(float x) {
+        name = "no name";
+        this.x = x;
     }
     public GameObject(string name, float x) {
+        // Console.WriteLine($"Constructing {name} with x {x}");
+
         this.name = name;
         this.x = x;
+    }
+
+    public void Echo(string str) {
+        Console.WriteLine("Echoing: " + str);
     }
     public void Update(float dt) {
         x += dt;
@@ -50,10 +57,3 @@ public class GameObject {
         Console.WriteLine($"{(float)dt}");
     }
 }
-// public class Dog
-// {
-//     static public void Type()
-//     {
-//         // Console.WriteLine("a Dog!");
-//     }
-// }
