@@ -32,20 +32,30 @@ public class GameObject {
     public GameObject() {
         name = "no name";
         x = 5.3f;
+        // Console.WriteLine($"Constructing {name} with x {x}");
+
     }
     public GameObject(string name) {
         this.name = name;
         x = 0;
+        Console.WriteLine($"Constructing {name} with x {x}");
+
     }
     public GameObject(float x) {
         name = "no name";
         this.x = x;
+        Console.WriteLine($"Constructing {name} with x {x}");
     }
     public GameObject(string name, float x) {
-        // Console.WriteLine($"Constructing {name} with x {x}");
+        Console.WriteLine($"Constructing {name} with x {x}");
 
         this.name = name;
         this.x = x;
+    }
+
+    public static int Test(int i) {
+        Console.WriteLine("Test success");
+        return i * 2;
     }
 
     public void Echo(string str) {
@@ -54,6 +64,6 @@ public class GameObject {
     public void Update(float dt) {
         x += dt;
         Console.WriteLine($"{name} updating by {dt} seconds and is now {x}");
-        Console.WriteLine($"{(float)dt}");
+        // Console.WriteLine($"{(float)dt}");
     }
 }

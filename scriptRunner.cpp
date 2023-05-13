@@ -13,6 +13,7 @@ typedef int (*GetNumber) (int, MonoException**);
 typedef void (*ObjectConstructor) (MonoObject*, float, MonoException**);
 typedef void (*UpdateObject) (MonoObject*, float, MonoException**);
 typedef void (*Echo) (MonoObject*, MonoString*, MonoException**);
+typedef int (*Test) (int, MonoException**);
 
 
 
@@ -51,7 +52,7 @@ MonoObject* createObjectUninitialized(MonoDomain* domain, MonoImage* image, cons
 void printAllMethodsInClass(MonoClass* monoClass) {
     printf("Printing methods in class %s\n", mono_class_get_name(monoClass));
     void* iter = NULL;
-    for (MonoMethod* method; method != NULL; method = mono_class_get_methods(monoClass, &iter))
+    for (MonoMethod* method = mono_class_get_methods(monoClass, &iter); method != NULL; method = mono_class_get_methods(monoClass, &iter))
     {
         printf("%s\n", mono_method_full_name(method, 1));
     }
@@ -59,7 +60,7 @@ void printAllMethodsInClass(MonoClass* monoClass) {
 }
 
 ScriptRunner::ScriptRunner(const char* assembliesPath, const char* assemblyFilePath, const char* configPath) {
-    unsetenv("TERM");
+    unsetenv("TERM"); // needed for Mono bug
     mono_set_assemblies_path(assembliesPath);
     mono_config_parse(configPath);
 
@@ -88,9 +89,10 @@ ScriptRunner::ScriptRunner(const char* assembliesPath, const char* assemblyFileP
 
 ScriptRunner::~ScriptRunner()
 {
-    mono_jit_cleanup(domain);
+    // mono_jit_cleanup(domain);
 }
 
+// Object will not be initialized if you just call this one!
 MonoObject* ScriptRunner::createObjectUninitialized(const char* namespaceName, const char* className) {
     MonoClass *monoClass = mono_class_from_name (image, namespaceName, className);
     if (!monoClass) {
@@ -102,25 +104,21 @@ MonoObject* ScriptRunner::createObjectUninitialized(const char* namespaceName, c
         printf("Class instance not created.\n");
         return nullptr;
     }
-    mono_runtime_object_init (classInstance);
-    if (!classInstance) {
-        printf("Object not created.\n");
-        return nullptr;
-    }
     return classInstance;
 }
 
 MonoObject* ScriptRunner::createObjectEmptyConstructor(const char *namespaceName, const char *className) {
-    MonoObject* monoObject = this->createObjectUninitialized(namespaceName, className);
-    if (!monoObject) {
+    MonoObject* classInstance = this->createObjectUninitialized(namespaceName, className);
+    if (!classInstance) {
         printf("Object not created.\n");
         return nullptr;
     }
-    mono_runtime_object_init (monoObject);
-    return monoObject;
+    mono_runtime_object_init (classInstance);
+    return classInstance;
 }
 
-void* ScriptRunner::getMethodThunk(MonoObject *object, const char *methodSignature)
+// Remember float must be written as single
+void* ScriptRunner::getMethodThunkFromObject(MonoObject *object, const char *methodSignature)
 {
     MonoMethodDesc* methodDesc = mono_method_desc_new (methodSignature, true);
     if (!methodDesc) {
@@ -129,14 +127,38 @@ void* ScriptRunner::getMethodThunk(MonoObject *object, const char *methodSignatu
     }
     
     // Remember this needs to be mono_free_method()'d!
+    // Should add logging system so I can say whether to print every step or not
     MonoMethod* method = mono_method_desc_search_in_class(methodDesc, mono_object_get_class(object));
     if (!method) {
-        printf("mono_method_desc_search_in_image failed\n");
+        printf("mono_method_desc_search_in_image failed for signature %s in class %s\n", methodSignature, mono_class_get_name(mono_object_get_class(object)));
         return nullptr;
     }
     else {
         printf("Found method with name %s\n", mono_method_full_name(method, true));
     }
+
+    void* thunk = mono_method_get_unmanaged_thunk(method);
+    if (!thunk) {
+        printf("mono_method_get_unmanaged_thunk failed\n");
+        return nullptr;
+    }
+
+    mono_method_desc_free(methodDesc);
+    // mono_free_method(method);
+    return thunk;
+}
+
+void* ScriptRunner::getMethodThunk(const char* methodSignature)
+{
+    MonoMethodDesc* methodDesc = mono_method_desc_new (methodSignature, true);
+    if (!methodDesc)
+        printf("mono_method_desc_new failed\n");
+    MonoMethod* method = mono_method_desc_search_in_image(methodDesc, image);
+    if (!method) {
+        printf("mono_method_desc_search_in_image failed\n");
+    }
+    else
+        printf("Found method with name %s\n", mono_method_full_name(method, 1));
 
     void* thunk = mono_method_get_unmanaged_thunk(method);
     if (!thunk) {
@@ -151,11 +173,47 @@ void* ScriptRunner::getMethodThunk(MonoObject *object, const char *methodSignatu
 
 
 int main( int argc, char* argv[] ) {
-    ScriptRunner runner("/Library/Frameworks/Mono.framework/Versions/6.12.0/lib", "test.exe", "/Library/Frameworks/Mono.framework/Versions/6.12.0/etc/mono/config");
-    MonoObject* gameObject = runner.createObjectEmptyConstructor("", "GameObject");
-    auto updateObject = (UpdateObject)runner.getMethodThunk(gameObject, ":Update(float)");
     MonoException* exception;
+    UpdateObject updateObject;
+
+    // TODO: should make test class so I can verify functionality of some of these
+    ScriptRunner runner("/Library/Frameworks/Mono.framework/Versions/6.12.0/lib", "test.exe", "/Library/Frameworks/Mono.framework/Versions/6.12.0/etc/mono/config");
+    Test test = (Test)runner.getMethodThunk("GameObject:Test(int)");
+    test(2, &exception);
+    MonoObject* gameObject = runner.createObjectEmptyConstructor("", "GameObject");
+    ObjectConstructor constructor = (UpdateObject)runner.getMethodThunkFromObject(gameObject, ":.ctor(single)");
+    if (!constructor)
+        printf("constructor null\n");
+    if (exception != nullptr)
+        mono_raise_exception(exception);
+    constructor(gameObject, 1.0f, &exception);
+
+    updateObject = (UpdateObject)runner.getMethodThunkFromObject(gameObject, ":Update(single)");
+    if (!updateObject)
+        printf("updateObject null\n");
+    if (exception != nullptr)
+        mono_raise_exception(exception);
+    // Test test = (Test)runner.getMethodThunk(gameObject, ":Test(int)");
     updateObject(gameObject, 1.0f, &exception);
+    // printf("Result: %d", test(2, &exception));
+    // mono_raise_exception(exception);
+    // try using debugger, not sure why this would cause crash
+    // static void , static int works, static (int) works
+    return 0;
+    MonoClass* instanceClass = mono_object_get_class(gameObject);
+    // Get a reference to the method in the class
+    MonoMethod* metho = mono_class_get_method_from_name(instanceClass, "Update", 1);
+    if (metho == nullptr)
+    {
+        // No method called "IncrementFloatVar" with 1 parameter in the class, log error or something
+        printf("Method not found.\n");
+    }
+
+    // Call the C# method on the objectInstance instance, and get any potential exceptions
+    MonoObject* exc = nullptr;
+    float value = 1.0f;
+    void* param = &value;
+    mono_runtime_invoke(metho, gameObject, &param, &exc);
     
     return 0;
 
@@ -307,4 +365,7 @@ int main( int argc, char* argv[] ) {
 
 // clang src/monoTest.c `pkg-config --cflags --libs mono-2` -o test
 // try setting path to pkg-config of the one in root mac directory, that might've been the dif that fixed it when I went from cmake to console
-// clang++ monoTest.cpp -rdynamic `pkg-config --cflags --libs mono-2` -o test
+// clang++ monoTest.cpp -rdynamic -Wall -g -o test `pkg-config --cflags --libs mono-2` 
+
+// could also embed python, if I use linting and py3 features for typing it might be alright
+// look into how python allocates memory though to see if it's alright

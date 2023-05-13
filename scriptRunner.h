@@ -11,7 +11,8 @@ public:
     // void runScript(const char* script);
     MonoObject* createObjectEmptyConstructor(const char *namespaceName, const char *className);
     MonoObject* createObjectUninitialized(const char *namespaceName, const char *className);
-    void* getMethodThunk(MonoObject* object, const char* methodSignature);
+    void* getMethodThunkFromObject(MonoObject* object, const char* methodSignature);
+    void* getMethodThunk(const char* methodSignature);
 
 private:
     MonoDomain* domain;
