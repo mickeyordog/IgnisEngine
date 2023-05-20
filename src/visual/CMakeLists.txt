@@ -4,6 +4,7 @@ add_library(visual
     renderer.cpp
     gameObject.cpp
     text.cpp
+    shader.cpp
 )
 
 target_link_libraries(
@@ -12,6 +13,8 @@ target_link_libraries(
         SDL2::SDL2
         SDL2_image::SDL2_image
         SDL2_ttf::SDL2_ttf
+        OpenGL::GL
+        GLEW::glew_s
         # input
 )
 
