@@ -8,7 +8,7 @@ InputHandler& InputHandler::getInstance()
 }
 
 // TODO: rename to resetKeys
-void InputHandler::reset()
+void InputHandler::resetKeys()
 {
     this->currentKeys.clear();
 }

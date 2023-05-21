@@ -1,6 +1,6 @@
 #pragma once
 #include "sprite.h"
-#include "window.h"
+#include "renderer.h"
 
 class GameObject {
 public:

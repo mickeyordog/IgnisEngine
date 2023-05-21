@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <math.h>
-#include "window.h"
+#include "SDLContext.h"
 #include "renderer.h"
 #include "gameObject.h"
 #include "timer.h"
@@ -13,7 +13,7 @@
 #include <GL/glew.h>
 #include <SDL_opengl.h>
 #include "stb_image.h"
-#include "context.h"
+#include "GLContext.h"
 #include "texture.h"
 #include "geometry.h"
 
@@ -53,17 +53,14 @@ void close()
 // TODO: extension that lets you add includes more easily
 int main( int argc, char* args[] )
 {
-	Window gWindow("Ignis Engine", 800, 600);
-	Context context(&gWindow);
+	SDLContext sdlContext("Ignis Engine", 800, 600);
+	GLContext glContext(&sdlContext);
 
 	// glViewport(0, 0, 200, 100);
 
 	Texture texture("assets/texture.png");
-	
 	Shader shader("src/shader/vertex.vs", "src/shader/fragment.fs");
-
-	Geometry geometry;
-
+	Geometry geometry(&texture, &shader);
 
 	bool quit = false;
 	while( !quit )
@@ -76,10 +73,9 @@ int main( int argc, char* args[] )
 				quit = true;
 			}
 		}
-		context.clear();
-		shader.use();
+		glContext.clear();
 		geometry.render();
-		gWindow.swapWindow();
+		sdlContext.swapWindow();
 	}
 
 	return 0;
@@ -90,7 +86,7 @@ int main( int argc, char* args[] )
 		return -1;
 	}
 
-	Window window("Engine", 640, 480);
+	SDLContext window("Engine", 640, 480);
 	Renderer renderer(window.getWindow());
 	Sprite sprite("../assets/texture.png", renderer.getRenderer());
 	GameObject gameObject = GameObject(&sprite, 100, 100, 640/2, 480/2);
@@ -109,7 +105,7 @@ int main( int argc, char* args[] )
 
 	while(!quit)
 	{
-		InputHandler::getInstance().reset();
+		InputHandler::getInstance().resetKeys();
 		while(SDL_PollEvent(&e) != 0)
 		{
 			if(e.type == SDL_QUIT)

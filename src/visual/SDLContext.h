@@ -5,10 +5,10 @@
 #include "renderer.h"
 
 // TODO: rename to SDLContext
-class Window {
+class SDLContext {
 public:
-    Window(const char* name, int width, int height);
-    ~Window();
+    SDLContext(const char* name, int width, int height);
+    ~SDLContext();
 
     void swapWindow();
     SDL_Window* getWindow();

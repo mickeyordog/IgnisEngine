@@ -11,7 +11,7 @@ public:
     InputHandler(InputHandler const&) = delete;
     void operator=(InputHandler const&) = delete;
 
-    void reset();
+    void resetKeys();
     void addCurrentKey(SDL_Keycode keycode);
     bool queryKeyPressed(SDL_Keycode keycode);
 private:

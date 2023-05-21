@@ -1,7 +1,7 @@
 #include <GL/glew.h>
-#include "context.h"
+#include "GLContext.h"
 
-Context::Context(Window *window)
+GLContext::GLContext(SDLContext *window)
 {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
@@ -23,11 +23,11 @@ Context::Context(Window *window)
     }
 }
 
-Context::~Context() {
+GLContext::~GLContext() {
 
 }
 
-void Context::clear()
+void GLContext::clear()
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);

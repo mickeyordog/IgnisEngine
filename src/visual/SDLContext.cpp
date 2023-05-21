@@ -1,9 +1,9 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
-#include "window.h"
+#include "SDLContext.h"
 
-Window::Window(const char* name, int width, int height)
+SDLContext::SDLContext(const char* name, int width, int height)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -26,7 +26,7 @@ Window::Window(const char* name, int width, int height)
 	}
 }
 
-Window::~Window()
+SDLContext::~SDLContext()
 {
 	// SDL_GL_DeleteContext(gl_context);
 	SDL_DestroyWindow(this->window);
@@ -35,12 +35,12 @@ Window::~Window()
 	SDL_Quit();
 }
 
-void Window::swapWindow()
+void SDLContext::swapWindow()
 {
 	SDL_GL_SwapWindow(this->window);
 }
 
-SDL_Window *Window::getWindow()
+SDL_Window *SDLContext::getWindow()
 {
     return this->window;
 }

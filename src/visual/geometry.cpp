@@ -1,8 +1,10 @@
 #include "geometry.h"
 #include <GL/glew.h>
 
-Geometry::Geometry()
+Geometry::Geometry(const Texture* texture, const Shader* shader)
 {
+    this->texture = texture;
+    this->shader = shader;
     // x, y, z, u, v
     float vertices[] = {
         0.5f, 0.5f, 0.0f, 1.0f, 1.0f,   // top right
@@ -41,6 +43,9 @@ Geometry::~Geometry()
 
 void Geometry::render()
 {
+    this->texture->bind();
+    this->shader->use();
+
     glBindVertexArray(this->VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
