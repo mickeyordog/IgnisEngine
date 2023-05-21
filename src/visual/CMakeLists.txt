@@ -5,6 +5,9 @@ add_library(visual
     gameObject.cpp
     text.cpp
     shader.cpp
+    context.cpp
+    texture.cpp
+    geometry.cpp
 )
 
 target_link_libraries(
@@ -15,6 +18,7 @@ target_link_libraries(
         SDL2_ttf::SDL2_ttf
         OpenGL::GL
         GLEW::glew_s
+        STB_IMAGE
         # input
 )
 
@@ -22,4 +26,5 @@ target_include_directories(
     visual
     PUBLIC 
         ../input # need it like this bc it's relative to current. To fix could take reddit advice and move all into root
+        ${STB_IMAGE_PATH}
 )
