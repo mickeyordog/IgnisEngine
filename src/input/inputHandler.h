@@ -1,8 +1,5 @@
 #pragma once
 
-#include <SDL.h>
-#include <unordered_set>
-
 // Singleton implementation from https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
 class InputHandler
 {
@@ -12,6 +9,7 @@ public:
     void operator=(InputHandler const&) = delete;
 
     void updateKeys();
+
 private:
     InputHandler() {}
 };

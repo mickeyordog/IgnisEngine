@@ -19,39 +19,6 @@
 #include "imgui_impl_sdl2.h"
 #include "imgui_impl_opengl3.h"
 
-bool init()
-{
-	bool success = true;
-
-	if( SDL_Init(SDL_INIT_VIDEO) < 0)
-	{
-		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-		success = false;
-	}
-	int imgFlags = IMG_INIT_PNG;
-	if(!(IMG_Init(imgFlags) & imgFlags))
-	{
-		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-		success = false;
-	}
-	if( TTF_Init() == -1 )
-	{
-		printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
-		success = false;
-	}
-
-	return success;
-}
-
-
-
-void close()
-{
-	IMG_Quit();
-	TTF_Quit();
-	SDL_Quit();
-}
-
 // TODO: extension that lets you add includes more easily
 int main( int argc, char* args[] )
 {
@@ -66,7 +33,7 @@ int main( int argc, char* args[] )
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;	  // Enable Docking
-	// io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;	  // Enable Multi-Viewport / Platform Windows
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;	  // Enable Multi-Viewport / Platform Windows
 	// io.ConfigViewportsNoAutoMerge = true;
 	// io.ConfigViewportsNoTaskBarIcon = true;
 
@@ -93,8 +60,8 @@ int main( int argc, char* args[] )
 
 	// glViewport(0, 0, 200, 100);
 
-	Texture texture("assets/texture.png");
-	Shader shader("src/shader/vertex.vs", "src/shader/fragment.fs");
+	Texture texture("../assets/texture.png");
+	Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
 	Geometry geometry(&texture, &shader);
 
 	Timer frameTimer;
@@ -117,9 +84,6 @@ int main( int argc, char* args[] )
 		deltaTime = frameTimer.read();
 		frameTimer.reset();
 		// std::cout << 1.0f/deltaTime << " fps" << std::endl;
-
-		// glContext.clear();
-		// geometry.render();
 
 
 		ImGui_ImplOpenGL3_NewFrame();
@@ -181,6 +145,8 @@ int main( int argc, char* args[] )
 			ImGui::RenderPlatformWindowsDefault();
 			SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
 		}
+		// glContext.clear();
+		// geometry.render();
 
 		sdlContext.swapWindow();
 	}
