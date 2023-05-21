@@ -88,6 +88,12 @@ add_library(STB_IMAGE ${STB_IMAGE_PATH}/stb_image.cpp)
 target_include_directories(${PROJECT_NAME} PUBLIC ${STB_IMAGE_PATH})
 target_link_libraries(${PROJECT_NAME} PUBLIC STB_IMAGE)
 
+set(IMGUI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/cross-platform/dear-imgui)
+add_library(IMGUI ${IMGUI_PATH}/imgui.cpp ${IMGUI_PATH}/imgui_demo.cpp ${IMGUI_PATH}/imgui_draw.cpp ${IMGUI_PATH}/imgui_widgets.cpp ${IMGUI_PATH}/imgui_impl_sdl2.cpp ${IMGUI_PATH}/imgui_impl_opengl3.cpp ${IMGUI_PATH}/imgui_tables.cpp)
+target_link_libraries(IMGUI PUBLIC SDL2::SDL2)
+target_include_directories(${PROJECT_NAME} PUBLIC ${IMGUI_PATH})
+target_link_libraries(${PROJECT_NAME} PUBLIC IMGUI)
+
 set(SRC_DIRECTORIES input visual util audio)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
 foreach(DIR ${SRC_PATHS})

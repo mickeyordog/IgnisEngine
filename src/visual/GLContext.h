@@ -9,4 +9,7 @@ public:
     ~GLContext();
 
     void clear();
+    SDL_GLContext getContext();
+private:
+    SDL_GLContext context;
 };

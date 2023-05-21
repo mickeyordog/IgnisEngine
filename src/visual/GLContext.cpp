@@ -2,7 +2,7 @@
 #include "GLContext.h"
 #include <stdio.h>
 
-GLContext::GLContext(SDLContext *window)
+GLContext::GLContext(SDLContext *sdlContext)
 {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
@@ -12,8 +12,8 @@ GLContext::GLContext(SDLContext *window)
         printf("Unable to set double buffer! SDL Error: %s\n", SDL_GetError());
     }
 
-    SDL_GLContext context = SDL_GL_CreateContext(window->getWindow());
-    if (context == NULL)
+    this->context = SDL_GL_CreateContext(sdlContext->getWindow());
+    if (this->context == NULL)
     {
         printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
     }
@@ -21,6 +21,9 @@ GLContext::GLContext(SDLContext *window)
     {
         printf("Unable to set VSync! SDL Error: %s\n", SDL_GetError());
     }
+    // if (SDL_GL_MakeCurrent(sdlContext->getWindow(), this->context) < 0) {
+    //     printf("Unable to set current context! SDL Error: %s\n", SDL_GetError());
+    // }
 
     glewExperimental = GL_TRUE;
     GLenum glewError = glewInit();
@@ -38,4 +41,9 @@ void GLContext::clear()
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+}
+
+SDL_GLContext GLContext::getContext()
+{
+    return SDL_GLContext();
 }
