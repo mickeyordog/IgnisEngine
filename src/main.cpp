@@ -63,15 +63,14 @@ int main( int argc, char* args[] )
 
 	Timer frameTimer;
 	float deltaTime = 0;
-
 	SDL_Event e;
 
 	bool quit = false;
-	while( !quit )
+	while(!quit)
 	{
-		while( SDL_PollEvent( &e ) != 0 )
+		while (SDL_PollEvent(&e) != 0)
 		{
-			if( e.type == SDL_QUIT )
+			if (e.type == SDL_QUIT)
 			{
 				quit = true;
 			}
@@ -80,6 +79,7 @@ int main( int argc, char* args[] )
 
 		deltaTime = frameTimer.read();
 		frameTimer.reset();
+		std::cout << 1.0f/deltaTime << " fps" << std::endl;
 
 		glContext.clear();
 		geometry.render();
