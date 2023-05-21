@@ -11,10 +11,7 @@ public:
     InputHandler(InputHandler const&) = delete;
     void operator=(InputHandler const&) = delete;
 
-    void resetKeys();
-    void addCurrentKey(SDL_Keycode keycode);
-    bool queryKeyPressed(SDL_Keycode keycode);
+    void updateKeys();
 private:
     InputHandler() {}
-    std::unordered_set<SDL_Keycode> currentKeys;
 };

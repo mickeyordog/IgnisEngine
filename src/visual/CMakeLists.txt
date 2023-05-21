@@ -1,9 +1,6 @@
 add_library(visual
     SDLContext.cpp
-    sprite.cpp
-    renderer.cpp
     gameObject.cpp
-    text.cpp
     shader.cpp
     GLContext.cpp
     texture.cpp

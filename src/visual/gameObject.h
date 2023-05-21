@@ -1,16 +1,13 @@
 #pragma once
-#include "sprite.h"
-#include "renderer.h"
 
 class GameObject {
 public:
-    GameObject(Sprite* sprite, float x, float y, int width, int height);
+    GameObject(float x, float y, int width, int height);
     ~GameObject();
     void update(float dt);
-    void render(Renderer* renderer);
+    void render();
 
 private:
-    Sprite* sprite;
     float x;
     float y;
     int width;

@@ -7,18 +7,7 @@ InputHandler& InputHandler::getInstance()
     return instance;
 }
 
-// TODO: rename to resetKeys
-void InputHandler::resetKeys()
+void InputHandler::updateKeys()
 {
-    this->currentKeys.clear();
-}
-
-void InputHandler::addCurrentKey(SDL_Keycode keycode)
-{
-    this->currentKeys.insert(keycode);
-}
-
-bool InputHandler::queryKeyPressed(SDL_Keycode keycode)
-{
-    return this->currentKeys.find(keycode) != this->currentKeys.end();
+    
 }

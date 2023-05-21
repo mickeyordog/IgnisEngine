@@ -1,8 +1,6 @@
 #pragma once
 
 #include <SDL.h>
-#include "sprite.h"
-#include "renderer.h"
 
 // TODO: rename to SDLContext
 class SDLContext {
