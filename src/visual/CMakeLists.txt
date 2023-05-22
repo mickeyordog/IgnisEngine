@@ -5,6 +5,7 @@ add_library(visual
     GLContext.cpp
     texture.cpp
     geometry.cpp
+    dearImGuiContext.cpp
 )
 
 target_link_libraries(
@@ -16,6 +17,7 @@ target_link_libraries(
         OpenGL::GL
         GLEW::glew_s
         STB_IMAGE
+        IMGUI
         # input
 )
 
@@ -24,4 +26,5 @@ target_include_directories(
     PUBLIC 
         ../input # need it like this bc it's relative to current. To fix could take reddit advice and move all into root
         ${STB_IMAGE_PATH}
+        ${IMGUI_PATH}
 )
