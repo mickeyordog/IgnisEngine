@@ -37,7 +37,6 @@ SDLContext::SDLContext(const char* name, int width, int height)
 
 SDLContext::~SDLContext()
 {
-	// SDL_GL_DeleteContext(gl_context);
 	SDL_DestroyWindow(this->window);
 	IMG_Quit();
 	TTF_Quit();

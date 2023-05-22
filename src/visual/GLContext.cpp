@@ -28,12 +28,12 @@ GLContext::GLContext(SDLContext *sdlContext)
 }
 
 GLContext::~GLContext() {
-
+    SDL_GL_DeleteContext(this->context);
 }
 
-void GLContext::clear()
+void GLContext::clear(float r, float g, float b, float a)
 {
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(r, g, b, a);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 

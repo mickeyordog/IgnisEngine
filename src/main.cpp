@@ -31,6 +31,7 @@ int main(int argc, char* args[])
 	bool show_another_window = false;
 
 	// glViewport(0, 0, 200, 100);
+	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	Texture texture("../assets/texture.png");
 	Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
@@ -76,14 +77,15 @@ int main(int argc, char* args[])
 			ImGui::Checkbox("Another Window", &show_another_window);
 
 			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);			 // Edit 1 float using a slider from 0.0f to 1.0f
-			// ImGui::ColorEdit3("clear color", (float *)&clear_color); // Edit 3 floats representing a color
+			ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
 			if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				counter++;
 			ImGui::SameLine();
 			ImGui::Text("counter = %d", counter);
 
-			// ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+			float framerate = dearImGuiContext.getIO().Framerate;
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / framerate, framerate);
 			ImGui::End();
 		}
 
@@ -98,16 +100,13 @@ int main(int argc, char* args[])
 		}
 
 		// Rendering
+		glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 		dearImGuiContext.render();
 
-		// glContext.clear();
 		// geometry.render();
 
 		sdlContext.swapWindow();
 	}
 
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplSDL2_Shutdown();
-	ImGui::DestroyContext();
 	return 0;
 }

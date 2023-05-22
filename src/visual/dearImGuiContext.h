@@ -11,4 +11,6 @@ public:
 
     void newFrame();
     void render();
+
+    ImGuiIO& getIO();
 };
