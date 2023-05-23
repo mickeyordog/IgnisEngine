@@ -1,26 +1,25 @@
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
 #include <stdio.h>
 #include <iostream>
-#include <math.h>
+#include <imgui.h>
+#include <imgui_impl_sdl2.h>
+#include <imgui_impl_opengl3.h>
 #include "SDLContext.h"
+#include "GLContext.h"
+#include "dearImGuiContext.h"
 #include "gameObject.h"
 #include "timer.h"
 #include "inputHandler.h"
 #include "shader.h"
-#include <GL/glew.h>
-#include <SDL_opengl.h>
-#include "stb_image.h"
-#include "GLContext.h"
 #include "texture.h"
 #include "geometry.h"
-#include "imgui.h"
-#include "imgui_impl_sdl2.h"
-#include "imgui_impl_opengl3.h"
-#include "dearImGuiContext.h"
 
 // TODO: extension that lets you add includes more easily
+// TODO: fix window resizing
+// TODO: allow editing gameobject fields in editor
+// TODO: set up camera, render scene to texture, render texture to screen
+// TODO: set up scene editor
+// TODO: fancier scene rendering, eg 3D stuff
+// TODO: script embed/implementation
 int main(int argc, char* args[])
 {
 	SDLContext sdlContext("Ignis Engine", 1280, 720);
@@ -46,7 +45,9 @@ int main(int argc, char* args[])
 		SDL_Event e;
 		while (SDL_PollEvent(&e) != 0)
 		{
+			// TODO: io.WantMouseCapture etc for imgui
 			ImGui_ImplSDL2_ProcessEvent(&e);
+			sdlContext.handleEvents(&e);
 			if (e.type == SDL_QUIT)
 			{
 				quit = true;
@@ -57,7 +58,6 @@ int main(int argc, char* args[])
 		deltaTime = frameTimer.read();
 		frameTimer.reset();
 		// std::cout << 1.0f/deltaTime << " fps" << std::endl;
-
 
 		dearImGuiContext.newFrame();
 
@@ -96,10 +96,10 @@ int main(int argc, char* args[])
 			ImGui::Text("Hello from another window!");
 			if (ImGui::Button("Close Me"))
 				show_another_window = false;
+			ImGui::Image((void*)texture.textureHandle, ImVec2(texture.width, texture.height));
 			ImGui::End();
 		}
 
-		// Rendering
 		glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 		dearImGuiContext.render();
 

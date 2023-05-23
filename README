@@ -13,3 +13,5 @@ Run:
 - cmake -S . -B build/ 
 - make -C build 
 - ./build/IgnisEngine
+
+# TODO: build everything from source with CMake so I don't need separate libs for each OS, remove vcpkg

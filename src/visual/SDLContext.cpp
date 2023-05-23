@@ -43,6 +43,13 @@ SDLContext::~SDLContext()
 	SDL_Quit();
 }
 
+void SDLContext::handleEvents(SDL_Event* e)
+{
+	if (e->type == SDL_WINDOWEVENT)
+	{
+	}
+}
+
 void SDLContext::swapWindow()
 {
 	SDL_GL_SwapWindow(this->window);

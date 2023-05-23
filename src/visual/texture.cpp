@@ -6,18 +6,16 @@
 
 Texture::Texture(const char *filePath)
 {
-    
     stbi_set_flip_vertically_on_load(true);
     int width, height, nrChannels;
     unsigned char *data = stbi_load(filePath, &width, &height, &nrChannels, 0);
-    std::cout << width << " " << height << " " << nrChannels << std::endl;
     if (data == NULL)
     {
         std::cout << "Failed to load texture" << std::endl;
     }
+    this->width = width;
+    this->height = height;
 
-    // TODO: what of this needs to be defined per texture? Any of this need to
-    // stick to VAO?
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
