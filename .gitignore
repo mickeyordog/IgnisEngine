@@ -13,3 +13,4 @@
 
 # Custom stuff
 build/
+vcpkg/

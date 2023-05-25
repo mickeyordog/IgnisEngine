@@ -73,6 +73,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_image::S
 find_package(SDL2_ttf CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)
 
+find_package(Python3 COMPONENTS Development REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE Python3::Python)
+
 # find_package(SDL2 REQUIRED)
 # find_package(SDL2_image REQUIRED)
 # find_package(SDL2_ttf REQUIRED)

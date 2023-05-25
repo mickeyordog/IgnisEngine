@@ -72,7 +72,8 @@
         "span": "cpp",
         "stack": "cpp",
         "thread": "cpp",
-        "unordered_set": "cpp"
+        "unordered_set": "cpp",
+        "*.inc": "cpp"
     },
     // Adapted from https://github.com/microsoft/vscode-cmake-tools/issues/506
     // be careful, I think lldb is Mac specific
