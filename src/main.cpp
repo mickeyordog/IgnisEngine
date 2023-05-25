@@ -16,8 +16,55 @@
 #include "texture.h"
 #include "geometry.h"
 
+/* Return the number of arguments of the application command line */
+static int numargs = 0;
+static PyObject* emb_numargs(PyObject *self, PyObject *args)
+{
+	if (!PyArg_ParseTuple(args, ":numargs"))
+		return NULL;
+	return PyLong_FromLong(numargs);
+}
+
+static PyObject* emb_multiply(PyObject *self, PyObject *args)
+{
+	float a, b;
+	if (!PyArg_ParseTuple(args, "ff:multiply", &a, &b))
+		return NULL;
+	return PyFloat_FromDouble(a * b);
+}
+
+static PyObject *emb_dot(PyObject *self, PyObject *args)
+{
+	float x1, y1, x2, y2;
+	if (!PyArg_ParseTuple(args, "(ff)(ff):dot", &x1, &y1, &x2, &y2))
+		return NULL;
+	return PyFloat_FromDouble(x1 * x2 + y1 * y2);
+}
+
+static PyMethodDef EmbMethods[] = {
+	{"numargs", emb_numargs, METH_VARARGS, "Return the number of arguments received by the process."},
+	{"multiply", emb_multiply, METH_VARARGS, "Multiply two numbers."},
+	{"dot", emb_dot, METH_VARARGS, "Dot product between two vectors."},
+	{NULL, NULL, 0, NULL}};
+
+static PyModuleDef EmbModule = {
+	PyModuleDef_HEAD_INIT, "emb", NULL, -1, EmbMethods,
+	NULL, NULL, NULL, NULL};
+
+static PyObject *
+PyInit_emb(void)
+{
+	return PyModule_Create(&EmbModule);
+}
+
 int main(int argc, char *argv[])
 {
+	argc = 4;
+	argv[1] = "ignis";
+	argv[2] = "test";
+	argv[3] = "3";
+	numargs = argc;
+	PyImport_AppendInittab("emb", &PyInit_emb);
 	PyObject *pName, *pModule, *pFunc;
 	PyObject *pArgs, *pValue;
 	int i;
@@ -29,10 +76,12 @@ int main(int argc, char *argv[])
 	}
 
 	Py_Initialize();
-	
+
+	// Is this alright to add?
 	PyObject *sys = PyImport_ImportModule("sys");
 	PyObject *path = PyObject_GetAttrString(sys, "path");
-	PyList_Append(path, PyUnicode_FromString("."));
+	PyList_Append(path, PyUnicode_FromString("../src/script"));
+	// need to dec ref?
 
 	pName = PyUnicode_DecodeFSDefault(argv[1]);
 	if (pName == NULL)
@@ -45,12 +94,35 @@ int main(int argc, char *argv[])
 	if (pModule == NULL) {
 		PyErr_Print();
 		fprintf(stderr, "Error importing module\n");
+		Py_DECREF(pName);
 		return 1;
 	}
 	Py_DECREF(pName);
 
 	if (pModule != NULL)
 	{
+		pFunc = PyObject_GetAttrString(pModule, "get_component_classes");
+		if (pFunc && PyCallable_Check(pFunc)) {
+			pValue = PyObject_CallObject(pFunc, NULL);
+			if (pValue != NULL) {
+				PyObject* obj = PyList_GET_ITEM(pValue, 0);
+				PyObject *repr = PyObject_Repr(pValue);
+				PyObject *str = PyUnicode_AsEncodedString(repr, "utf-8", "~E~");
+				const char *bytes = PyBytes_AS_STRING(str);
+
+				printf("REPR: %s\n", bytes);
+			}
+			else {
+				PyErr_Print();
+				printf("Error calling object\n");
+			}
+		}
+		else {
+			PyErr_Print();
+			printf("Error getting component classes\n");
+		}
+			
+
 		pFunc = PyObject_GetAttrString(pModule, argv[2]);
 		/* pFunc is a new reference */
 
@@ -120,8 +192,8 @@ int main2(int argc, char* args[])
 	Py_Initialize();
 	// PyRun_SimpleString("print('Hello from Python!')");
 	// Py_DecodeLocale()
-	FILE* file = fopen("../src/script/test.py", "rb");
-	if (PyRun_SimpleFileExFlags(file, "test.py", true, nullptr) < 0)
+	FILE* file = fopen("../src/script/ignis.py", "rb");
+	if (PyRun_SimpleFileExFlags(file, "ignis.py", true, nullptr) < 0)
 	{
 		std::cout << "PyRun_SimpleFile() failed" << std::endl;
 	}
@@ -205,7 +277,7 @@ int main2(int argc, char* args[])
 			ImGui::Text("Hello from another window!");
 			if (ImGui::Button("Close Me"))
 				show_another_window = false;
-			ImGui::Image((void*)texture.textureHandle, ImVec2(texture.width, texture.height));
+			ImGui::Image((void *)(uintptr_t)texture.textureHandle, ImVec2(texture.width, texture.height));
 			ImGui::End();
 		}
 
