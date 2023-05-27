@@ -59,10 +59,11 @@ PyInit_emb(void)
 
 int main(int argc, char *argv[])
 {
-	argc = 4;
-	argv[1] = "ignis";
-	argv[2] = "test";
-	argv[3] = "3";
+	return 0;
+	// argc = 4;
+	// argv[1] = "ignis";
+	// argv[2] = "test";
+	// argv[3] = "3";
 	numargs = argc;
 	PyImport_AppendInittab("emb", &PyInit_emb);
 	PyObject *pName, *pModule, *pFunc;
@@ -201,7 +202,7 @@ int main2(int argc, char* args[])
 	{
 		std::cout << "Py_FinalizeEx() failed" << std::endl;
 	}
-	return 0;
+	// return 0;
 
 	SDLContext sdlContext("Ignis Engine", 1280, 720);
 	GLContext glContext(&sdlContext);

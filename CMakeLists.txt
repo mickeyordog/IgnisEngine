@@ -97,7 +97,7 @@ target_link_libraries(IMGUI PUBLIC SDL2::SDL2)
 target_include_directories(${PROJECT_NAME} PUBLIC ${IMGUI_PATH})
 target_link_libraries(${PROJECT_NAME} PUBLIC IMGUI)
 
-set(SRC_DIRECTORIES input visual util audio)
+set(SRC_DIRECTORIES input visual util audio component scripting-system)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
 foreach(DIR ${SRC_PATHS})
     add_subdirectory(${DIR})

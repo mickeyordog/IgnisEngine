@@ -1,4 +1,3 @@
-from re import X
 import emb
 
 print("Number of arguments", emb.numargs())
@@ -29,6 +28,7 @@ def get_class_fields(cls: type):
 # perf doesn't really matter bc this should only be happening in editor
 # upon cmd+S, save entire dict to file
 # need to handle possibly changing component class names and fields
+# for speed, does cpython auto compile to something good? OR should I use Cython? Also check how mem alloc works in python
 def get_component_dict():
     return {cls.__name__: get_class_fields(cls) for cls in get_component_classes()}
 
@@ -63,3 +63,7 @@ t = Transform()
 setattr(Transform, "x", 10.0)
 getattr(Transform, "move")(t, (1.0, 2.0, 3.0))
 print(type(Component.__subclasses__()[0]))
+
+def cool_function(a:int):
+    print("hi mickey")
+    return a+2
