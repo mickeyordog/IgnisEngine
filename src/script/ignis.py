@@ -57,12 +57,12 @@ class Transform(Component):
         print("New pos is: " + str((self.x, self.y, self.z)))
 
     
-print(Component.__subclasses__())
-print([attribute for attribute in dir(Transform) if callable(getattr(Transform, attribute)) is False and attribute.startswith('__') is False])
-t = Transform()
-setattr(Transform, "x", 10.0)
-getattr(Transform, "move")(t, (1.0, 2.0, 3.0))
-print(type(Component.__subclasses__()[0]))
+# print(Component.__subclasses__())
+# print([attribute for attribute in dir(Transform) if callable(getattr(Transform, attribute)) is False and attribute.startswith('__') is False])
+# t = Transform()
+# setattr(Transform, "x", 10.0)
+# getattr(Transform, "move")(t, (1.0, 2.0, 3.0))
+# print(type(Component.__subclasses__()[0]))
 
 def cool_function(a:int):
     print("hi mickey")

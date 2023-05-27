@@ -1,12 +1,12 @@
-#define PY_SSIZE_T_CLEAN
-#include <Python.h>
-
 #include <iostream>
 
 #include "pythonEngine.h"
+#include "moduleIgnis.h"
 
 PythonEngine::PythonEngine()
 {
+    PyImport_AppendInittab("emb", &PyInit_emb);
+
     Py_Initialize();
 
     // Is this alright to add?
@@ -14,8 +14,6 @@ PythonEngine::PythonEngine()
     PyObject *path = PyObject_GetAttrString(sys, "path");
     PyList_Append(path, PyUnicode_FromString("../src/script"));
     // need to dec ref?
-
-    
 }
 
 PythonEngine::~PythonEngine()
@@ -26,7 +24,7 @@ PythonEngine::~PythonEngine()
     }
 }
 
-bool PythonEngine::invokeMethod(const char* moduleName, const char* functionName, int argc, char** argv)
+bool PythonEngine::invokeMethod(const char* moduleName, const char* functionName, int argc, int argv[]) const
 {
     PyObject *pName, *pModule, *pFunc;
     PyObject *pArgs, *pValue;
@@ -53,21 +51,21 @@ bool PythonEngine::invokeMethod(const char* moduleName, const char* functionName
         pFunc = PyObject_GetAttrString(pModule, "get_component_classes");
         if (pFunc && PyCallable_Check(pFunc))
         {
-            pValue = PyObject_CallObject(pFunc, NULL);
-            if (pValue != NULL)
-            {
-                PyObject *obj = PyList_GET_ITEM(pValue, 0);
-                PyObject *repr = PyObject_Repr(pValue);
-                PyObject *str = PyUnicode_AsEncodedString(repr, "utf-8", "~E~");
-                const char *bytes = PyBytes_AS_STRING(str);
+            // pValue = PyObject_CallObject(pFunc, NULL);
+            // if (pValue != NULL)
+            // {
+            //     PyObject *obj = PyList_GET_ITEM(pValue, 0);
+            //     PyObject *repr = PyObject_Repr(pValue);
+            //     PyObject *str = PyUnicode_AsEncodedString(repr, "utf-8", "~E~");
+            //     const char *bytes = PyBytes_AS_STRING(str);
 
-                printf("REPR: %s\n", bytes);
-            }
-            else
-            {
-                PyErr_Print();
-                printf("Error calling object\n");
-            }
+            //     printf("REPR: %s\n", bytes);
+            // }
+            // else
+            // {
+            //     PyErr_Print();
+            //     printf("Error calling object\n");
+            // }
         }
         else
         {
@@ -83,7 +81,7 @@ bool PythonEngine::invokeMethod(const char* moduleName, const char* functionName
             pArgs = PyTuple_New(argc);
             for (int i = 0; i < argc; ++i)
             {
-                pValue = PyLong_FromLong(atoi(argv[i]));
+                pValue = PyLong_FromLong(argv[i]);
                 if (!pValue)
                 {
                     Py_DECREF(pArgs);
@@ -114,7 +112,7 @@ bool PythonEngine::invokeMethod(const char* moduleName, const char* functionName
         {
             if (PyErr_Occurred())
                 PyErr_Print();
-            fprintf(stderr, "Cannot find function \"%s\"\n", argv[2]);
+            fprintf(stderr, "Cannot find function \"%s\"\n", functionName);
         }
         Py_XDECREF(pFunc);
         Py_DECREF(pModule);
@@ -122,7 +120,8 @@ bool PythonEngine::invokeMethod(const char* moduleName, const char* functionName
     else
     {
         PyErr_Print();
-        fprintf(stderr, "Failed to load \"%s\"\n", argv[1]);
+        fprintf(stderr, "Failed to load \"%s\"\n", moduleName);
         return 1;
     }
+    return true;
 }

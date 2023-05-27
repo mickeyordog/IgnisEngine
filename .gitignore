@@ -14,4 +14,5 @@
 # Custom stuff
 build/
 vcpkg/
+**/__pycache__
 *.pyc
