@@ -4,6 +4,7 @@
 #include "texture.h"
 #include "shader.h"
 
+// TODO: allow instancing?
 class Geometry {
 public:
     Geometry(const Texture* texture, const Shader* shader);

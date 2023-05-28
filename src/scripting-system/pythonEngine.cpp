@@ -130,4 +130,5 @@ bool PythonEngine::invokeMethod(PyObject *self, PyObject *name, PyObject *arg)
 {
     PyObject_CallMethodOneArg(self, name, arg);
     // PyObject_CallMethod()
+    return true;
 }

@@ -1,28 +1,15 @@
 #pragma once
 
 #include <vector>
+#include "serialization.h"
 
-#define GET_NAME(variable) (#variable)
-
-enum Type
-{
-    Float,
-    Int
-};
-
-struct FieldDescription
-{
-    const char* name;
-    Type type;
-    const void* ptr;
-};
-
+// TODO: if need List of smth that needs to be in inspector, prob make SerializedList vector class wrapper that will spit out correct fields vec
 class Component {
 public:
     Component();
     ~Component();
-    void start();
-    void update(float dt);
+    virtual void start() = 0;
+    virtual void update(float dt) = 0;
 
     const std::vector<FieldDescription>& getFields() { return fields; };
 

@@ -1,6 +1,7 @@
 add_library(component
     component.cpp
-    transform.cpp
+    objectTransform.cpp
+    vec3.cpp
 )
 
 target_link_libraries(

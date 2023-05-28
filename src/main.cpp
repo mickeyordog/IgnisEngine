@@ -13,7 +13,7 @@
 #include "texture.h"
 #include "geometry.h"
 #include "pythonEngine.h"
-#include "transform.h"
+#include "objectTransform.h" // how to not need to do this/get around this?
 
 
 // TODO: extension that lets you add includes more easily
@@ -25,7 +25,14 @@
 // TODO: script embed/implementation
 int main(int argc, char* args[])
 {
-	Transform t(3, 4, 5);
+	ignis_engine::Transform t;
+
+	std::cout << "Size: " << t.getFields().size() << std::endl;
+	for (const FieldDescription& f : t.getFields()) {
+		std::cout << "Name: " << f.name << std::endl;
+		std::cout << "Type enum: " << (int)f.type << std::endl;
+		std::cout << "Value: " << *(float*)f.ptr << std::endl;
+	}
 	// PythonEngine pythonEngine;
 
 	SDLContext sdlContext("Ignis Engine", 1280, 720);
