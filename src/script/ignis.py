@@ -28,7 +28,7 @@ def get_class_fields(cls: type):
 # perf doesn't really matter bc this should only be happening in editor
 # upon cmd+S, save entire dict to file
 # need to handle possibly changing component class names and fields
-# for speed, does cpython auto compile to something good? OR should I use Cython? Also check how mem alloc works in python
+# for speed, does cpython auto compile to something good? Or should I use Cython? Also check how mem alloc works in python
 def get_component_dict():
     return {cls.__name__: get_class_fields(cls) for cls in get_component_classes()}
 

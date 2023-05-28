@@ -24,7 +24,7 @@ PythonEngine::~PythonEngine()
     }
 }
 
-bool PythonEngine::invokeMethod(const char* moduleName, const char* functionName, int argc, int argv[]) const
+bool PythonEngine::invokeFunction(const char* moduleName, const char* functionName, int argc, int argv[]) const
 {
     PyObject *pName, *pModule, *pFunc;
     PyObject *pArgs, *pValue;
@@ -33,7 +33,7 @@ bool PythonEngine::invokeMethod(const char* moduleName, const char* functionName
     if (pName == NULL)
     {
         fprintf(stderr, "Error decoding filename\n");
-        return 1;
+        return false;
     }
 
     pModule = PyImport_Import(pName);
@@ -42,7 +42,7 @@ bool PythonEngine::invokeMethod(const char* moduleName, const char* functionName
         PyErr_Print();
         fprintf(stderr, "Error importing module\n");
         Py_DECREF(pName);
-        return 1;
+        return false;
     }
     Py_DECREF(pName);
 
@@ -124,4 +124,10 @@ bool PythonEngine::invokeMethod(const char* moduleName, const char* functionName
         return 1;
     }
     return true;
+}
+
+bool PythonEngine::invokeMethod(PyObject *self, PyObject *name, PyObject *arg)
+{
+    PyObject_CallMethodOneArg(self, name, arg);
+    // PyObject_CallMethod()
 }

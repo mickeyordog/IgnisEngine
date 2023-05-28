@@ -2,19 +2,24 @@
 
 #include "component.h"
 
-class Transform {
+class Transform: public Component {
 public:
-    Transform(float x, float y, float z);
+    Transform(float x, float y, float z) : x(x), y(y), z(z) {
+        fields.insert(fields.end(), Component::getFields().begin(), Component::getFields().end());
+    };
     ~Transform();
 
     void start();
     void update(float dt);
-    void serialize();
-    void deserialize();
+
     float x, y, z;
 
-    std::vector<FieldInfoTest> fields = {
-        FieldInfoTest{GET_NAME(x), Type::Float, &x},
-        FieldInfoTest{GET_NAME(y), Type::Float, &y},
-        FieldInfoTest{GET_NAME(z), Type::Float, &z}};
+    const std::vector<FieldDescription> &getFields() { return fields; };
+
+private:
+    std::vector<FieldDescription> fields = {
+        FieldDescription{GET_NAME(x), Type::Float, &x},
+        FieldDescription{GET_NAME(y), Type::Float, &y},
+        FieldDescription{GET_NAME(z), Type::Float, &z}
+    };
 };

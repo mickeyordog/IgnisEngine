@@ -1,6 +1,3 @@
-#define PY_SSIZE_T_CLEAN
-#include <Python.h>
-
 #include <stdio.h>
 #include <iostream>
 #include <imgui.h>
@@ -16,17 +13,8 @@
 #include "texture.h"
 #include "geometry.h"
 #include "pythonEngine.h"
+#include "transform.h"
 
-
-int main(int argc, char *argv[])
-{
-	PythonEngine pythonEngine;
-	// const char[] *args = {"3"};
-	int args[] = {atoi(argv[1])};
-	pythonEngine.invokeMethod("ignis", "test", 1, args);
-
-	return 0;
-}
 
 // TODO: extension that lets you add includes more easily
 // TODO: fix window resizing
@@ -35,21 +23,10 @@ int main(int argc, char *argv[])
 // TODO: set up scene editor
 // TODO: fancier scene rendering, eg 3D stuff
 // TODO: script embed/implementation
-int main2(int argc, char* args[])
+int main(int argc, char* args[])
 {
-	Py_Initialize();
-	// PyRun_SimpleString("print('Hello from Python!')");
-	// Py_DecodeLocale()
-	FILE* file = fopen("../src/script/ignis.py", "rb");
-	if (PyRun_SimpleFileExFlags(file, "ignis.py", true, nullptr) < 0)
-	{
-		std::cout << "PyRun_SimpleFile() failed" << std::endl;
-	}
-	if (Py_FinalizeEx() < 0)
-	{
-		std::cout << "Py_FinalizeEx() failed" << std::endl;
-	}
-	// return 0;
+	Transform t(3, 4, 5);
+	// PythonEngine pythonEngine;
 
 	SDLContext sdlContext("Ignis Engine", 1280, 720);
 	GLContext glContext(&sdlContext);
@@ -131,8 +108,6 @@ int main2(int argc, char* args[])
 
 		glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 		dearImGuiContext.render();
-
-		// geometry.render();
 
 		sdlContext.swapWindow();
 	}

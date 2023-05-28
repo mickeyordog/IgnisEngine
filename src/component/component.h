@@ -2,29 +2,32 @@
 
 #include <vector>
 
+#define GET_NAME(variable) (#variable)
+
 enum Type
 {
     Float,
     Int
 };
 
-struct FieldInfoTest
+struct FieldDescription
 {
     const char* name;
     Type type;
-    const void* value;
+    const void* ptr;
 };
-
-#define GET_NAME(variable) (#variable)
 
 class Component {
 public:
     Component();
     ~Component();
-    virtual void start() = 0;
-    virtual void update(float dt) = 0;
-    virtual void serialize() = 0;
-    virtual void deserialize() = 0;
+    void start();
+    void update(float dt);
+
+    const std::vector<FieldDescription>& getFields() { return fields; };
+
+private:
+    std::vector<FieldDescription> fields = { };
 };
 
 

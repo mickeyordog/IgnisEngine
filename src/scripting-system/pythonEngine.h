@@ -8,6 +8,6 @@ public:
     PythonEngine();
     ~PythonEngine();
 
-    bool invokeMethod(const char *moduleName, const char *functionName, int argc, int argv[]) const;
-    bool addModule(PyObject* module);
+    bool invokeFunction(const char *moduleName, const char *functionName, int argc, int argv[]) const;
+    bool invokeMethod(PyObject *self, PyObject *name, PyObject *arg);
 };
