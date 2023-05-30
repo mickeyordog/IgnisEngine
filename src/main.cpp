@@ -17,6 +17,7 @@
 #include "pythonEngine.h"
 #include "objectTransform.h" // how to not need to do this/get around this?
 #include "guiHierarchy.h"
+#include "guiInspector.h"
 #include "scene.h"
 
 
@@ -53,20 +54,24 @@ int main(int argc, char* args[])
 	g0.addChildObject(g4);
 	g1.addChildObject(g3);
 
+	// Print out the locations of each of the three Vec3's in g0
+	printf("%p\n%p\n%p\n", &t0.position.x, &t0.position.y, &t0.position.z);
+
 	Scene scene;
 	scene.addRootGameObject(g0);
 	scene.addRootGameObject(g2);
 
-	std::vector <GameObject*> selectedObjects = {};
-	for (Component* component : g0.getComponents()) {
-		std::cout << "New Component:" << std::endl;
-		for (const FieldDescription& f : component->getFields())
-		{
-			std::cout << "Field name: " << f.name << std::endl;
-			std::cout << "Type enum: " << (int)f.type << std::endl;
-			std::cout << "Value: " << *(float*)f.ptr << std::endl << std::endl;
-		}
-	}
+	std::vector<GameObject*> selectedGameObjects = { &g0 };
+
+	// for (Component* component : g0.getComponents()) {
+	// 	std::cout << "New Component:" << std::endl; // TODO: component name, maybe FieldDescription meta info type
+	// 	for (const FieldDescription& f : component->getFields())
+	// 	{
+	// 		std::cout << "Field name: " << f.name << std::endl;
+	// 		std::cout << "Type enum: " << (int)f.type << std::endl;
+	// 		std::cout << "Value: " << *(float*)f.ptr << std::endl << std::endl;
+	// 	}
+	// }
 
 	SDLContext sdlContext("Ignis Engine", 1280, 720);
 	GLContext glContext(&sdlContext);
@@ -74,7 +79,8 @@ int main(int argc, char* args[])
 
 	bool show_demo_window = true;
 	bool show_another_window = false;
-	bool show_ignis_window = true;
+	bool show_hierarchy_window = true;
+	bool show_inspector_window = true;
 
 	// glViewport(0, 0, 200, 100);
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -108,8 +114,11 @@ int main(int argc, char* args[])
 
 		dearImGuiContext.newFrame();
 
-		if (show_ignis_window) {
+		if (show_hierarchy_window) {
 			showGuiHierarchyPanel(scene);
+		}
+		if (show_inspector_window) {
+			showGuiInspectorPanel(selectedGameObjects);
 		}
 
 		// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
@@ -126,7 +135,8 @@ int main(int argc, char* args[])
 			ImGui::Text("This is some useful text.");		   // Display some text (you can use a format strings too)
 			ImGui::Checkbox("Demo Window", &show_demo_window); // Edit bools storing our window open/close state
 			ImGui::Checkbox("Another Window", &show_another_window);
-			ImGui::Checkbox("Ignis Window", &show_ignis_window);
+			ImGui::Checkbox("Hierarchy Window", &show_hierarchy_window);
+			ImGui::Checkbox("Inspector Window", &show_inspector_window);
 
 			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);			 // Edit 1 float using a slider from 0.0f to 1.0f
 			ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color

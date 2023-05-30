@@ -16,8 +16,8 @@ public:
 
 private:
     std::vector<FieldDescription> fields = {
-        FieldDescription{GET_NAME(x), Type::Float, &x},
-        FieldDescription{GET_NAME(y), Type::Float, &y},
-        FieldDescription{GET_NAME(z), Type::Float, &z}
+        FieldDescription{GET_NAME(x), FieldType::Float, &x},
+        FieldDescription{GET_NAME(y), FieldType::Float, &y},
+        FieldDescription{GET_NAME(z), FieldType::Float, &z}
     };
 };

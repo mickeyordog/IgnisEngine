@@ -2,15 +2,18 @@
 
 #define GET_NAME(variable) (#variable)
 
-enum Type
+enum FieldType
 {
     Float,
-    Int
+    Int,
+    Subclass,
+    EndSubclass,
+    ComponentType
 };
 
 struct FieldDescription
 {
     const char *name;
-    Type type;
+    FieldType type;
     const void *ptr;
 };

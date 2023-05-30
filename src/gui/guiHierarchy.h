@@ -23,7 +23,7 @@ void showGuiHierarchyPanel(Scene& scene) {
         std::stack<GameObject*> treePopStack;
         for (auto gameObject = scene.getRootGameObjects().rbegin(); gameObject != scene.getRootGameObjects().rend(); ++gameObject)
         {
-            objectStack.push(*gameObject); // TODO: does this copy them? Should use ptrs instead?
+            objectStack.push(*gameObject); 
         }
         while (objectStack.size() > 0) {
             GameObject* currentObject = objectStack.top();

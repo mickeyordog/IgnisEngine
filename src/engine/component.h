@@ -11,7 +11,7 @@ public:
     virtual void start() = 0;
     virtual void update(float dt) = 0;
 
-    const std::vector<FieldDescription>& getFields() { return fields; };
+    virtual std::vector<FieldDescription>& getFields() { return fields; };
 
 private:
     std::vector<FieldDescription> fields = { };
