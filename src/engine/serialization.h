@@ -17,3 +17,7 @@ struct FieldDescription
     FieldType type;
     const void *ptr;
 };
+
+struct ClassDescription {
+
+};
