@@ -5,7 +5,8 @@
 #include "serialization.h"
 #include "gameObject.h"
 
-void showGuiInspectorPanel(std::vector<GameObject*>& selectedObjects) {
+// TODO: component tab should be open by default
+void showGuiInspectorPanel(const std::unordered_set<GameObject*>& selectedObjects) {
     ImGui::Begin("Inspector");
 
     if (selectedObjects.size() == 0)
@@ -13,7 +14,14 @@ void showGuiInspectorPanel(std::vector<GameObject*>& selectedObjects) {
         ImGui::Text("No object selected");
     }
     else if (selectedObjects.size() == 1) {
-        for (Component *component : selectedObjects.front()->getComponents())
+        GameObject* const& gameObject = *selectedObjects.begin();
+        if (gameObject->getComponents().size() == 0) {
+            ImGui::Text("Object has no components");
+            ImGui::End();
+            return;
+        }
+
+        for (Component *component : (*selectedObjects.begin())->getComponents())
         {
             // ImGui::Text("New Component:"); // TODO: component name, maybe FieldDescription meta info type
             if (!ImGui::TreeNode("New Component"))
@@ -36,7 +44,7 @@ void showGuiInspectorPanel(std::vector<GameObject*>& selectedObjects) {
                     break;
                 case FieldType::Subclass:
                     ImGui::BulletText("Subclass: %s", f.name);
-                    ImGui::TreePush(f.name);
+                    ImGui::TreePush(f.name); // TODO: this will still cause probs if multiple fields w/ same name
                     break;
                 case FieldType::EndSubclass:
                     ImGui::TreePop(); // crashing bc subclass only pushes if interacted?

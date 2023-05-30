@@ -5,7 +5,8 @@
 #include <imgui.h>
 #include "scene.h"
 
-void showGuiHierarchyPanel(Scene& scene) {
+// TODO: scene should be open by default
+void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& selectedObjects) {
     ImGui::Begin("Hierarchy");
     if (ImGui::TreeNode("Scene"))
     {
@@ -18,7 +19,6 @@ void showGuiHierarchyPanel(Scene& scene) {
         /// of the loop. May be a pointer to your own node type, etc.
         static int selection_mask = (1 << 2);
         GameObject* node_clicked = nullptr;
-        static std::unordered_set<GameObject*> selectedObjects;
         std::stack<GameObject*> objectStack;
         std::stack<GameObject*> treePopStack;
         for (auto gameObject = scene.getRootGameObjects().rbegin(); gameObject != scene.getRootGameObjects().rend(); ++gameObject)
@@ -54,9 +54,6 @@ void showGuiHierarchyPanel(Scene& scene) {
                         objectStack.push(*gameObject);
                     }
                     treePopStack.push(currentObject->getChildObjects().back());
-                    
-                    // ImGui::BulletText("Blah blah\nBlah Blah");
-                    // ImGui::TreePop();
                 }
             }
             else
