@@ -1,11 +1,13 @@
-add_library(component
+add_library(engine
     component.cpp
     objectTransform.cpp
     vec3.cpp
+    scene.cpp
+    gameObject.cpp
 )
 
 target_link_libraries(
-    visual
+    engine
     PUBLIC
         SDL2::SDL2
         SDL2_image::SDL2_image
@@ -18,9 +20,10 @@ target_link_libraries(
 )
 
 target_include_directories(
-    visual
+    engine
     PUBLIC 
         ../input # need it like this bc it's relative to current. To fix could take reddit advice and move all into root
+        ../visual
         ${STB_IMAGE_PATH}
         ${IMGUI_PATH}
 )

@@ -3,6 +3,8 @@
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_opengl3.h>
+#include <vector>
+#include <string>
 #include "SDLContext.h"
 #include "GLContext.h"
 #include "dearImGuiContext.h"
@@ -14,6 +16,8 @@
 #include "geometry.h"
 #include "pythonEngine.h"
 #include "objectTransform.h" // how to not need to do this/get around this?
+#include "guiHierarchy.h"
+#include "scene.h"
 
 
 // TODO: extension that lets you add includes more easily
@@ -25,15 +29,44 @@
 // TODO: script embed/implementation
 int main(int argc, char* args[])
 {
-	ignis_engine::Transform t;
+	// HIERARCHY REQUIREMENTS
+	// 1. See all gameobjects in scene, nested under their respective parents
+	//	- By default, only root child objects will show. Press arrow to show that object's child(ren)
+	// 2. Upon selecting a gameobject, its information/fields will show up in the inspector
+	//	- An arbitrary number of gameobjects can be selected at once, and their common fields will be editable
+	//	- Selected gameobjects will be stored in static vector of imgui function for hierarchy
+	// 3. These fields will be modifiable in real time
+	// 4. Gameobjects can be rearranged in scene by dragging
 
-	std::cout << "Size: " << t.getFields().size() << std::endl;
-	for (const FieldDescription& f : t.getFields()) {
-		std::cout << "Name: " << f.name << std::endl;
-		std::cout << "Type enum: " << (int)f.type << std::endl;
-		std::cout << "Value: " << *(float*)f.ptr << std::endl;
+	GameObject g0("g0");
+	GameObject g1("g1");
+	GameObject g2("g2");
+	GameObject g3("g3");
+	GameObject g4("g4");
+	ignis_engine::Transform t0(0, 0, 0);
+	ignis_engine::Transform t1(0, 0, 0);
+	ignis_engine::Transform t2(0, 0, 0);
+	g0.addComponent(t0);
+	g1.addComponent(t1);
+	g2.addComponent(t2);
+	g0.addChildObject(g1);
+	g0.addChildObject(g4);
+	g1.addChildObject(g3);
+
+	Scene scene;
+	scene.addRootGameObject(g0);
+	scene.addRootGameObject(g2);
+
+	std::vector <GameObject*> selectedObjects = {};
+	for (Component* component : g0.getComponents()) {
+		std::cout << "New Component:" << std::endl;
+		for (const FieldDescription& f : component->getFields())
+		{
+			std::cout << "Field name: " << f.name << std::endl;
+			std::cout << "Type enum: " << (int)f.type << std::endl;
+			std::cout << "Value: " << *(float*)f.ptr << std::endl << std::endl;
+		}
 	}
-	// PythonEngine pythonEngine;
 
 	SDLContext sdlContext("Ignis Engine", 1280, 720);
 	GLContext glContext(&sdlContext);
@@ -41,6 +74,7 @@ int main(int argc, char* args[])
 
 	bool show_demo_window = true;
 	bool show_another_window = false;
+	bool show_ignis_window = true;
 
 	// glViewport(0, 0, 200, 100);
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -74,6 +108,10 @@ int main(int argc, char* args[])
 
 		dearImGuiContext.newFrame();
 
+		if (show_ignis_window) {
+			showGuiHierarchyPanel(scene);
+		}
+
 		// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		if (show_demo_window)
 			ImGui::ShowDemoWindow(&show_demo_window);
@@ -88,6 +126,7 @@ int main(int argc, char* args[])
 			ImGui::Text("This is some useful text.");		   // Display some text (you can use a format strings too)
 			ImGui::Checkbox("Demo Window", &show_demo_window); // Edit bools storing our window open/close state
 			ImGui::Checkbox("Another Window", &show_another_window);
+			ImGui::Checkbox("Ignis Window", &show_ignis_window);
 
 			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);			 // Edit 1 float using a slider from 0.0f to 1.0f
 			ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color

@@ -8,7 +8,7 @@
 namespace ignis_engine {
 class Transform: public Component {
 public:
-    Transform() : position(0,0,0), rotation(0,0,0), scale(0,0,0) {
+    Transform(float x, float y, float z) : position(x,y,z), rotation(0,0,0), scale(0,0,0) {
         fields.insert(fields.end(), Component::getFields().begin(), Component::getFields().end());
         fields.insert(fields.end(), position.getFields().begin(), position.getFields().end());
         fields.insert(fields.end(), rotation.getFields().begin(), rotation.getFields().end());

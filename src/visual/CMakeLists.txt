@@ -1,6 +1,5 @@
 add_library(visual
     SDLContext.cpp
-    gameObject.cpp
     shader.cpp
     GLContext.cpp
     texture.cpp
@@ -25,6 +24,7 @@ target_include_directories(
     visual
     PUBLIC 
         ../input # need it like this bc it's relative to current. To fix could take reddit advice and move all into root
+        ../engine
         ${STB_IMAGE_PATH}
         ${IMGUI_PATH}
 )

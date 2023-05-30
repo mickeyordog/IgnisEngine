@@ -2,7 +2,7 @@
 #include "gameObject.h"
 #include "inputHandler.h"
 
-GameObject::GameObject(float x, float y, int width, int height) : x(x), y(y), width(width), height(height)
+GameObject::GameObject(const char* name) : name(name)
 {
 
 }
@@ -24,4 +24,23 @@ void GameObject::update(float dt)
 void GameObject::render()
 {
     
+}
+
+void GameObject::addComponent(Component& component)
+{
+    this->components.push_back(&component);
+}
+
+std::vector<Component*>& GameObject::getComponents() {
+    return this->components;
+}
+
+void GameObject::addChildObject(GameObject& gameObject)
+{
+    this->childObjects.push_back(&gameObject);
+    gameObject.parentObject = this;
+}
+
+std::vector<GameObject*>& GameObject::getChildObjects() {
+    return this->childObjects;
 }
