@@ -18,6 +18,12 @@ DearImGuiContext::DearImGuiContext(SDLContext *sdlContext, GLContext *glContext)
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable Multi-Viewport / Platform Windows
     // io.ConfigViewportsNoAutoMerge = true;
     // io.ConfigViewportsNoTaskBarIcon = true;
+#ifdef __EMSCRIPTEN__
+    // For an Emscripten build we are disabling file-system access, so let's not attempt to do a fopen() of the imgui.ini file.
+    // You may manually call LoadIniSettingsFromMemory() to load settings from your own storage.
+    // I moved this from the main loop and it's from the example so make sure it actually works here
+    io.IniFilename = nullptr;
+#endif
 
     ImGui::StyleColorsDark();
     // ImGui::StyleColorsLight();

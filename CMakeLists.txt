@@ -48,8 +48,9 @@ target_link_libraries(IMGUI PUBLIC SDL2::SDL2)
 target_include_directories(${PROJECT_NAME} PUBLIC ${IMGUI_PATH})
 target_link_libraries(${PROJECT_NAME} PUBLIC IMGUI)
 
-# TODO: why can't it find glm?
-if (WIN32)
+if (APPLE)
+    set(glm_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/glm)
+elseif (WIN32)
     set(glm_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/glm)
 endif()
 find_package(glm CONFIG REQUIRED)
