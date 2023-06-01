@@ -15,8 +15,10 @@ target_link_libraries(
         GLEW::GLEW
         STB_IMAGE
         IMGUI
-        # input
+        glm::glm
 )
+
+# get_target_property(GLM_INCLUDE_DIR glm::glm INTERFACE_INCLUDE_DIRECTORIES)
 
 target_include_directories(
     visual
@@ -25,4 +27,5 @@ target_include_directories(
         ../engine
         ${STB_IMAGE_PATH}
         ${IMGUI_PATH}
+        # ${GLM_INCLUDE_DIR}
 )

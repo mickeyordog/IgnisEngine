@@ -5,8 +5,9 @@
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_opengl3.h>
-#include <vector>
-#include <string>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "SDLContext.h"
 #include "GLContext.h"
 #include "dearImGuiContext.h"
@@ -22,7 +23,7 @@
 #include "scene.h"
 #include "engineGuiManager.h"
 #include "serialization.h"
-#include <glm/glm.hpp>
+
 
 #ifdef __EMSCRIPTEN__
 #include "../libs/emscripten/emscripten_mainloop_stub.h"
@@ -48,22 +49,24 @@ void beginEngineMainLoop() {
     scene.addRootGameObject(g0);
     scene.addRootGameObject(g2);
 
-    SDLContext sdlContext("Ignis Engine", 1280, 720);
+    SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);
     DearImGuiContext dearImGuiContext(&sdlContext, &glContext);
 
-    static bool show_demo_window = true;
+    static bool show_demo_window = false;
     bool show_another_window = false;
 
     // glViewport(0, 0, 200, 100);
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    Texture texture("../assets/texture.png");
+    Texture texture("../assets/fire_penguin.png");
     Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
     Geometry geometry(&texture, &shader);
 
     Timer frameTimer;
     float deltaTime = 0;
+
+    Timer runtimeTimer;
 
     bool quit = false;
 #ifdef __EMSCRIPTEN__
@@ -134,7 +137,20 @@ void beginEngineMainLoop() {
         glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         dearImGuiContext.render();
 
-        // geometry.render();
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::rotate(model, runtimeTimer.read() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));          
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        glm::mat4 projection;
+        // need to adjust this to my viewport dimensions tho
+        projection = glm::perspective(glm::radians(45.0f), 800.0f / 800.0f, 0.1f, 100.0f);
+
+
+        shader.setUniform("model", model);
+        shader.setUniform("view", view);
+        shader.setUniform("projection", projection);
+        geometry.render();
+        
         sdlContext.swapWindow();
     }
 #ifdef __EMSCRIPTEN__

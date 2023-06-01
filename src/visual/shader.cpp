@@ -33,7 +33,6 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath)
     }
     catch (std::ifstream::failure e)
     {
-
         std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ " << std::endl << e.what() << std::endl;
     }
     const char *vShaderCode = vertexCode.c_str();
@@ -91,4 +90,11 @@ Shader::~Shader()
 void Shader::use() const
 {
     glUseProgram(this->id);
+}
+
+void Shader::setUniform(const char* name, glm::mat4& value)
+{
+    this->use(); // could micro optimize this b/c doesn't need to be called if several uniforms set at once
+    GLuint uniformLocation = glGetUniformLocation(this->id, name);
+    glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(value));
 }

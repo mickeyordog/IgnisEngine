@@ -25,6 +25,10 @@ GLContext::GLContext(SDLContext *sdlContext)
     {
         printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
     }
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_DEPTH_TEST);
 }
 
 GLContext::~GLContext() {
@@ -34,7 +38,7 @@ GLContext::~GLContext() {
 void GLContext::clear(float r, float g, float b, float a)
 {
     glClearColor(r, g, b, a);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 SDL_GLContext* GLContext::getContext()
