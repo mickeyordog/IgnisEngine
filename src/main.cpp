@@ -14,7 +14,7 @@
 #include "shader.h"
 #include "texture.h"
 #include "geometry.h"
-#include "pythonEngine.h"
+// #include "pythonEngine.h"
 #include "objectTransform.h"
 #include "ignisEngineGui.h"
 #include "scene.h"

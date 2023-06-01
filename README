@@ -10,7 +10,7 @@ MAC:
 - ./vcpkg install sdl2 python3 glm
 WINDOWS:
 - ./vcpkg install sdl2:x64-windows-static
-- ./vcpkg install python3
+- ./vcpkg install python3:x64-windows-static
 - ./vcpkg install glew:x64-windows-static
 
 Install cmake, navigate to project root
