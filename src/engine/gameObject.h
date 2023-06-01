@@ -11,8 +11,8 @@ public:
     void update(float dt);
     void render();
 
-    void addComponent(Component& component);
-    void removeComponent(Component& component);
+    void addComponent(Component& component); // TODO: This should prob just construct the component based on its type?
+    void removeComponent(Component& component); // Should look for component of given type and remove it
     std::vector<Component*>& getComponents();
 
     void addChildObject(GameObject& gameObject);

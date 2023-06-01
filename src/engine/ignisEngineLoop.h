@@ -138,13 +138,27 @@ void beginEngineMainLoop() {
         dearImGuiContext.render();
 
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, runtimeTimer.read() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));          
-        glm::mat4 view = glm::mat4(1.0f);
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f));
+        // model = glm::rotate(model, glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));          
+        
+        const float radius = 10.0f;
+        float camX = cos(runtimeTimer.read()) * radius;
+        float camZ = sin(runtimeTimer.read()) * radius;
+        glm::mat4 view;
+        view = glm::lookAt(glm::vec3(camX, camZ, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+
         glm::mat4 projection;
         // need to adjust this to my viewport dimensions tho
         projection = glm::perspective(glm::radians(45.0f), 800.0f / 800.0f, 0.1f, 100.0f);
 
+        shader.setUniform("model", model);
+        shader.setUniform("view", view);
+        shader.setUniform("projection", projection);
+        geometry.render();
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.5f, 0.0f));
+        // model = glm::rotate(model, - glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));          
 
         shader.setUniform("model", model);
         shader.setUniform("view", view);

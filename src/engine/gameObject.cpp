@@ -24,6 +24,7 @@ void GameObject::render() {
 
 void GameObject::addComponent(Component& component) {
     this->components.push_back(&component);
+    component.parentGameObject = this;
 }
 
 std::vector<Component*>& GameObject::getComponents() {
