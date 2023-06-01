@@ -5,7 +5,13 @@ Install vcpkg
 Run the following commands:
 - git clone https://github.com/Microsoft/vcpkg.git
 - ./vcpkg/bootstrap-vcpkg.sh
-- vcpkg install sdl2 python3 glm
+- cd ./vcpkg
+MAC:
+- ./vcpkg install sdl2 python3 glm
+WINDOWS:
+- ./vcpkg install sdl2:x64-windows-static
+- ./vcpkg install python3
+- ./vcpkg install glew:x64-windows-static
 
 Install cmake, navigate to project root
 

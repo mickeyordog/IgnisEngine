@@ -62,16 +62,15 @@ endif()
 # target_link_libraries(${PROJECT_NAME} PRIVATE "-framework Mono")
 
 # target_link_libraries(${PROJECT_NAME} PRIVATE "-framework SDL2")
+if (WIN32)
+    set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/sdl2)
+endif()
 find_package(SDL2 CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
     $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 )
-find_package(SDL2_image CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>)
-find_package(SDL2_ttf CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)
 
 find_package(Python3 COMPONENTS Development REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Python3::Python)
@@ -122,7 +121,7 @@ target_link_libraries(
 )
 
 
-
+# shouldn't need anymore since statically linking
 if (WIN32)
     # from https://stackoverflow.com/questions/10671916/how-to-copy-dll-files-into-the-same-folder-as-the-executable-using-cmake
     # see if can find a better solution than this bc now I need to manually specify every dll
