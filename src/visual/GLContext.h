@@ -9,6 +9,7 @@ public:
 
     void clear(float r, float g, float b, float a);
     SDL_GLContext* getContext();
+    
 private:
     SDL_GLContext context;
 };

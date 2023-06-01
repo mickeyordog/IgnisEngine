@@ -4,6 +4,8 @@
 #include "dearImGuiContext.h"
 #include "GL/Glew.h"
 
+#include <iostream>
+
 DearImGuiContext::DearImGuiContext(SDLContext *sdlContext, GLContext *glContext)
 {
     IMGUI_CHECKVERSION();
@@ -30,8 +32,7 @@ DearImGuiContext::DearImGuiContext(SDLContext *sdlContext, GLContext *glContext)
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForOpenGL(sdlContext->getWindow(), *(glContext->getContext()));
-    const char *glsl_version = "#version 150"; // check example docs, this was diff on diff platforms
-    ImGui_ImplOpenGL3_Init(glsl_version);
+    ImGui_ImplOpenGL3_Init(sdlContext->glsl_version);
 }
 
 DearImGuiContext::~DearImGuiContext()

@@ -21,6 +21,9 @@
 #include "engineGuiManager.h"
 #include "serialization.h"
 
+#ifdef __EMSCRIPTEN__
+#include "../libs/emscripten/emscripten_mainloop_stub.h"
+#endif
 
 // TODO: extension that lets you add includes more easily
 // TODO: fix window resizing
@@ -96,7 +99,15 @@ int main(int argc, char* args[]) {
 	float deltaTime = 0;
 
 	bool quit = false;
-	while (!quit) {
+#ifdef __EMSCRIPTEN__
+    // For an Emscripten build we are disabling file-system access, so let's not attempt to do a fopen() of the imgui.ini file.
+    // You may manually call LoadIniSettingsFromMemory() to load settings from your own storage.
+    io.IniFilename = nullptr;
+    EMSCRIPTEN_MAINLOOP_BEGIN
+#else
+    while (!quit)
+#endif
+	{
 		SDL_Event e;
 		while (SDL_PollEvent(&e) != 0) {
 			// TODO: io.WantMouseCapture etc for imgui
@@ -161,6 +172,9 @@ int main(int argc, char* args[]) {
 
 		sdlContext.swapWindow();
 	}
+	#ifdef __EMSCRIPTEN__
+    	EMSCRIPTEN_MAINLOOP_END;
+	#endif
 
 	return 0;
 }

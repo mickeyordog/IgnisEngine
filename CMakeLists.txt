@@ -22,10 +22,11 @@ target_link_libraries(${PROJECT_NAME}
     $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 )
 
-if (WIN32)
-    set(PYTHON3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/python3)
-endif()
 # got warning "WARNING: Static builds of Python will not have C extension modules available." on Windows. If Python doesn't work here that's why
+# currently using my system python which doesnt have debug, instead of vendored 3.10
+if (WIN32)
+    set(PYTHON3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows/share/python3)
+endif()
 find_package(Python3 COMPONENTS Development REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Python3::Python)
 

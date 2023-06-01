@@ -10,6 +10,8 @@ public:
     void handleEvents(SDL_Event* e);
     void swapWindow();
     SDL_Window* getWindow();
+    const char* glsl_version; // Should be in GLContext but whatever
+
 private:
     SDL_Window* window;
 };
