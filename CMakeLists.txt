@@ -97,6 +97,10 @@ target_link_libraries(IMGUI PUBLIC SDL2::SDL2)
 target_include_directories(${PROJECT_NAME} PUBLIC ${IMGUI_PATH})
 target_link_libraries(${PROJECT_NAME} PUBLIC IMGUI)
 
+# TODO: why can't it find glm?
+# find_package(glm CONFIG REQUIRED)
+# target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
+
 set(SRC_DIRECTORIES input engine visual util audio scripting-system gui)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
 foreach(DIR ${SRC_PATHS})

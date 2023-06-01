@@ -18,6 +18,8 @@
 #include "objectTransform.h"
 #include "ignisEngineGui.h"
 #include "scene.h"
+#include "engineGuiManager.h"
+#include "serialization.h"
 
 
 // TODO: extension that lets you add includes more easily
@@ -27,6 +29,10 @@
 // TODO: set up scene editor
 // TODO: fancier scene rendering, eg 3D stuff
 // TODO: script embed/implementation
+// TODO: could make vscode plugin that helps you add includes easily (give you window to top of class)
+// TODO: and one for editing header and cpp declaration at same time (could use regex to find, then just put cursor in both places and can edit both at once)
+// TODO: does cpp optimize not making a copy if you don't change value when assigning local and just use it to get some vals out?
+// TODO: could it optimize if you have (x * y) * z where multiplying by x is an expensive operation but by y and z isn't?
 int main(int argc, char* args[]) {
 	// HIERARCHY REQUIREMENTS
 	// 1. See all gameobjects in scene, nested under their respective parents
@@ -36,6 +42,9 @@ int main(int argc, char* args[]) {
 	//	- Selected gameobjects will be stored in static vector of imgui function for hierarchy
 	// 3. These fields will be modifiable in real time
 	// 4. Gameobjects can be rearranged in scene by dragging
+
+	// TODO: where should I register these? How can I arrange for them to be registered outside engine for game specific components too?
+	// EngineGuiManager::getInstance().registerComponentClass({ GET_NAME(ignis_engine::Transform), nullptr });
 
 	GameObject g0("g0");
 	GameObject g1("g1");

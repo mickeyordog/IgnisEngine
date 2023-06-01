@@ -19,5 +19,6 @@ struct FieldDescription
 };
 
 struct ClassDescription {
-
+    // const char* name;
+    // void* constructor;
 };

@@ -5,7 +5,7 @@
 #include <imgui.h>
 #include "scene.h"
 
-// TODO: scene should be open by default
+// TODO: scene node should be open by default
 void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& selectedObjects) {
     ImGui::Begin("Hierarchy");
     if (ImGui::TreeNode("Scene"))
