@@ -27,11 +27,9 @@
 
 // TODO: extension that lets you add includes more easily
 // TODO: fix window resizing
-// TODO: allow editing gameobject fields in editor
 // TODO: set up camera, render scene to texture, render texture to screen
 // TODO: set up scene editor
 // TODO: fancier scene rendering, eg 3D stuff
-// TODO: script embed/implementation
 // TODO: could make vscode plugin that helps you add includes easily (give you window to top of class)
 // TODO: and one for editing header and cpp declaration at same time (could use regex to find, then just put cursor in both places and can edit both at once)
 // TODO: does cpp optimize not making a copy if you don't change value when assigning local and just use it to get some vals out?
@@ -64,22 +62,9 @@ int main(int argc, char* args[]) {
 	g0.addChildObject(g4);
 	g1.addChildObject(g3);
 
-	// Print out the locations of each of the three Vec3's in g0
-	// printf("%p\n%p\n%p\n", &t0.position.x, &t0.position.y, &t0.position.z);
-
 	Scene scene;
 	scene.addRootGameObject(g0);
 	scene.addRootGameObject(g2);
-
-	// for (Component* component : g0.getComponents()) {
-	// 	std::cout << "New Component:" << std::endl; // TODO: component name, maybe FieldDescription meta info type
-	// 	for (const FieldDescription& f : component->getFields())
-	// 	{
-	// 		std::cout << "Field name: " << f.name << std::endl;
-	// 		std::cout << "Type enum: " << (int)f.type << std::endl;
-	// 		std::cout << "Value: " << *(float*)f.ptr << std::endl << std::endl;
-	// 	}
-	// }
 
 	SDLContext sdlContext("Ignis Engine", 1280, 720);
 	GLContext glContext(&sdlContext);
@@ -170,6 +155,7 @@ int main(int argc, char* args[]) {
 		glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 		dearImGuiContext.render();
 
+		// geometry.render();
 		sdlContext.swapWindow();
 	}
 	#ifdef __EMSCRIPTEN__
