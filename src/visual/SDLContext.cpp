@@ -1,6 +1,4 @@
 #include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
 #include "SDLContext.h"
 
 // THERE WAS MORE OS SPECIFIC STUFF IN EXAMPLE, CHECK THAT IF OS NOT WORKING
@@ -9,15 +7,6 @@ SDLContext::SDLContext(const char* name, int width, int height)
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-	}
-	int imgFlags = IMG_INIT_PNG;
-	if (!(IMG_Init(imgFlags) & imgFlags))
-	{
-		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-	}
-	if (TTF_Init() < 0)
-	{
-		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 	}
 	
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); // Always required on Mac
@@ -38,8 +27,6 @@ SDLContext::SDLContext(const char* name, int width, int height)
 SDLContext::~SDLContext()
 {
 	SDL_DestroyWindow(this->window);
-	IMG_Quit();
-	TTF_Quit();
 	SDL_Quit();
 }
 

@@ -75,15 +75,9 @@ target_link_libraries(${PROJECT_NAME}
 find_package(Python3 COMPONENTS Development REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Python3::Python)
 
-# find_package(SDL2 REQUIRED)
-# find_package(SDL2_image REQUIRED)
-# find_package(SDL2_ttf REQUIRED)
-# find_package(MONO REQUIRED)
-
-set (GLEW_DIR ${LIB_PATH}/glew/2.2.0_1/lib/cmake/glew)
 find_package(GLEW REQUIRED)
-
 find_package(OpenGL REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE GLEW::GLEW OpenGL::GL)
 
 set(STB_IMAGE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/cross-platform/stb_image)
 add_library(STB_IMAGE ${STB_IMAGE_PATH}/stb_image.cpp)
@@ -109,17 +103,13 @@ endforeach()
 target_include_directories(
     ${PROJECT_NAME}
     PUBLIC 
-        "${LIB_PATH}/glad/include"
         ${SRC_PATHS}
 )
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
-        OpenGL::GL
-        GLEW::glew_s
         ${SRC_DIRECTORIES}
 )
-
 
 # shouldn't need anymore since statically linking
 if (WIN32)

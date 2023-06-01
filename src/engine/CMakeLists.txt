@@ -10,10 +10,8 @@ target_link_libraries(
     engine
     PUBLIC
         SDL2::SDL2
-        SDL2_image::SDL2_image
-        SDL2_ttf::SDL2_ttf
-        OpenGL::GL
-        GLEW::glew_s
+        # OpenGL::GL
+        # GLEW::glew_s
         STB_IMAGE
         IMGUI
         # input
