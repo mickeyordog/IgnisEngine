@@ -25,7 +25,7 @@ target_link_libraries(${PROJECT_NAME}
 # got warning "WARNING: Static builds of Python will not have C extension modules available." on Windows. If Python doesn't work here that's why
 # currently using my system python which doesnt have debug, instead of vendored 3.10
 if (WIN32)
-    set(PYTHON3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows/share/python3)
+    set(Python3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows/share/python3)
 endif()
 find_package(Python3 COMPONENTS Development REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Python3::Python)
@@ -49,8 +49,11 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${IMGUI_PATH})
 target_link_libraries(${PROJECT_NAME} PUBLIC IMGUI)
 
 # TODO: why can't it find glm?
-# find_package(glm CONFIG REQUIRED)
-# target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
+if (WIN32)
+    set(glm_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/glm)
+endif()
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
 
 set(SRC_DIRECTORIES input engine visual util audio scripting-system gui)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)

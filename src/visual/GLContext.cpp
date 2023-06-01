@@ -15,7 +15,7 @@ GLContext::GLContext(SDLContext *sdlContext)
     }
     if (SDL_GL_SetSwapInterval(1) < 0)
     {
-        printf("Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+        printf("Unable to set Swap Interval! SDL Error: %s\n", SDL_GetError());
     }
     
 
