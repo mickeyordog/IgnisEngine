@@ -5,6 +5,7 @@ add_library(engine
     scene.cpp
     gameObject.cpp
     cameraComponent.cpp
+    renderTexture.cpp
 )
 
 target_link_libraries(

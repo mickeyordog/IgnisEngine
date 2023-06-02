@@ -4,9 +4,10 @@
 #include "guiHierarchy.h"
 #include "guiInspector.h"
 #include "guiFileSystem.h"
+#include "guiSceneView.h"
 #include "scene.h"
 
-void showIgnisEngineGui(Scene& scene) {
+void showIgnisEngineGui(Scene& scene, RenderTexture& renderTexture) {
     static std::unordered_set<GameObject*> selectedGameObjects;
 
     showGuiHierarchyPanel(scene, selectedGameObjects);
@@ -14,4 +15,6 @@ void showIgnisEngineGui(Scene& scene) {
     showGuiInspectorPanel(selectedGameObjects);
 
     showGuiFileSystemPanel();
+
+    showGuiScenePanel(renderTexture);
 }

@@ -10,7 +10,8 @@ public:
     ~Scene();
 
     void addRootGameObject(GameObject& gameObject);
-    std::vector<GameObject*>& getRootGameObjects();
+    const std::vector<GameObject*>& getRootGameObjects() const { return this->rootObjects; }
+    
 private:
     std::vector<GameObject*> rootObjects;
 };
