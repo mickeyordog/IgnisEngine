@@ -39,13 +39,13 @@ void beginEngineMainLoop()
 
     Texture texture("../assets/fire_penguin.png");
     Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
-    SpriteRenderer geometry(&texture, &shader);
-    RenderTexture renderTexture(800, 800);
 
     GameObject g0("g0");
-    SpriteRenderer sr(&texture, &shader);
-    g0.addVisualComponent(&sr);
+    SpriteRenderer sr0(&texture, &shader);
+    g0.addVisualComponent(&sr0);
     GameObject g1("g1");
+    SpriteRenderer sr1(&texture, &shader);
+    g1.addVisualComponent(&sr1);
     GameObject g2("g2");
     GameObject g3("g3");
     GameObject g4("g4");
@@ -57,10 +57,10 @@ void beginEngineMainLoop()
     camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
     camera.transform.translate(Vec3 { 0,-1,0 });
 
-    g0.transform.addChildTransform(g3.transform);
+    g0.transform.addChildTransform(g1.transform);
     g0.transform.addChildTransform(g2.transform);
     g0.transform.addChildTransform(g3.transform);
-    g0.transform.addChildTransform(g4.transform);
+    g3.transform.addChildTransform(g4.transform); // Opening this causes error for some reason
 
     Scene scene;
     scene.addRootGameObject(camera);
@@ -77,6 +77,7 @@ void beginEngineMainLoop()
     float deltaTime = 0;
 
     Timer runtimeTimer;
+    scene.startGameObjects();
 
     bool quit = false;
 #ifdef __EMSCRIPTEN__
@@ -104,49 +105,9 @@ void beginEngineMainLoop()
 
         dearImGuiContext.newFrame();
 
+        scene.updateGameObjects(deltaTime);
         cameraComponent.renderScene(scene);
         showIgnisEngineGui(scene, cameraComponent.getOutputTexture());
-
-/*
-#pragma region CAM STUFF TO ABSTRACT
-        renderTexture.bind();
-        glContext.clear(1.0, 0.7, 1.0, 1.0);
-        // FOR EACH MODEL
-        // FOR ITS SHADER, SET MODEL WITH ITS TRANSFORM DATA
-        // SET VIEW WITH CAM DATA
-        // SET PROJECTION FROM DEFAULT
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f));
-        // model = glm::rotate(model, glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));          
-
-        const float radius = 1.0f;
-        float camX = cos(runtimeTimer.read()) * radius * deltaTime;
-        float camZ = sin(runtimeTimer.read()) * radius * deltaTime;
-        // camera.transform.translate({ camX, camZ, 0 });
-        glm::mat4 view = camera.transform.getData();
-        // view = glm::lookAt(glm::vec3(camX, camZ, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
-
-        glm::mat4 projection;
-        // need to adjust this to my viewport dimensions tho
-        projection = glm::perspective(glm::radians(45.0f), 800.0f / 800.0f, 0.1f, 100.0f);
-        // projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
-
-        shader.setUniform("model", model);
-        shader.setUniform("view", view);
-        shader.setUniform("projection", projection);
-        geometry.render();
-
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.5f, 0.0f));
-        // model = glm::rotate(model, - glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));          
-
-        shader.setUniform("model", model);
-        // shader.setUniform("view", view);
-        // shader.setUniform("projection", projection);
-        geometry.render();
-        renderTexture.unbind();
-#pragma endregion
-*/
 
 #pragma region Dear Imgui Remove This
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).

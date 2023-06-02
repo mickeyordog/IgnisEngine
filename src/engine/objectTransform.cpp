@@ -27,12 +27,12 @@ ObjectTransform::~ObjectTransform()
 
 void ObjectTransform::start()
 {
-    std::cout << "Transform start" << std::endl;
+
 }
 
 void ObjectTransform::update(float dt)
 {
-
+    // translate({dt, 0, 0});
 }
 
 // TODO: these all probably have to be stored in separate matrices and multiplied when needed, otherwise order will matter

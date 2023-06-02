@@ -3,12 +3,23 @@
 #include "inputHandler.h"
 #include "objectTransform.h"
 
-GameObject::GameObject(const char* name) : name(name), transform() {
+GameObject::GameObject(const char* name) : name(name) {
     this->transform.parentGameObject = this;
 }
 
 GameObject::~GameObject() {
     // ~sprite(); not needed anymore
+}
+
+void GameObject::start()
+{
+    transform.start();
+    for (Component* component : this->components) {
+        component->start();
+    }
+    for (ComponentVisual* visualComponent : this->visualComponents) {
+        visualComponent->start();
+    }
 }
 
 void GameObject::update(float dt) {
@@ -17,6 +28,13 @@ void GameObject::update(float dt) {
     // x -= InputHandler::getInstance().queryKeyPressed(SDLK_a) ? 1000 * dt : 0;
     // x = 100 + 100 * cos(SDL_GetTicks() / 1000.0);
     // y = 100 + 100 * sin(SDL_GetTicks() / 1000.0);
+    transform.update(dt);
+    for (Component* component : this->components) {
+        component->update(dt);
+    }
+    for (ComponentVisual* visualComponent : this->visualComponents) {
+        visualComponent->update(dt);
+    }
 }
 
 void GameObject::render() {

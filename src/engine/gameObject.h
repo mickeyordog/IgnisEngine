@@ -10,6 +10,7 @@ public:
     GameObject(const char* name);
     ~GameObject();
 
+    void start();
     void update(float dt);
     void render();
 

@@ -1,5 +1,6 @@
 #include "spriteRenderer.h"
 #include <GL/glew.h>
+#include <iostream>
 
 SpriteRenderer::SpriteRenderer(const Texture* texture, Shader* shader)
 {
@@ -43,12 +44,12 @@ SpriteRenderer::~SpriteRenderer()
 
 void SpriteRenderer::start()
 {
-    
+
 }
 
 void SpriteRenderer::update(float dt)
 {
-    
+
 }
 
 void SpriteRenderer::render()
