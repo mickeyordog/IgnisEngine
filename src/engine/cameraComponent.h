@@ -2,10 +2,10 @@
 
 #include "component.h"
 
-class Camera : public Component {
+class CameraComponent : public Component {
 public:
-    Camera();
-    ~Camera();
+    CameraComponent();
+    ~CameraComponent();
 
     virtual void start() override;
     virtual void update(float dt) override;

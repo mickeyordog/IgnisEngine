@@ -23,7 +23,7 @@
 #include "scene.h"
 #include "engineGuiManager.h"
 #include "serialization.h"
-#include "camera.h"
+#include "cameraComponent.h"
 
 
 #ifdef __EMSCRIPTEN__
@@ -36,11 +36,15 @@ void beginEngineMainLoop() {
     GameObject g2("g2");
     GameObject g3("g3");
     GameObject g4("g4");
+
     GameObject camera("Camera");
-
-    Camera cameraComponent;
-
+    CameraComponent cameraComponent;
     camera.addComponent(&cameraComponent);
+    camera.transform.translate(Vec3{0,0,3});
+    camera.transform.lookAt(Vec3{0,0,0}, Vec3{0,1,0});
+    auto eeee = camera.transform.getData()[0][0];
+    std::cout << eeee << std::endl;
+
     g0.transform.addChildTransform(g1.transform);
     g0.transform.addChildTransform(g4.transform);
     g0.transform.addChildTransform(g3.transform);
@@ -146,8 +150,8 @@ void beginEngineMainLoop() {
         const float radius = 10.0f;
         float camX = cos(runtimeTimer.read()) * radius;
         float camZ = sin(runtimeTimer.read()) * radius;
-        glm::mat4 view;
-        view = glm::lookAt(glm::vec3(camX, camZ, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+        glm::mat4 view = camera.transform.getData();
+        // view = glm::lookAt(glm::vec3(camX, camZ, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 
         glm::mat4 projection;
         // need to adjust this to my viewport dimensions tho

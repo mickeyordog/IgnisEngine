@@ -17,10 +17,10 @@ public:
     // Vec3 rotation;
     // Vec3 scale;
 
-    void translate(Vec3& translation);
+    void translate(Vec3 translation);
     void scale(Vec3& scale);
     void rotateAround(Vec3& axis, float angleDegrees);
-    void lookAt(Vec3& target, Vec3& up);
+    void lookAt(Vec3 target, Vec3 up);
 
     void addChildTransform(ObjectTransform& transform);
     void removeChildTransform(ObjectTransform& transform);
@@ -37,6 +37,6 @@ private:
         { GET_NAME(ObjectTransform), FieldType::ComponentType, this }
     };
 
-    glm::mat4 matrix;
+    glm::mat4 matrix = glm::mat4(1.0f);
     std::vector<ObjectTransform*> childTransforms;
 };

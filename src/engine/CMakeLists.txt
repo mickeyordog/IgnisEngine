@@ -4,7 +4,7 @@ add_library(engine
     vec3.cpp
     scene.cpp
     gameObject.cpp
-    camera.cpp
+    cameraComponent.cpp
 )
 
 target_link_libraries(

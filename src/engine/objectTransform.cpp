@@ -35,7 +35,7 @@ void ObjectTransform::update(float dt)
 
 }
 
-void ObjectTransform::translate(Vec3& translation)
+void ObjectTransform::translate(Vec3 translation)
 {
     this->matrix = glm::translate(this->matrix, translation.getData());
 }
@@ -50,7 +50,8 @@ void ObjectTransform::rotateAround(Vec3& axis, float angleDegrees)
     this->matrix = glm::rotate(this->matrix, glm::radians(angleDegrees), glm::normalize(axis.getData()));
 }
 
-void ObjectTransform::lookAt(Vec3& target, Vec3& up)
+// TODO: figure out how to efficiently take in new Vec3 as param, as this will copy which is maybe fine
+void ObjectTransform::lookAt(Vec3 target, Vec3 up)
 {
     this->matrix = glm::lookAt(glm::vec3(this->matrix[3]), target.getData(), up.getData());
 }
