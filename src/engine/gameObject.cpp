@@ -20,10 +20,17 @@ void GameObject::update(float dt) {
 }
 
 void GameObject::render() {
-
+    // loop through vis components and call render
+    // but how should I set uniforms?
 }
 
 void GameObject::addComponent(Component* component) {
     this->components.push_back(component);
     component->parentGameObject = this;
+}
+
+void GameObject::addVisualComponent(ComponentVisual* visualComponent)
+{
+    this->visualComponents.push_back(visualComponent);
+    visualComponent->parentGameObject = this;
 }

@@ -92,7 +92,7 @@ void Shader::use() const
     glUseProgram(this->id);
 }
 
-void Shader::setUniform(const char* name, glm::mat4& value)
+void Shader::setUniform(const char* name, const glm::mat4& value)
 {
     this->use(); // could micro optimize this b/c doesn't need to be called if several uniforms set at once
     GLuint uniformLocation = glGetUniformLocation(this->id, name);

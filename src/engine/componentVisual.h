@@ -1,6 +1,7 @@
 #pragma once
 
 #include "component.h"
+#include "shader.h"
 
 class ComponentVisual : public Component {
 public:
@@ -11,7 +12,7 @@ public:
     virtual void render() = 0;
 
     virtual std::vector<FieldDescription>& getFields() { return fields; };
-
+    virtual Shader& getShader() = 0;
 private:
     std::vector<FieldDescription> fields = { };
 };

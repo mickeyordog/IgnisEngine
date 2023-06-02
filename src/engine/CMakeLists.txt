@@ -1,11 +1,13 @@
 add_library(engine
     component.cpp
+    componentVisual.cpp
     objectTransform.cpp
     vec3.cpp
     scene.cpp
     gameObject.cpp
     cameraComponent.cpp
     renderTexture.cpp
+    spriteRenderer.cpp
 )
 
 target_link_libraries(

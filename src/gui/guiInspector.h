@@ -52,16 +52,16 @@ void showGuiInspectorPanel(const std::unordered_set<GameObject*>& selectedObject
     }
     else if (selectedObjects.size() == 1) {
         GameObject* const& gameObject = *selectedObjects.begin();
-        if (gameObject->getComponents().size() == 0) {
-            ImGui::Text("Object has no components");
-            ImGui::End();
-            return;
-        }
+
         showComponent(&gameObject->transform);
 
-        for (Component *component : (*selectedObjects.begin())->getComponents())
+        for (Component *component : gameObject->getComponents())
         {
             showComponent(component);
+        }
+        for (ComponentVisual* visualComponent : gameObject->getVisualComponents())
+        {
+            showComponent(visualComponent);
         }
     }
     else {

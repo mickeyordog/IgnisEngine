@@ -10,8 +10,9 @@ public:
     ~Scene();
 
     void addRootGameObject(GameObject& gameObject);
+    // TODO: iterator for traversing entire scene tree
     const std::vector<GameObject*>& getRootGameObjects() const { return this->rootObjects; }
-    
+
 private:
     std::vector<GameObject*> rootObjects;
 };

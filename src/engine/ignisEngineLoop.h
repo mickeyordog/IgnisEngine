@@ -16,7 +16,7 @@
 #include "inputHandler.h"
 #include "shader.h"
 #include "texture.h"
-#include "geometry.h"
+#include "spriteRenderer.h"
 // #include "pythonEngine.h"
 #include "objectTransform.h"
 #include "ignisEngineGui.h"
@@ -28,7 +28,7 @@
 
 
 #ifdef __EMSCRIPTEN__
-#include "../libs/emscripten/emscripten_mainloop_stub.h"
+// #include "../libs/emscripten/emscripten_mainloop_stub.h" // uncomment later
 #endif
 
 void beginEngineMainLoop()
@@ -37,27 +37,34 @@ void beginEngineMainLoop()
     GLContext glContext(&sdlContext);
     DearImGuiContext dearImGuiContext(&sdlContext, &glContext);
 
+    Texture texture("../assets/fire_penguin.png");
+    Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
+    SpriteRenderer geometry(&texture, &shader);
+    RenderTexture renderTexture(800, 800);
+
     GameObject g0("g0");
+    SpriteRenderer sr(&texture, &shader);
+    g0.addVisualComponent(&sr);
     GameObject g1("g1");
     GameObject g2("g2");
     GameObject g3("g3");
     GameObject g4("g4");
 
     GameObject camera("Camera");
-    CameraComponent cameraComponent(800, 800, true);
+    CameraComponent cameraComponent(800, 800, false);
     camera.addComponent(&cameraComponent);
     camera.transform.translate(Vec3 { 0,0,5 });
     camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
     camera.transform.translate(Vec3 { 0,-1,0 });
 
-    g0.transform.addChildTransform(g1.transform);
-    g0.transform.addChildTransform(g4.transform);
     g0.transform.addChildTransform(g3.transform);
+    g0.transform.addChildTransform(g2.transform);
+    g0.transform.addChildTransform(g3.transform);
+    g0.transform.addChildTransform(g4.transform);
 
     Scene scene;
-    scene.addRootGameObject(g0);
-    scene.addRootGameObject(g2);
     scene.addRootGameObject(camera);
+    scene.addRootGameObject(g0);
 
     static bool show_demo_window = false;
     bool show_another_window = false;
@@ -65,10 +72,6 @@ void beginEngineMainLoop()
     // glViewport(0, 0, 200, 100);
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    Texture texture("../assets/fire_penguin.png");
-    Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
-    Geometry geometry(&texture, &shader);
-    RenderTexture renderTexture(800, 800);
 
     Timer frameTimer;
     float deltaTime = 0;
@@ -101,8 +104,10 @@ void beginEngineMainLoop()
 
         dearImGuiContext.newFrame();
 
-        showIgnisEngineGui(scene, renderTexture);
+        cameraComponent.renderScene(scene);
+        showIgnisEngineGui(scene, cameraComponent.getOutputTexture());
 
+/*
 #pragma region CAM STUFF TO ABSTRACT
         renderTexture.bind();
         glContext.clear(1.0, 0.7, 1.0, 1.0);
@@ -141,7 +146,7 @@ void beginEngineMainLoop()
         geometry.render();
         renderTexture.unbind();
 #pragma endregion
-
+*/
 
 #pragma region Dear Imgui Remove This
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).

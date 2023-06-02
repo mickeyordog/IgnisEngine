@@ -12,9 +12,11 @@ public:
 
     virtual void start() override;
     virtual void update(float dt) override;
-    void renderScene(const Scene& scene);
 
     virtual std::vector<FieldDescription>& getFields() override { return fields; };
+
+    void renderScene(const Scene& scene);
+    RenderTexture& getOutputTexture() { return outputTexture; }
 
 private:
     std::vector<FieldDescription> fields = { };

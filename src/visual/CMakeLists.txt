@@ -3,7 +3,6 @@ add_library(visual
     shader.cpp
     GLContext.cpp
     texture.cpp
-    geometry.cpp
     dearImGuiContext.cpp
 )
 

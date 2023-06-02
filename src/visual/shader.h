@@ -11,7 +11,7 @@ public:
     ~Shader();
     void use() const;
     // TODO: prob use class wrapper for param
-    void setUniform(const char* name, glm::mat4& value);
+    void setUniform(const char* name, const glm::mat4& value);
     // TODO: uniform helpers
     // void setFloat(const std::string &name, float value) const;
 

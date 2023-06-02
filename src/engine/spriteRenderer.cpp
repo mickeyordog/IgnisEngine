@@ -1,7 +1,7 @@
-#include "geometry.h"
+#include "spriteRenderer.h"
 #include <GL/glew.h>
 
-Geometry::Geometry(const Texture* texture, const Shader* shader)
+SpriteRenderer::SpriteRenderer(const Texture* texture, Shader* shader)
 {
     this->texture = texture;
     this->shader = shader;
@@ -34,14 +34,24 @@ Geometry::Geometry(const Texture* texture, const Shader* shader)
     glEnableVertexAttribArray(1);
 }
 
-Geometry::~Geometry()
+SpriteRenderer::~SpriteRenderer()
 {
     glDeleteVertexArrays(1, &this->VAO);
     glDeleteBuffers(1, &this->VBO);
     glDeleteBuffers(1, &this->EBO);
 }
 
-void Geometry::render()
+void SpriteRenderer::start()
+{
+    
+}
+
+void SpriteRenderer::update(float dt)
+{
+    
+}
+
+void SpriteRenderer::render()
 {
     this->texture->bind();
     this->shader->use();
