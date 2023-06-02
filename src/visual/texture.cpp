@@ -13,7 +13,6 @@ Texture::Texture(const char *filePath)
     {
         std::cout << "Failed to load texture" << std::endl;
     }
-    std::cout << "Loaded texture " << filePath << " with dimensions " << width << "x" << height << " channels: " << nrChannels << std::endl;
     this->width = width;
     this->height = height;
 

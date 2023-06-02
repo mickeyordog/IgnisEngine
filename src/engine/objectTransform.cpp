@@ -35,6 +35,7 @@ void ObjectTransform::update(float dt)
 
 }
 
+// TODO: these all probably have to be stored in separate matrices and multiplied when needed, otherwise order will matter
 void ObjectTransform::translate(Vec3 translation)
 {
     this->matrix = glm::translate(this->matrix, translation.getData());

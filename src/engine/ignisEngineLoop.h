@@ -30,7 +30,8 @@
 #include "../libs/emscripten/emscripten_mainloop_stub.h"
 #endif
 
-void beginEngineMainLoop() {
+void beginEngineMainLoop()
+{
     GameObject g0("g0");
     GameObject g1("g1");
     GameObject g2("g2");
@@ -40,10 +41,9 @@ void beginEngineMainLoop() {
     GameObject camera("Camera");
     CameraComponent cameraComponent;
     camera.addComponent(&cameraComponent);
-    camera.transform.translate(Vec3{0,0,3});
-    camera.transform.lookAt(Vec3{0,0,0}, Vec3{0,1,0});
-    auto eeee = camera.transform.getData()[0][0];
-    std::cout << eeee << std::endl;
+    camera.transform.translate(Vec3 { 0,0,5 });
+    camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
+    camera.transform.translate(Vec3 { 0,-1,0 });
 
     g0.transform.addChildTransform(g1.transform);
     g0.transform.addChildTransform(g4.transform);
@@ -82,11 +82,13 @@ void beginEngineMainLoop() {
 #endif
     {
         SDL_Event e;
-        while (SDL_PollEvent(&e) != 0) {
+        while (SDL_PollEvent(&e) != 0)
+        {
             // TODO: io.WantMouseCapture etc for imgui
             ImGui_ImplSDL2_ProcessEvent(&e);
             sdlContext.handleEvents(&e);
-            if (e.type == SDL_QUIT) {
+            if (e.type == SDL_QUIT)
+            {
                 quit = true;
             }
         }
@@ -130,7 +132,8 @@ void beginEngineMainLoop() {
         }
 
         // 3. Show another simple window.
-        if (show_another_window) {
+        if (show_another_window)
+        {
             ImGui::Begin("Another Window", &show_another_window); // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
             ImGui::Text("Hello from another window!");
             if (ImGui::Button("Close Me"))
@@ -146,10 +149,11 @@ void beginEngineMainLoop() {
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f));
         // model = glm::rotate(model, glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));          
-        
-        const float radius = 10.0f;
-        float camX = cos(runtimeTimer.read()) * radius;
-        float camZ = sin(runtimeTimer.read()) * radius;
+
+        const float radius = 1.0f;
+        float camX = cos(runtimeTimer.read()) * radius * deltaTime;
+        float camZ = sin(runtimeTimer.read()) * radius * deltaTime;
+        camera.transform.translate({ camX, camZ, 0 });
         glm::mat4 view = camera.transform.getData();
         // view = glm::lookAt(glm::vec3(camX, camZ, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 
@@ -170,7 +174,7 @@ void beginEngineMainLoop() {
         shader.setUniform("view", view);
         shader.setUniform("projection", projection);
         geometry.render();
-        
+
         sdlContext.swapWindow();
     }
 #ifdef __EMSCRIPTEN__

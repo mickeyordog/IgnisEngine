@@ -5,7 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "serialization.h"
 
-// TODO: use GLM for backend, for this and matrices
 class Vec3 {
 public:
     Vec3(float x, float y, float z) : data(x, y, z) { };
