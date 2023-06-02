@@ -153,7 +153,7 @@ void beginEngineMainLoop()
         const float radius = 1.0f;
         float camX = cos(runtimeTimer.read()) * radius * deltaTime;
         float camZ = sin(runtimeTimer.read()) * radius * deltaTime;
-        camera.transform.translate({ camX, camZ, 0 });
+        // camera.transform.translate({ camX, camZ, 0 });
         glm::mat4 view = camera.transform.getData();
         // view = glm::lookAt(glm::vec3(camX, camZ, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 

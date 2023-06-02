@@ -33,10 +33,13 @@ public:
     ObjectTransform* parentTransform;
 
 private:
+    glm::mat4 matrix = glm::mat4(1.0f);
     std::vector<FieldDescription> fields = {
-        { GET_NAME(ObjectTransform), FieldType::ComponentType, this }
+        { GET_NAME(ObjectTransform), FieldType::ComponentType, this },
+        { "x", FieldType::Float, &matrix[3][0]}, // TODO: this is wrong, I think should be inverse b/c goes in wrong dir
+        { "y", FieldType::Float, &matrix[3][1]},
+        { "z", FieldType::Float, &matrix[3][2]}
     };
 
-    glm::mat4 matrix = glm::mat4(1.0f);
     std::vector<ObjectTransform*> childTransforms;
 };
