@@ -16,7 +16,7 @@ target_link_libraries(
         # GLEW::glew_s
         STB_IMAGE
         IMGUI
-        # input
+        glm::glm
 )
 
 target_include_directories(

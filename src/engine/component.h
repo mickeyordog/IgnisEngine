@@ -2,7 +2,9 @@
 
 #include <vector>
 #include "serialization.h"
-#include "gameObject.h"
+// #include "gameObject.h"
+
+class GameObject;
 
 // TODO: if need List of smth that needs to be in inspector, prob make SerializedList vector class wrapper that will spit out correct fields vec
 class Component {
