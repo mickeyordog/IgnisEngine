@@ -1,14 +1,17 @@
 #pragma once
 
-#include "transformationMatrix.h"
-
 #include "component.h"
 
-class Camera : Component {
+class Camera : public Component {
 public:
     Camera();
     ~Camera();
 
-private:
+    virtual void start() override;
+    virtual void update(float dt) override;
 
+    virtual std::vector<FieldDescription>& getFields() override { return fields; };
+
+private:
+    std::vector<FieldDescription> fields = { };
 };

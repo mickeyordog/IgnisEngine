@@ -20,7 +20,7 @@ int main(int argc, char* args[]) {
 	// 4. Gameobjects can be rearranged in scene by dragging
 
 	// TODO: where should I register these? How can I arrange for them to be registered outside engine for game specific components too?
-	// EngineGuiManager::getInstance().registerComponentClass({ GET_NAME(ignis_engine::Transform), nullptr });
+	// EngineGuiManager::getInstance().registerComponentClass({ GET_NAME(ignis_engine::ObjectTransform), nullptr });
 
 	beginEngineMainLoop();
 

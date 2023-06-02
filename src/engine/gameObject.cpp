@@ -1,9 +1,10 @@
 #include <SDL.h>
 #include "gameObject.h"
 #include "inputHandler.h"
+#include "objectTransform.h"
 
-GameObject::GameObject(const char* name) : name(name) {
-
+GameObject::GameObject(const char* name) : name(name), transform() {
+    this->transform.parentGameObject = this;
 }
 
 GameObject::~GameObject() {
@@ -22,20 +23,7 @@ void GameObject::render() {
 
 }
 
-void GameObject::addComponent(Component& component) {
-    this->components.push_back(&component);
-    component.parentGameObject = this; // TODO: add this back when working
-}
-
-std::vector<Component*>& GameObject::getComponents() {
-    return this->components;
-}
-
-void GameObject::addChildObject(GameObject& gameObject) {
-    this->childObjects.push_back(&gameObject);
-    gameObject.parentObject = this;
-}
-
-std::vector<GameObject*>& GameObject::getChildObjects() {
-    return this->childObjects;
+void GameObject::addComponent(Component* component) {
+    this->components.push_back(component);
+    component->parentGameObject = this;
 }

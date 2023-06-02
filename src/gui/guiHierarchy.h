@@ -36,7 +36,7 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
             const bool is_selected = selectedObjects.find(currentObject) != selectedObjects.end();
             if (is_selected)
                 node_flags |= ImGuiTreeNodeFlags_Selected;
-            if (currentObject->getChildObjects().size() > 0)
+            if (currentObject->transform.getChildTransforms().size() > 0)
             {
                 bool node_open = ImGui::TreeNodeEx(currentObject->name, node_flags); // TODO: Do I need to pass a ptr_id here? What does that do?
                 if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
@@ -49,11 +49,11 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
                 }
                 if (node_open)
                 {
-                    for (auto gameObject = currentObject->getChildObjects().rbegin(); gameObject != currentObject->getChildObjects().rend(); ++gameObject)
+                    for (auto transform = currentObject->transform.getChildTransforms().rbegin(); transform != currentObject->transform.getChildTransforms().rend(); ++transform)
                     {
-                        objectStack.push(*gameObject);
+                        objectStack.push((*transform)->parentGameObject);
                     }
-                    treePopStack.push(currentObject->getChildObjects().back());
+                    treePopStack.push(currentObject->transform.getChildTransforms().back()->parentGameObject);
                 }
             }
             else

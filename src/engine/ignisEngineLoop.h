@@ -23,6 +23,7 @@
 #include "scene.h"
 #include "engineGuiManager.h"
 #include "serialization.h"
+#include "camera.h"
 
 
 #ifdef __EMSCRIPTEN__
@@ -35,19 +36,20 @@ void beginEngineMainLoop() {
     GameObject g2("g2");
     GameObject g3("g3");
     GameObject g4("g4");
-    ignis_engine::Transform t0(0, 0, 0);
-    ignis_engine::Transform t1(0, 0, 0);
-    ignis_engine::Transform t2(0, 0, 0);
-    g0.addComponent(t0);
-    g1.addComponent(t1);
-    g2.addComponent(t2);
-    g0.addChildObject(g1);
-    g0.addChildObject(g4);
-    g1.addChildObject(g3);
+    GameObject camera("Camera");
+
+    Camera cameraComponent;
+
+    camera.addComponent(&cameraComponent);
+    g0.transform.addChildTransform(g1.transform);
+    g0.transform.addChildTransform(g4.transform);
+    g0.transform.addChildTransform(g3.transform);
 
     Scene scene;
     scene.addRootGameObject(g0);
     scene.addRootGameObject(g2);
+    scene.addRootGameObject(camera);
+
 
     SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);

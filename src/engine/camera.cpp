@@ -9,3 +9,13 @@ Camera::~Camera()
 {
     
 }
+
+void Camera::start()
+{
+    
+}
+
+void Camera::update(float dt)
+{
+    
+}
