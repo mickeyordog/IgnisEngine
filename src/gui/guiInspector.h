@@ -38,7 +38,9 @@ void showComponent(Component* component) {
             break;
         case FieldType::vec3:
             if (ImGui::SliderFloat3("Position", (float*)f.ptr, -10, 10))
-                ((ObjectTransform*)f.objectPtr)->updateMatrix(); // why does this work without this??
+                if (f.postUpdateFunction)
+                    f.postUpdateFunction();
+                // ((ObjectTransform*)f.objectPtr)->updateMatrix(); // why does this work without this??
         }
 
     }

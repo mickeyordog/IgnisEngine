@@ -31,8 +31,15 @@
 // #include "../libs/emscripten/emscripten_mainloop_stub.h" // uncomment later
 #endif
 
+
 void beginEngineMainLoop()
 {
+    // std::function<GameObject*(void)> func = []() { return new GameObject("test"); };
+    // auto go0 = func();
+    // auto* go1 = func();
+    // go1->start();
+    // return;
+
     SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);
     DearImGuiContext dearImGuiContext(&sdlContext, &glContext);

@@ -47,7 +47,7 @@ private:
 
     std::vector<FieldDescription> fields = {
         { GET_NAME(ObjectTransform), FieldType::Subclass, this },
-        { GET_NAME(position), FieldType::vec3, &position, this },
+        { GET_NAME(position), FieldType::vec3, &position, [this](){ this->updateMatrix(); } },
         { GET_NAME(ObjectTransform), FieldType::EndSubclass, this },
     };
 

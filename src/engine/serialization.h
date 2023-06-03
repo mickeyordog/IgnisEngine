@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #define GET_NAME(variable) (#variable)
 
 enum FieldType
@@ -17,9 +19,9 @@ struct FieldDescription
     const char *name;
     FieldType type;
     const void *ptr;
-    const void* objectPtr;
+    std::function<void(void)> postUpdateFunction;
 
-    FieldDescription(const char *name, FieldType type, const void *ptr, const void* objectPtr = nullptr) : name(name), type(type), ptr(ptr), objectPtr(objectPtr) {}
+    FieldDescription(const char* name, FieldType type, const void* ptr, const std::function<void(void)> postUpdateFunction = NULL) : name(name), type(type), ptr(ptr), postUpdateFunction(postUpdateFunction) { }
 };
 
 struct ClassDescription {
