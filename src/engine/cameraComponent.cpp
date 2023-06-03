@@ -46,11 +46,11 @@ void CameraComponent::renderScene(const Scene& scene)
 
         for (ComponentVisual* visualComponent : currentObject->getVisualComponents()) {
             Shader& shader = visualComponent->getShader();
-            glm::mat4 model = currentObject->transform.getData();
-            glm::mat4 view = this->parentGameObject->transform.getData();
+            glm::mat4 model = currentObject->transform.getMatrix();
+            glm::mat4 view = glm::inverse(this->parentGameObject->transform.getMatrix()); // Is compiler smart enough to only compute this once?
             glm::mat4 projection = this->projectionMatrix;
             glm::mat4 mvp = projection * view * model;
-            shader.setUniform("mvp", mvp); // this doesn't really need to be set for all objects every frame
+            shader.setUniform("mvp", mvp);
 
             visualComponent->render();
         }

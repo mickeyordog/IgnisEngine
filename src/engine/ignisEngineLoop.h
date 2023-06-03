@@ -46,6 +46,7 @@ void beginEngineMainLoop()
     GameObject g1("g1");
     SpriteRenderer sr1(&texture, &shader);
     g1.addVisualComponent(&sr1);
+    g1.transform.translate(Vec3 { -1,0,0 });
     GameObject g2("g2");
     GameObject g3("g3");
     GameObject g4("g4");
@@ -55,7 +56,8 @@ void beginEngineMainLoop()
     camera.addComponent(&cameraComponent);
     camera.transform.translate(Vec3 { 0,0,5 });
     camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
-    camera.transform.translate(Vec3 { 0,-1,0 });
+    // camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
+    // camera.transform.translate(Vec3 { 0,-1,0 });
 
     g0.transform.addChildTransform(g1.transform);
     g0.transform.addChildTransform(g2.transform);
@@ -104,6 +106,9 @@ void beginEngineMainLoop()
         // std::cout << 1.0f/deltaTime << " fps" << std::endl;
 
         dearImGuiContext.newFrame();
+
+        // camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
+        // std::cout << "g0 position: " << g0.transform.getPosition().getData().x << ", " << g0.transform.getPosition().getData().y << ", " << g0.transform.getPosition().getData().z << std::endl;
 
         scene.updateGameObjects(deltaTime);
         cameraComponent.renderScene(scene);

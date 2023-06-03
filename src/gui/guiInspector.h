@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <unordered_set>
 #include <imgui.h>
 #include "serialization.h"
 #include "gameObject.h"
@@ -21,7 +22,7 @@ void showComponent(Component* component) {
             ImGui::SliderInt(f.name, (int*)f.ptr, -10, 10);
             break;
         case FieldType::Float:
-            ImGui::Text("Value: %f", *(float*)f.ptr);
+            ImGui::Text("Value: %f", *(float*)f.ptr); // would need to call update matrix here too, but then this slider would need to be specific to changing transform and non generic
             // ImGui::Text("Address: %p", f.ptr);
             ImGui::SliderFloat(f.name, (float*)f.ptr, -10.0, 10.0);
             break;
@@ -36,6 +37,9 @@ void showComponent(Component* component) {
         case FieldType::ComponentType:
             ImGui::Text("Component: %s", f.name);
             break;
+        case FieldType::vec3:
+            if (ImGui::SliderFloat3("Position", (float*)f.ptr, -10, 10))
+                ((ObjectTransform*)f.objectPtr)->updateMatrix(); // why does this work without this??
         }
 
     }

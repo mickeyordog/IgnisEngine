@@ -8,7 +8,8 @@ enum FieldType
     Int,
     Subclass,
     EndSubclass,
-    ComponentType
+    ComponentType,
+    vec3
 };
 
 struct FieldDescription
@@ -16,6 +17,9 @@ struct FieldDescription
     const char *name;
     FieldType type;
     const void *ptr;
+    const void* objectPtr;
+
+    FieldDescription(const char *name, FieldType type, const void *ptr, const void* objectPtr = nullptr) : name(name), type(type), ptr(ptr), objectPtr(objectPtr) {}
 };
 
 struct ClassDescription {
