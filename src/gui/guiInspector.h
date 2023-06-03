@@ -8,13 +8,12 @@
 
 void showComponent(Component* component) {
     // ImGui::Text("New Component:"); // TODO: component name, maybe FieldDescription meta info type
-    if (!ImGui::TreeNode("New Component"))
+    ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+    if (!ImGui::TreeNode("New Component")) // TODO: these need to all have diff names, rn they're overlapping functionality
         return;
 
     for (FieldDescription& f : component->getFields())
     {
-        // ImGui::Text("Field name: %s", f.name);
-        // ImGui::Text("Type enum: %d", (int)f.type);
         switch (f.type)
         {
         case FieldType::Int:
@@ -72,6 +71,5 @@ void showGuiInspectorPanel(const std::unordered_set<GameObject*>& selectedObject
         ImGui::Text("Multiple objects selected");
     }
     
-
     ImGui::End();
 }

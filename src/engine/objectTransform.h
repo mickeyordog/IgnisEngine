@@ -46,8 +46,9 @@ private:
     glm::mat4 parentMatrix = glm::mat4(1.0f);
 
     std::vector<FieldDescription> fields = {
-        { GET_NAME(ObjectTransform), FieldType::ComponentType, this },
-        { GET_NAME(position), FieldType::vec3, &position, this }, // TODO: this is wrong for camera, I think should be inverse b/c goes in wrong dir
+        { GET_NAME(ObjectTransform), FieldType::Subclass, this },
+        { GET_NAME(position), FieldType::vec3, &position, this },
+        { GET_NAME(ObjectTransform), FieldType::EndSubclass, this },
     };
 
     std::vector<ObjectTransform*> childTransforms;
