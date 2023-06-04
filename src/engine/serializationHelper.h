@@ -8,7 +8,7 @@
 
 class SerializationHelper
 {
-public:
+public: // TODO: remove old version with 2 params for register, refactor getters to use new vector
     void registerComponentClass(enum ComponentType componentType, std::function<Component* (void)> constructor) { componentTypeToConstructor[componentType] = constructor; }
     static void registerComponentClass(ComponentClassInfo componentClassInfo) { componentClassInfos.push_back(componentClassInfo); };
     Component* getNewComponent(enum ComponentType componentType) { return componentTypeToConstructor[componentType](); }
