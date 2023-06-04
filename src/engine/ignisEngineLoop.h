@@ -55,7 +55,7 @@ void beginEngineMainLoop()
 
 
     GameObject g0("g0");
-    SpriteRenderer* sr0 = (SpriteRenderer*)serializationHelper.getNewComponent(ComponentType::SPRITE_RENDERER);
+    SpriteRenderer* sr0 = (SpriteRenderer*)serializationHelper.getNewComponent(ComponentType::SPRITE_RENDERER); // NEED TO FREE THESE TOO!
     g0.addVisualComponent(sr0);
     GameObject g1("g1");
     SpriteRenderer* sr1 = (SpriteRenderer*)serializationHelper.getNewComponent(ComponentType::SPRITE_RENDERER);
@@ -126,7 +126,7 @@ void beginEngineMainLoop()
 
         scene.updateGameObjects(deltaTime);
         cameraComponent->renderScene(scene);
-        showIgnisEngineGui(scene, cameraComponent->getOutputTexture());
+        showIgnisEngineGui(scene, cameraComponent->getOutputTexture(), serializationHelper);
 
 #pragma region Dear Imgui Remove This
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).

@@ -8,6 +8,7 @@ add_library(engine
     cameraComponent.cpp
     renderTexture.cpp
     spriteRenderer.cpp
+    serializationHelper.cpp
 )
 
 target_link_libraries(

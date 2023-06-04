@@ -29,4 +29,5 @@ enum ComponentType
     CAMERA,
     TRANSFORM,
     SPRITE_RENDERER,
+    UNKNOWN
 };
