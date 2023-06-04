@@ -47,6 +47,16 @@ void GameObject::addComponent(Component* component) {
     component->parentGameObject = this;
 }
 
+Component* GameObject::getComponentOfType(enum ComponentType type)
+{
+    for (Component* component : this->components) {
+        if (component->getType() == type) {
+            return component;
+        }
+    }
+    return nullptr;
+}
+
 void GameObject::addVisualComponent(ComponentVisual* visualComponent)
 {
     this->visualComponents.push_back(visualComponent);

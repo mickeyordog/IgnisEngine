@@ -16,15 +16,17 @@ enum FieldType
 
 struct FieldDescription
 {
-    const char *name;
+    const char* name;
     FieldType type;
-    const void *ptr;
+    const void* ptr;
     std::function<void(void)> postUpdateFunction;
 
     FieldDescription(const char* name, FieldType type, const void* ptr, const std::function<void(void)> postUpdateFunction = NULL) : name(name), type(type), ptr(ptr), postUpdateFunction(postUpdateFunction) { }
 };
 
-struct ClassDescription {
-    // const char* name;
-    // void* constructor;
+enum ComponentType 
+{
+    CAMERA,
+    TRANSFORM,
+    SPRITE_RENDERER,
 };

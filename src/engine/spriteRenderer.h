@@ -9,10 +9,12 @@ class SpriteRenderer : public ComponentVisual {
 public:
     SpriteRenderer(const Texture* texture, Shader* shader);
     ~SpriteRenderer();
-    virtual void start();
-    virtual void update(float dt);
-    virtual void render();
-    virtual Shader& getShader() { return *shader; };
+    virtual void start() override;
+    virtual void update(float dt) override;
+    virtual void render() override;
+    virtual Shader& getShader() override { return *shader; };
+
+    virtual enum ComponentType getType() override { return ComponentType::SPRITE_RENDERER; };
 
 private:
     GLuint VAO, VBO, EBO;

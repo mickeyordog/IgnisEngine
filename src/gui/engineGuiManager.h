@@ -21,8 +21,8 @@ class EngineGuiManager {
 
 public:
     // void registerComponentClass(ClassDescription classDescription) { componentClasses.insert(classDescription); }
-    const std::unordered_set<ClassDescription>& getAllComponentClasses() { return componentClasses; }
+    // const std::unordered_set<ClassDescription>& getAllComponentClasses() { return componentClasses; }
 
 private:
-    std::unordered_set<ClassDescription> componentClasses;
+    // std::unordered_set<ClassDescription> componentClasses;
 };

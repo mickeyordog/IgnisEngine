@@ -32,6 +32,7 @@ public:
     Vec3 getPosition() { return Vec3(position.x, position.y, position.z); };
 
     virtual std::vector<FieldDescription>& getFields() override { return fields; };
+    virtual enum ComponentType getType() override { return ComponentType::TRANSFORM; };
 
     ObjectTransform* parentTransform;
 

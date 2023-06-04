@@ -14,6 +14,7 @@ public:
     virtual void update(float dt) override;
 
     virtual std::vector<FieldDescription>& getFields() override { return fields; };
+    virtual enum ComponentType getType() override { return ComponentType::CAMERA; };
 
     void renderScene(const Scene& scene);
     RenderTexture& getOutputTexture() { return outputTexture; }

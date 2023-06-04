@@ -23,17 +23,18 @@
 #include "scene.h"
 #include "engineGuiManager.h"
 #include "serialization.h"
+#include "serializationHelper.h"
 #include "cameraComponent.h"
 #include "renderTexture.h"
-
 
 #ifdef __EMSCRIPTEN__
 // #include "../libs/emscripten/emscripten_mainloop_stub.h" // uncomment later
 #endif
 
-
 void beginEngineMainLoop()
 {
+
+
     // std::function<GameObject*(void)> func = []() { return new GameObject("test"); };
     // auto go0 = func();
     // auto* go1 = func();
@@ -47,20 +48,26 @@ void beginEngineMainLoop()
     Texture texture("../assets/fire_penguin.png");
     Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
 
+    SerializationHelper serializationHelper;
+    serializationHelper.registerComponentClass(ComponentType::CAMERA, []() { return new CameraComponent(800, 800); });
+    serializationHelper.registerComponentClass(ComponentType::TRANSFORM, []() { return new ObjectTransform(); });
+    serializationHelper.registerComponentClass(ComponentType::SPRITE_RENDERER, [&]() { return new SpriteRenderer(&texture, &shader); });
+
+
     GameObject g0("g0");
-    SpriteRenderer sr0(&texture, &shader);
-    g0.addVisualComponent(&sr0);
+    SpriteRenderer* sr0 = (SpriteRenderer*)serializationHelper.getNewComponent(ComponentType::SPRITE_RENDERER);
+    g0.addVisualComponent(sr0);
     GameObject g1("g1");
-    SpriteRenderer sr1(&texture, &shader);
-    g1.addVisualComponent(&sr1);
+    SpriteRenderer* sr1 = (SpriteRenderer*)serializationHelper.getNewComponent(ComponentType::SPRITE_RENDERER);
+    g1.addVisualComponent(sr1);
     g1.transform.translate(Vec3 { -1,0,0 });
     GameObject g2("g2");
     GameObject g3("g3");
     GameObject g4("g4");
 
     GameObject camera("Camera");
-    CameraComponent cameraComponent(800, 800, false);
-    camera.addComponent(&cameraComponent);
+    CameraComponent* cameraComponent = (CameraComponent*)serializationHelper.getNewComponent(ComponentType::CAMERA);
+    camera.addComponent(cameraComponent);
     camera.transform.translate(Vec3 { 0,0,5 });
     camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
     // camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
@@ -118,8 +125,8 @@ void beginEngineMainLoop()
         // std::cout << "g0 position: " << g0.transform.getPosition().getData().x << ", " << g0.transform.getPosition().getData().y << ", " << g0.transform.getPosition().getData().z << std::endl;
 
         scene.updateGameObjects(deltaTime);
-        cameraComponent.renderScene(scene);
-        showIgnisEngineGui(scene, cameraComponent.getOutputTexture());
+        cameraComponent->renderScene(scene);
+        showIgnisEngineGui(scene, cameraComponent->getOutputTexture());
 
 #pragma region Dear Imgui Remove This
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).

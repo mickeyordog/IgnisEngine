@@ -17,6 +17,8 @@ public:
     virtual std::vector<FieldDescription>& getFields() { return fields; };
     GameObject* parentGameObject;
 
+    virtual enum ComponentType getType() = 0;
+
 private:
     std::vector<FieldDescription> fields = { };
 };

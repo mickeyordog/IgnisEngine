@@ -16,6 +16,7 @@ public:
 
     void addComponent(Component* component); // TODO: This should prob just construct the component based on its type?
     void removeComponent(Component& component); // Should look for component of given type and remove it
+    Component* getComponentOfType(enum ComponentType type);
     const std::vector<Component*>& getComponents() { return this->components; }
 
     void addVisualComponent(ComponentVisual* visualComponent);
@@ -28,6 +29,7 @@ public:
     GameObject* parentObject;
 
 private:
+    // TODO: have these be same list, just have virtual method that defines whether it is visual or not
     std::vector<Component*> components;
     std::vector<ComponentVisual*> visualComponents;
 };
