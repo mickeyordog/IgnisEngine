@@ -31,3 +31,10 @@ enum ComponentType
     SPRITE_RENDERER,
     UNKNOWN
 };
+
+struct ComponentClassInfo 
+{
+    enum ComponentType type;
+    const char* name;
+    std::function<void*(void)> constructor;
+};

@@ -8,12 +8,13 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-    
+    // TODO: iterate over all objects, from root upwards, and delete them
+    // All gameobjects will need to be dynamically allocated
 }
 
-void Scene::addRootGameObject(GameObject& gameObject)
+void Scene::addRootGameObject(GameObject* gameObject)
 {
-    this->rootObjects.push_back(&gameObject);
+    this->rootObjects.push_back(gameObject);
 }
 
 void Scene::startGameObjects()

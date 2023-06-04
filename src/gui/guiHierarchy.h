@@ -98,5 +98,11 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
         }
         ImGui::TreePop();
     }
+
+    if (ImGui::Button("Add GameObject"))
+    {
+        auto* gameObject = new GameObject("GameObject");
+        scene.addRootGameObject(gameObject);
+    }
     ImGui::End();
 }

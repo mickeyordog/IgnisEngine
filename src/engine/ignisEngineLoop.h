@@ -48,12 +48,18 @@ void beginEngineMainLoop()
     Texture texture("../assets/fire_penguin.png");
     Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
 
-    SerializationHelper serializationHelper;
+
+    // this can probably just be global static, or doesn't even need to be a class
+    SerializationHelper serializationHelper; // TODO: replace this with registering ComponentClassInfo for each class, then don't have to do that weird mapping to string thing
     serializationHelper.registerComponentClass(ComponentType::CAMERA, []() { return new CameraComponent(800, 800); });
     serializationHelper.registerComponentClass(ComponentType::TRANSFORM, []() { return new ObjectTransform(); });
     serializationHelper.registerComponentClass(ComponentType::SPRITE_RENDERER, [&]() { return new SpriteRenderer(&texture, &shader); });
 
+    SerializationHelper::registerComponentClass({ ComponentType::CAMERA, "Camera", []() { return new CameraComponent(800, 800); } });
+    SerializationHelper::registerComponentClass({ ComponentType::TRANSFORM, "Transform", []() { return new ObjectTransform(); } });
+    SerializationHelper::registerComponentClass({ ComponentType::SPRITE_RENDERER, "Sprite Renderer", [&]() { return new SpriteRenderer(&texture, &shader); } });
 
+    // TODO: should prob just make serializationHelper some kind of global so don't need to pass it literally everywhere, and then gameobject can just have a add component of type method
     GameObject g0("g0");
     SpriteRenderer* sr0 = (SpriteRenderer*)serializationHelper.getNewComponent(ComponentType::SPRITE_RENDERER); // NEED TO FREE THESE TOO!
     g0.addVisualComponent(sr0);
@@ -79,8 +85,8 @@ void beginEngineMainLoop()
     g3.transform.addChildTransform(g4.transform); // Opening this causes error for some reason
 
     Scene scene;
-    scene.addRootGameObject(camera);
-    scene.addRootGameObject(g0);
+    scene.addRootGameObject(&camera); // TODO: replace this with method that constructs and creates gameobject pointer itself
+    scene.addRootGameObject(&g0);
 
     static bool show_demo_window = false;
     bool show_another_window = false;

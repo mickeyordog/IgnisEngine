@@ -9,7 +9,7 @@ public:
     Scene();
     ~Scene();
 
-    void addRootGameObject(GameObject& gameObject);
+    void addRootGameObject(GameObject* gameObject);
     void startGameObjects();
     void updateGameObjects(float dt);
     // TODO: iterator for traversing entire scene tree

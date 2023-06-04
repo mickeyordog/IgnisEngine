@@ -1,5 +1,7 @@
 #include "serializationHelper.h"
 
+std::vector<ComponentClassInfo> SerializationHelper::componentClassInfos;
+
 std::unique_ptr<std::vector<const char*>> SerializationHelper::getComponentTypeNames()
 {
     auto componentTypeNames = std::make_unique<std::vector<const char*>>();

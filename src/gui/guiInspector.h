@@ -10,7 +10,7 @@
 void showComponent(Component* component, SerializationHelper& serializationHelper) {
     // ImGui::Text("New Component:"); // TODO: component name, maybe FieldDescription meta info type
     ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-    if (!ImGui::TreeNode((void*)component, serializationHelper.componentTypeToString(component->getType()))) // TODO: these need to all have diff names, rn they're overlapping functionality
+    if (!ImGui::TreeNode((void*)component, "%s", serializationHelper.componentTypeToString(component->getType()))) // TODO: these need to all have diff names, rn they're overlapping functionality
         return;
 
     for (FieldDescription& f : component->getFields())
@@ -79,6 +79,7 @@ void showGuiInspectorPanel(const std::unordered_set<GameObject*>& selectedObject
             {
                 enum ComponentType type = serializationHelper.stringToComponentType(name);
                 gameObject->addComponent(serializationHelper.getNewComponent(type));
+                // break; // TODO: weird glitch happening where new components getting added to middle instead of bottom
             }
         }
     }
