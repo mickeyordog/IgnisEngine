@@ -27,11 +27,11 @@ const char* SerializationHelper::componentTypeToString(enum ComponentType type)
 
 enum ComponentType SerializationHelper::stringToComponentType(const char* name)
 {
-    if (strcmp(name, "Camera")) {
+    if (strcmp(name, "Camera") == 0) {
         return ComponentType::CAMERA;
-    } else if (strcmp(name, "Transform")) {
+    } else if (strcmp(name, "Transform") == 0) {
         return ComponentType::TRANSFORM;
-    } else if (strcmp(name, "Sprite Renderer")) {
+    } else if (strcmp(name, "Sprite Renderer") == 0) {
         return ComponentType::SPRITE_RENDERER;
     } else {
         return ComponentType::UNKNOWN;

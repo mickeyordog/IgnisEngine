@@ -10,7 +10,7 @@ class GameObject;
 class Component {
 public:
     Component();
-    ~Component();
+    virtual ~Component() = default;
     virtual void start() = 0;
     virtual void update(float dt) = 0;
 

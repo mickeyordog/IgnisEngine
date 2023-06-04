@@ -4,8 +4,3 @@ ComponentVisual::ComponentVisual()
 {
     
 }
-
-ComponentVisual::~ComponentVisual()
-{
-    
-}

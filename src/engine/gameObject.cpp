@@ -8,7 +8,13 @@ GameObject::GameObject(const char* name) : name(name) {
 }
 
 GameObject::~GameObject() {
-    // ~sprite(); not needed anymore
+    // TODO: transform? Rn being stack allocated
+    for (Component* component : this->components) {
+        delete component;
+    }
+    for (ComponentVisual* visualComponent : this->visualComponents) {
+        delete visualComponent;
+    }
 }
 
 void GameObject::start()
