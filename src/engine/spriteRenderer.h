@@ -15,8 +15,11 @@ public:
     virtual Shader& getShader() override { return *shader; };
 
     virtual enum ComponentType getType() override { return ComponentType::SPRITE_RENDERER; };
+    virtual std::vector<FieldDescription>& getFields() override { return fields; };
 
 private:
+    std::vector<FieldDescription> fields = { };
+
     GLuint VAO, VBO, EBO;
     const Texture* texture;
     Shader* shader;

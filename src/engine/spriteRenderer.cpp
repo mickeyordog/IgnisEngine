@@ -4,6 +4,8 @@
 
 SpriteRenderer::SpriteRenderer(const Texture* texture, Shader* shader)
 {
+    fields.insert(fields.begin(), Component::getFields().begin(), Component::getFields().end());
+
     this->texture = texture;
     this->shader = shader;
     // x, y, z, u, v

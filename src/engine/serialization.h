@@ -22,10 +22,11 @@ struct FieldDescription
     const void* ptr;
     std::function<void(void)> postUpdateFunction;
 
-    FieldDescription(const char* name, FieldType type, const void* ptr, const std::function<void(void)> postUpdateFunction = NULL) : name(name), type(type), ptr(ptr), postUpdateFunction(postUpdateFunction) { }
+    FieldDescription(const char* name, FieldType type, const void* ptr, const std::function<void(void)> postUpdateFunction = []() { })
+        : name(name), type(type), ptr(ptr), postUpdateFunction(postUpdateFunction) { }
 };
 
-enum ComponentType 
+enum ComponentType
 {
     CAMERA,
     TRANSFORM,
@@ -33,9 +34,9 @@ enum ComponentType
     UNKNOWN
 };
 
-struct ComponentClassInfo 
+struct ComponentClassInfo
 {
     enum ComponentType type;
     const char* name;
-    std::function<void*(void)> constructor;
+    std::function<void* (void)> constructor;
 };

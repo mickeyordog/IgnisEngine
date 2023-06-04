@@ -36,10 +36,12 @@ void GameObject::update(float dt) {
     // y = 100 + 100 * sin(SDL_GetTicks() / 1000.0);
     transform.update(dt);
     for (Component* component : this->components) {
-        component->update(dt);
+        if (component->isActive)
+            component->update(dt);
     }
     for (ComponentVisual* visualComponent : this->visualComponents) {
-        visualComponent->update(dt);
+        if (visualComponent->isActive)
+            visualComponent->update(dt);
     }
 }
 

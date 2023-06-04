@@ -49,6 +49,8 @@ void Scene::updateGameObjects(float dt)
     {
         GameObject* currentObject = objectStack.top();
         objectStack.pop();
+        if (!currentObject->isActive)
+            continue;
         for (auto transformIt = currentObject->transform.getChildTransforms().rbegin(); transformIt != currentObject->transform.getChildTransforms().rend(); ++transformIt)
         {
             objectStack.push((*transformIt)->parentGameObject);

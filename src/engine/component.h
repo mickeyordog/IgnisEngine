@@ -19,9 +19,12 @@ public:
 
     virtual enum ComponentType getType() = 0;
     virtual bool isVisual() { return false; }
+    bool isActive = true;
 
 private:
-    std::vector<FieldDescription> fields = { };
+    std::vector<FieldDescription> fields = { 
+        { "isActive", FieldType::BOOL, &isActive }
+    };
 };
 
 

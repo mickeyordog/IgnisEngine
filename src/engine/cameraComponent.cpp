@@ -4,6 +4,8 @@
 
 CameraComponent::CameraComponent(int width, int height, bool orthographic) : width(width), height(height), orthographic(orthographic), outputTexture(width, height)
 {
+    fields.insert(fields.begin(), Component::getFields().begin(), Component::getFields().end());
+
     setProjectionMatrix();
 }
 
@@ -37,12 +39,17 @@ void CameraComponent::renderScene(const Scene& scene)
     {
         GameObject* currentObject = objectStack.top();
         objectStack.pop();
+        if (!currentObject->isActive)
+            continue;
         for (auto transformIt = currentObject->transform.getChildTransforms().rbegin(); transformIt != currentObject->transform.getChildTransforms().rend(); ++transformIt)
         {
             objectStack.push((*transformIt)->parentGameObject);
         }
 
         for (ComponentVisual* visualComponent : currentObject->getVisualComponents()) {
+            if (!visualComponent->isActive)
+                continue;
+
             Shader& shader = visualComponent->getShader();
             glm::mat4 model = currentObject->transform.getMatrix();
             // TODO: I don't think taking inverse to get view is correct
@@ -61,7 +68,7 @@ void CameraComponent::renderScene(const Scene& scene)
 void CameraComponent::setProjectionMatrix()
 {
     if (orthographic)
-        projectionMatrix = glm::ortho(-(float)width / 2, (float)width / 2, -(float)height / 2, (float)height / 2, 0.1f, 100.0f); // TODO: why doesn't this work
+        projectionMatrix = glm::ortho(-(float)width / 2, (float)width / 2, -(float)height / 2, (float)height / 2, 0.1f, 1000.0f); // TODO: why doesn't this work
     else
         projectionMatrix = glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 100.0f);
     
@@ -71,5 +78,4 @@ void CameraComponent::setProjectionMatrix()
 void CameraComponent::updateOutputTexture()
 {
     outputTexture = RenderTexture(width, height);
-    std::cout << "Updated output texture" << std::endl;
 }

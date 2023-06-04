@@ -22,6 +22,7 @@ public:
     void addVisualComponent(ComponentVisual* visualComponent);
     const std::vector<ComponentVisual*>& getVisualComponents() { return this->visualComponents; }
 
+    bool isActive = true;
     
     ObjectTransform transform;
 

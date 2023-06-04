@@ -19,7 +19,7 @@ void showComponent(Component* component, SerializationHelper& serializationHelpe
         {
         case FieldType::INT:
             // ImGui::Text("Value: %d", *(int*)f.ptr);
-            if (ImGui::SliderInt(f.name, (int*)f.ptr, -10, 10))
+            if (ImGui::DragInt(f.name, (int*)f.ptr))
                 f.postUpdateFunction();
             break;
         case FieldType::FLOAT:
