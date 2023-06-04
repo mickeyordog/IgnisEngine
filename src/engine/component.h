@@ -18,6 +18,7 @@ public:
     GameObject* parentGameObject;
 
     virtual enum ComponentType getType() = 0;
+    virtual bool isVisual() { return false; }
 
 private:
     std::vector<FieldDescription> fields = { };

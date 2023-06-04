@@ -7,12 +7,13 @@ class ComponentVisual : public Component {
 public:
     ComponentVisual();
     virtual ~ComponentVisual() = default;
-    virtual void start() = 0;
-    virtual void update(float dt) = 0;
+    virtual void start() override = 0;
+    virtual void update(float dt) override = 0;
     virtual void render() = 0;
 
-    virtual std::vector<FieldDescription>& getFields() { return fields; };
+    virtual std::vector<FieldDescription>& getFields() override { return fields; };
     virtual Shader& getShader() = 0;
+    virtual bool isVisual() override { return true; }
 private:
     std::vector<FieldDescription> fields = { };
 };

@@ -6,12 +6,13 @@
 
 enum FieldType
 {
-    Float,
-    Int,
-    Subclass,
-    EndSubclass,
-    ComponentType,
-    vec3
+    FLOAT,
+    INT,
+    BOOL,
+    SUBCLASS,
+    END_SUBCLASS,
+    COMPONENT_TYPE,
+    VEC3
 };
 
 struct FieldDescription

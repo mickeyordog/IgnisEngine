@@ -17,27 +17,35 @@ void showComponent(Component* component, SerializationHelper& serializationHelpe
     {
         switch (f.type)
         {
-        case FieldType::Int:
-            ImGui::Text("Value: %d", *(int*)f.ptr);
-            ImGui::SliderInt(f.name, (int*)f.ptr, -10, 10);
+        case FieldType::INT:
+            // ImGui::Text("Value: %d", *(int*)f.ptr);
+            if (ImGui::SliderInt(f.name, (int*)f.ptr, -10, 10))
+                f.postUpdateFunction();
             break;
-        case FieldType::Float:
-            ImGui::Text("Value: %f", *(float*)f.ptr); // would need to call update matrix here too, but then this slider would need to be specific to changing transform and non generic
+        case FieldType::FLOAT:
+            // ImGui::Text("Value: %f", *(float*)f.ptr); // would need to call update matrix here too, but then this slider would need to be specific to changing transform and non generic
             // ImGui::Text("Address: %p", f.ptr);
-            ImGui::SliderFloat(f.name, (float*)f.ptr, -10.0, 10.0);
+            if (ImGui::SliderFloat(f.name, (float*)f.ptr, -10.0, 10.0))
+                f.postUpdateFunction();
             break;
-        case FieldType::Subclass:
+        case FieldType::BOOL:
+            if (ImGui::Checkbox(f.name, (bool*)f.ptr))
+                f.postUpdateFunction();
+            break;
+        case FieldType::SUBCLASS:
+            // Prob don't actually need to do this subclass thing b/c can just use treenode at top
             // ImGui::TreePush(f.name); // TODO: this will still cause probs if multiple fields w/ same name
             ImGui::BulletText("Subclass: %s", f.name);
             break;
-        case FieldType::EndSubclass:
+        case FieldType::END_SUBCLASS:
             // ImGui::TreePop(); // crashing bc subclass only pushes if interacted?
             // ImGui::TreeNode("End Subclass: %s", f.name);
             break;
-        case FieldType::ComponentType:
+        case FieldType::COMPONENT_TYPE:
+            // Do I still need this?
             ImGui::Text("Component: %s", f.name);
             break;
-        case FieldType::vec3:
+        case FieldType::VEC3:
             if (ImGui::SliderFloat3("Position", (float*)f.ptr, -10, 10))
                 if (f.postUpdateFunction)
                     f.postUpdateFunction();
@@ -77,9 +85,13 @@ void showGuiInspectorPanel(const std::unordered_set<GameObject*>& selectedObject
         {
             if (ImGui::Selectable(name))
             {
+                // TODO: this should all be done inside GameObject::newComponentByType, once serializationHelper is global static
                 enum ComponentType type = serializationHelper.stringToComponentType(name);
-                gameObject->addComponent(serializationHelper.getNewComponent(type));
-                // break; // TODO: weird glitch happening where new components getting added to middle instead of bottom
+                Component* newComponent = serializationHelper.getNewComponent(type);
+                if (newComponent->isVisual())
+                    gameObject->addVisualComponent((ComponentVisual*)newComponent);
+                else
+                    gameObject->addComponent(serializationHelper.getNewComponent(type));
             }
         }
     }

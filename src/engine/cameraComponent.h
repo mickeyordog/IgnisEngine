@@ -20,7 +20,16 @@ public:
     RenderTexture& getOutputTexture() { return outputTexture; }
 
 private:
-    std::vector<FieldDescription> fields = { };
+    void setProjectionMatrix();
+    void updateOutputTexture();
+
+    std::vector<FieldDescription> fields = { 
+        { "width", FieldType::INT, &width, [&](){ this->updateOutputTexture(); } },
+        { "height", FieldType::INT, &height, [&]() { this->updateOutputTexture(); } },
+        { "orthographic", FieldType::BOOL, &orthographic, [&]() { this->setProjectionMatrix(); } }
+    };
     RenderTexture outputTexture;
     glm::mat4 projectionMatrix;
+    int width, height; // TODO: these can't really be changed b/c being used to create render texture. Could recreate it maybe?
+    bool orthographic;
 };

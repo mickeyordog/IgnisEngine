@@ -47,9 +47,7 @@ private:
     glm::mat4 parentMatrix = glm::mat4(1.0f);
 
     std::vector<FieldDescription> fields = {
-        { GET_NAME(ObjectTransform), FieldType::Subclass, this },
-        { GET_NAME(position), FieldType::vec3, &position, [this](){ this->updateMatrix(); } },
-        { GET_NAME(ObjectTransform), FieldType::EndSubclass, this },
+        { GET_NAME(position), FieldType::VEC3, &position, [this](){ this->updateMatrix(); } },
     };
 
     std::vector<ObjectTransform*> childTransforms;
