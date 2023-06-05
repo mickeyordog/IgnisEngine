@@ -8,6 +8,7 @@
 class Vec3 {
 public:
     Vec3(float x, float y, float z) : data(x, y, z) { };
+    Vec3(glm::vec3 data) : data(data) { };
     ~Vec3();
 
     const std::vector<FieldDescription>& getFields() { return fields; }

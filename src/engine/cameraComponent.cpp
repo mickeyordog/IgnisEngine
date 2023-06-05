@@ -68,11 +68,10 @@ void CameraComponent::renderScene(const Scene& scene)
 void CameraComponent::setProjectionMatrix()
 {
     if (orthographic)
-        projectionMatrix = glm::ortho(-(float)width / 2, (float)width / 2, -(float)height / 2, (float)height / 2, 0.1f, 1000.0f); // TODO: why doesn't this work
+        // projectionMatrix = glm::ortho(-(float)width / 2, (float)width / 2, -(float)height / 2, (float)height / 2, 0.1f, 1000.0f);
+        projectionMatrix = glm::ortho(-0.5f, 0.5f, -0.5f, 0.5f, 0.1f, 1000.0f); // TODO: find good way to make this work
     else
         projectionMatrix = glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 100.0f);
-    
-    std::cout << "Updated projection matrix" << std::endl;
 }
 
 void CameraComponent::updateOutputTexture()

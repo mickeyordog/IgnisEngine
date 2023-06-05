@@ -25,7 +25,7 @@ void showComponent(Component* component, SerializationHelper& serializationHelpe
         case FieldType::FLOAT:
             // ImGui::Text("Value: %f", *(float*)f.ptr); // would need to call update matrix here too, but then this slider would need to be specific to changing transform and non generic
             // ImGui::Text("Address: %p", f.ptr);
-            if (ImGui::SliderFloat(f.name, (float*)f.ptr, -10.0, 10.0))
+            if (ImGui::DragFloat(f.name, (float*)f.ptr))
                 f.postUpdateFunction();
             break;
         case FieldType::BOOL:
@@ -46,7 +46,7 @@ void showComponent(Component* component, SerializationHelper& serializationHelpe
             ImGui::Text("Component: %s", f.name);
             break;
         case FieldType::VEC3:
-            if (ImGui::SliderFloat3("Position", (float*)f.ptr, -10, 10))
+            if (ImGui::DragFloat3(f.name, (float*)f.ptr))
                 if (f.postUpdateFunction)
                     f.postUpdateFunction();
                 // ((ObjectTransform*)f.objectPtr)->updateMatrix(); // why does this work without this??

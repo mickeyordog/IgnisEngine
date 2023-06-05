@@ -54,6 +54,12 @@ void ObjectTransform::setScale(Vec3 scale)
     updateMatrix();
 }
 
+void ObjectTransform::setEulerRotation(Vec3 eulerRotationDegrees)
+{
+    rotation = glm::quat(glm::radians(eulerRotationDegrees.getData()));
+    updateMatrix();
+}
+
 void ObjectTransform::rotateAround(Vec3& axis, float angleDegrees)
 {
     // this->globalMatrix = glm::rotate(this->globalMatrix, glm::radians(angleDegrees), glm::normalize(axis.getData()));

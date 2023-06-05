@@ -18,6 +18,7 @@ public:
     void setPosition(Vec3 position);
     void translate(Vec3 translation);
     void setScale(Vec3 scale);
+    void setEulerRotation(Vec3 eulerRotation);
     void rotateAround(Vec3& axis, float angleDegrees);
     void lookAt(Vec3 target, Vec3 up);
 
@@ -46,8 +47,11 @@ private:
     glm::vec3 scale = glm::vec3(1.0f);
     glm::mat4 parentMatrix = glm::mat4(1.0f);
 
+    glm::vec3 guiEulerAngles = glm::vec3(0.0f);
     std::vector<FieldDescription> fields = {
-        { GET_NAME(position), FieldType::VEC3, &position, [this](){ this->updateMatrix(); } },
+        { GET_NAME(position), FieldType::VEC3, &position, [&]() { this->updateMatrix(); } },
+        { GET_NAME(rotation), FieldType::VEC3, &guiEulerAngles, [&]() { this->setEulerRotation(guiEulerAngles); } },
+        { GET_NAME(scale), FieldType::VEC3, &scale, [&]() { this->updateMatrix(); } },
     };
 
     std::vector<ObjectTransform*> childTransforms;

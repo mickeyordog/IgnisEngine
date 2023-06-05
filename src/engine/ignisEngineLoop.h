@@ -33,21 +33,12 @@
 
 void beginEngineMainLoop()
 {
-
-
-    // std::function<GameObject*(void)> func = []() { return new GameObject("test"); };
-    // auto go0 = func();
-    // auto* go1 = func();
-    // go1->start();
-    // return;
-
     SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);
     DearImGuiContext dearImGuiContext(&sdlContext, &glContext);
 
     Texture texture("../assets/fire_penguin.png");
     Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
-
 
     // this can probably just be global static, or doesn't even need to be a class
     SerializationHelper serializationHelper; // TODO: replace this with registering ComponentClassInfo for each class, then don't have to do that weird mapping to string thing
