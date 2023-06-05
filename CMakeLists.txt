@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.26.3)
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 17) # need 17 for imfilebrowser, but could otherwise use 14 for make_unique
 
 project(IgnisEngine VERSION 0.1
                     DESCRIPTION "Game engine"

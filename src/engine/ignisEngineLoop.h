@@ -27,6 +27,9 @@
 #include "cameraComponent.h"
 #include "renderTexture.h"
 
+#include <imgui.h>
+#include <imfilebrowser.h>
+
 #ifdef __EMSCRIPTEN__
 // #include "../libs/emscripten/emscripten_mainloop_stub.h" // uncomment later
 #endif
@@ -92,6 +95,13 @@ void beginEngineMainLoop()
     Timer runtimeTimer;
     scene.startGameObjects();
 
+#pragma region imfilebrowser
+    ImGui::FileBrowser fileDialog(ImGuiFileBrowserFlags_NoModal);
+    // (optional) set browser properties
+    fileDialog.SetTitle("title");
+    fileDialog.SetTypeFilters({ ".h", ".cpp" });
+#pragma endregion
+
     bool quit = false;
 #ifdef __EMSCRIPTEN__
     EMSCRIPTEN_MAINLOOP_BEGIN
@@ -118,10 +128,26 @@ void beginEngineMainLoop()
 
         dearImGuiContext.newFrame();
 
+#pragma region imfilebrowser
+        if (ImGui::Begin("dummy window"))
+        {
+            // open file dialog when user clicks this button
+            if (ImGui::Button("open file dialog"))
+                fileDialog.Open();
+        }
+        ImGui::End();
+        fileDialog.Display();
+        if (fileDialog.HasSelected())
+        {
+            std::cout << "Selected filename" << fileDialog.GetSelected().string() << std::endl;
+            fileDialog.ClearSelected();
+        }
+#pragma endregion
+
         // camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
         // std::cout << "g0 position: " << g0.transform.getPosition().getData().x << ", " << g0.transform.getPosition().getData().y << ", " << g0.transform.getPosition().getData().z << std::endl;
 
-        scene.updateGameObjects(deltaTime);
+        scene.updateGameObjects(deltaTime); // this should actually only happen in game build or during play mode
         cameraComponent->renderScene(scene);
         showIgnisEngineGui(scene, cameraComponent->getOutputTexture(), serializationHelper);
 
