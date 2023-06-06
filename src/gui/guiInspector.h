@@ -29,13 +29,15 @@ void showComponent(Component* component) {
             if (ImGui::Checkbox(f.name, (bool*)f.ptr))
                 f.postUpdateFunction();
             break;
-        case FieldType::COMPONENT_TYPE:
-            // Do I still need this?
-            ImGui::Text("Component: %s", f.name);
-            break;
         case FieldType::VEC3:
             if (ImGui::DragFloat3(f.name, (float*)f.ptr))
                 f.postUpdateFunction();
+            break;
+        case FieldType::POINTER:
+            ImGui::Text("Pointer to %s: %p", f.name, *(void**)f.ptr);
+            break;
+        default:
+            break;
         }
 
     }
@@ -55,7 +57,6 @@ void showGuiInspectorPanel(const std::unordered_set<GameObject*>& selectedObject
         GameObject* gameObject = *selectedObjects.begin();
 
         showComponent(&gameObject->transform);
-
         for (Component *component : gameObject->getComponents())
         {
             showComponent(component);
@@ -67,7 +68,7 @@ void showGuiInspectorPanel(const std::unordered_set<GameObject*>& selectedObject
 
         ImGui::Button("Add Component");
         auto componentTypeNames = SerializationHelper::getComponentTypeNames();
-        for (auto& name : *componentTypeNames)
+        for (auto& name : componentTypeNames)
         {
             if (ImGui::Selectable(name))
             {

@@ -6,7 +6,7 @@
 #include "component.h"
 #include "vec3.h"
 
-
+// TODO: rename TransformComponent to match others' convention
 class ObjectTransform : public Component {
 public:
     ObjectTransform();

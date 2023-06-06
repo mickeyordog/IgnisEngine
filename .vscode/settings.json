@@ -117,7 +117,8 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "__tree": "cpp"
     },
     // Adapted from https://github.com/microsoft/vscode-cmake-tools/issues/506
     // be careful, I think lldb is Mac specific

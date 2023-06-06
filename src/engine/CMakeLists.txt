@@ -1,4 +1,7 @@
 add_library(engine
+    animationClip.cpp
+    animatorComponent.cpp
+    animationController.cpp
     component.cpp
     componentVisual.cpp
     objectTransform.cpp

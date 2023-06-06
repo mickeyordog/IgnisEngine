@@ -13,11 +13,11 @@ public:
     virtual ~Component() = default;
     virtual void start() = 0;
     virtual void update(float dt) = 0;
+    virtual enum ComponentType getType() = 0;
 
     virtual std::vector<FieldDescription>& getFields() { return fields; };
     GameObject* parentGameObject;
 
-    virtual enum ComponentType getType() = 0;
     virtual bool isVisual() { return false; }
     bool isActive = true;
 

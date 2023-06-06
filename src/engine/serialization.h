@@ -9,10 +9,8 @@ enum FieldType
     FLOAT,
     INT,
     BOOL,
-    SUBCLASS,
-    END_SUBCLASS,
-    COMPONENT_TYPE,
-    VEC3
+    VEC3,
+    POINTER
 };
 
 struct FieldDescription
@@ -31,6 +29,7 @@ enum class ComponentType
     CAMERA,
     TRANSFORM,
     SPRITE_RENDERER,
+    ANIMATOR,
     UNKNOWN
 };
 

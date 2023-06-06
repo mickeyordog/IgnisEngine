@@ -1,6 +1,14 @@
 #include "serializationHelper.h"
 
 std::vector<ComponentClassInfo> SerializationHelper::componentClassInfos;
+std::vector<const char*> SerializationHelper::componentTypeNames;
+
+void SerializationHelper::registerComponentClass(ComponentClassInfo componentClassInfo)
+{
+    componentClassInfos.push_back(componentClassInfo);
+    componentTypeNames.push_back(componentClassInfo.name);
+}
+
 
 Component* SerializationHelper::getNewComponent(enum ComponentType componentType)
 {
@@ -10,16 +18,6 @@ Component* SerializationHelper::getNewComponent(enum ComponentType componentType
             return classInfo.constructor();
     }
     return nullptr;
-}
-
-std::unique_ptr<std::vector<const char*>> SerializationHelper::getComponentTypeNames()
-{
-    auto componentTypeNames = std::make_unique<std::vector<const char*>>();
-
-    for (auto& classInfo : componentClassInfos)
-        componentTypeNames->push_back(classInfo.name);
-
-    return componentTypeNames;
 }
 
 const char* SerializationHelper::componentTypeToString(enum ComponentType type)
@@ -41,3 +39,4 @@ enum ComponentType SerializationHelper::stringToComponentType(const char* name)
     }
     return ComponentType::UNKNOWN;
 }
+

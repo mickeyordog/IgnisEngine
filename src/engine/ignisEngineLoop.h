@@ -25,6 +25,7 @@
 #include "serialization.h"
 #include "serializationHelper.h"
 #include "cameraComponent.h"
+#include "animatorComponent.h"
 #include "renderTexture.h"
 
 #include <imgui.h>
@@ -36,6 +37,7 @@
 
 void beginEngineMainLoop()
 {
+    // NOTE: if vs starts getting really buggy (eg intellisense) and laptop gets hot, try actually quitting app
     SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);
     DearImGuiContext dearImGuiContext(&sdlContext, &glContext);
@@ -43,27 +45,20 @@ void beginEngineMainLoop()
     Texture texture("../assets/fire_penguin.png");
     Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
 
-    // this can probably just be global static, or doesn't even need to be a class
-    // SerializationHelper serializationHelper; // TODO: replace this with registering ComponentClassInfo for each class, then don't have to do that weird mapping to string thing
-    // serializationHelper.registerComponentClass(ComponentType::CAMERA, []() { return new CameraComponent(800, 800); });
-    // serializationHelper.registerComponentClass(ComponentType::TRANSFORM, []() { return new ObjectTransform(); });
-    // serializationHelper.registerComponentClass(ComponentType::SPRITE_RENDERER, [&]() { return new SpriteRenderer(&texture, &shader); });
-
     SerializationHelper::registerComponentClass({ ComponentType::CAMERA, "Camera", []() { return new CameraComponent(800, 800); } });
     SerializationHelper::registerComponentClass({ ComponentType::TRANSFORM, "Transform", []() { return new ObjectTransform(); } });
     SerializationHelper::registerComponentClass({ ComponentType::SPRITE_RENDERER, "Sprite Renderer", [&]() { return new SpriteRenderer(&texture, &shader); } });
+    SerializationHelper::registerComponentClass({ ComponentType::ANIMATOR, "Animator", [&]() { return new AnimatorComponent(); } });
 
-    // TODO: should prob just make serializationHelper some kind of global so don't need to pass it literally everywhere, and then gameobject can just have a add component of type method
+
     GameObject g0("g0");
     g0.addComponentOfType(ComponentType::SPRITE_RENDERER);
-    // SpriteRenderer* sr0 = (SpriteRenderer*)SerializationHelper::getNewComponent(ComponentType::SPRITE_RENDERER); // NEED TO FREE THESE TOO!
-    // g0.addVisualComponent(sr0);
     GameObject g1("g1");
     g1.addComponentOfType(ComponentType::SPRITE_RENDERER);
-    // SpriteRenderer* sr1 = (SpriteRenderer*)SerializationHelper::getNewComponent(ComponentType::SPRITE_RENDERER);
-    // g1.addVisualComponent(sr1);
     g1.transform.translate(Vec3 { -1,0,0 });
     GameObject g2("g2");
+    g2.addComponentOfType(ComponentType::SPRITE_RENDERER);
+    g2.transform.translate(Vec3 { 1,0,0 });
     GameObject g3("g3");
     GameObject g4("g4");
 
@@ -72,8 +67,6 @@ void beginEngineMainLoop()
     CameraComponent* cameraComponent = (CameraComponent*)camera.getComponentOfType(ComponentType::CAMERA);
     camera.transform.translate(Vec3 { 0,0,5 });
     camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
-    // camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
-    // camera.transform.translate(Vec3 { 0,-1,0 });
 
     g0.transform.addChildTransform(g1.transform);
     g0.transform.addChildTransform(g2.transform);
@@ -94,7 +87,6 @@ void beginEngineMainLoop()
     Timer frameTimer;
     float deltaTime = 0;
 
-    Timer runtimeTimer;
     scene.startGameObjects();
 
 #pragma region imfilebrowser

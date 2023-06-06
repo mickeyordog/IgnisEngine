@@ -6,17 +6,19 @@
 #include "serialization.h"
 #include "component.h"
 
+// This could maybe be replaced with a singleton if I want more control over its lifetime later
 class SerializationHelper
 {
-public: // TODO: remove old version with 2 params for register, refactor getters to use new vector
-    // void registerComponentClass(enum ComponentType componentType, std::function<Component* (void)> constructor) { componentTypeToConstructor[componentType] = constructor; }
-    static void registerComponentClass(ComponentClassInfo componentClassInfo) { componentClassInfos.push_back(componentClassInfo); };
+public:
+    static void registerComponentClass(ComponentClassInfo componentClassInfo);
     static Component* getNewComponent(enum ComponentType componentType);
-    static std::unique_ptr<std::vector<const char*>> getComponentTypeNames();
+    static std::vector<const char*>& getComponentTypeNames() { return componentTypeNames; }
+
     static const char* componentTypeToString(enum ComponentType type);
     static enum ComponentType stringToComponentType(const char* name);
 
 private:
-    // std::unordered_map<enum ComponentType, std::function<Component*(void)>> componentTypeToConstructor;
+    SerializationHelper() { }
     static std::vector<ComponentClassInfo> componentClassInfos;
+    static std::vector<const char*> componentTypeNames;
 };

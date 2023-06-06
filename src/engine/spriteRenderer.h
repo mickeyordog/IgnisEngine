@@ -4,7 +4,7 @@
 #include "shader.h"
 #include "componentVisual.h"
 
-// TODO: allow instancing?
+// TODO: allow gpu instancing?
 class SpriteRenderer : public ComponentVisual {
 public:
     SpriteRenderer(const Texture* texture, Shader* shader);
@@ -18,7 +18,13 @@ public:
     virtual std::vector<FieldDescription>& getFields() override { return fields; };
 
 private:
-    std::vector<FieldDescription> fields = { };
+    // TODO: thinking about how I want to reference texture and shader. Should prob be using handle instead of pointer.
+    // Not sure how I should serialize the reference though. Probably review game engine textbook because I think 
+    // there was some discussion about how to save references in the context of going from scene to scene, so similar to here
+    std::vector<FieldDescription> fields = {
+        { GET_NAME(texture), FieldType::POINTER, &texture },
+        { GET_NAME(shader), FieldType::POINTER, &shader }
+    };
 
     GLuint VAO, VBO, EBO;
     const Texture* texture;
