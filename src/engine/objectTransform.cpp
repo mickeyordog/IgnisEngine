@@ -2,22 +2,9 @@
 
 #include <iostream>
 
-ObjectTransform::ObjectTransform() /*: position(0, 0, 0), rotation(0, 0, 0), scale(0, 0, 0)*/
+ObjectTransform::ObjectTransform()
 {
     fields.insert(fields.begin(), Component::getFields().begin(), Component::getFields().end());
-
-    // fields.emplace_back(FieldDescription { GET_NAME(position), FieldType::Subclass, &position });
-    // fields.insert(fields.end(), position.getFields().begin(), position.getFields().end());
-    // fields.emplace_back(FieldDescription { GET_NAME(position), FieldType::EndSubclass, &position });
-
-    // fields.emplace_back(FieldDescription { GET_NAME(rotation), FieldType::Subclass, &rotation });
-    // fields.insert(fields.end(), rotation.getFields().begin(), rotation.getFields().end());
-    // fields.emplace_back(FieldDescription { GET_NAME(rotation), FieldType::EndSubclass, &rotation });
-
-    // fields.emplace_back(FieldDescription { GET_NAME(scale), FieldType::Subclass, &scale });
-    // fields.insert(fields.end(), scale.getFields().begin(), scale.getFields().end());
-    // fields.emplace_back(FieldDescription { GET_NAME(scale), FieldType::EndSubclass, &scale });
-
 }
 
 ObjectTransform::~ObjectTransform()
@@ -32,7 +19,7 @@ void ObjectTransform::start()
 
 void ObjectTransform::update(float dt)
 {
-    // translate({dt, 0, 0});
+
 }
 
 void ObjectTransform::setPosition(Vec3 position)
@@ -41,7 +28,6 @@ void ObjectTransform::setPosition(Vec3 position)
     updateMatrix();
 }
 
-// TODO: these all probably have to be stored in separate matrices and multiplied when needed, otherwise order will matter
 void ObjectTransform::translate(Vec3 translation)
 {
     this->position += translation.getData();
@@ -65,7 +51,6 @@ void ObjectTransform::rotateAround(Vec3& axis, float angleDegrees)
     // this->globalMatrix = glm::rotate(this->globalMatrix, glm::radians(angleDegrees), glm::normalize(axis.getData()));
 }
 
-// TODO: figure out how to efficiently take in new Vec3 as param, as this will copy which is maybe fine
 void ObjectTransform::lookAt(Vec3 target, Vec3 up)
 {
     glm::mat4 viewMatrix = glm::lookAt(this->position, target.getData(), up.getData());

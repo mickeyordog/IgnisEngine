@@ -1,5 +1,7 @@
 #pragma once
 
+// From https://github.com/AirGuanZ/imgui-filebrowser
+
 #include <algorithm>
 #include <array>
 #include <cctype>

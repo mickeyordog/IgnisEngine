@@ -44,10 +44,10 @@ void beginEngineMainLoop()
     Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
 
     // this can probably just be global static, or doesn't even need to be a class
-    SerializationHelper serializationHelper; // TODO: replace this with registering ComponentClassInfo for each class, then don't have to do that weird mapping to string thing
-    serializationHelper.registerComponentClass(ComponentType::CAMERA, []() { return new CameraComponent(800, 800); });
-    serializationHelper.registerComponentClass(ComponentType::TRANSFORM, []() { return new ObjectTransform(); });
-    serializationHelper.registerComponentClass(ComponentType::SPRITE_RENDERER, [&]() { return new SpriteRenderer(&texture, &shader); });
+    // SerializationHelper serializationHelper; // TODO: replace this with registering ComponentClassInfo for each class, then don't have to do that weird mapping to string thing
+    // serializationHelper.registerComponentClass(ComponentType::CAMERA, []() { return new CameraComponent(800, 800); });
+    // serializationHelper.registerComponentClass(ComponentType::TRANSFORM, []() { return new ObjectTransform(); });
+    // serializationHelper.registerComponentClass(ComponentType::SPRITE_RENDERER, [&]() { return new SpriteRenderer(&texture, &shader); });
 
     SerializationHelper::registerComponentClass({ ComponentType::CAMERA, "Camera", []() { return new CameraComponent(800, 800); } });
     SerializationHelper::registerComponentClass({ ComponentType::TRANSFORM, "Transform", []() { return new ObjectTransform(); } });
@@ -55,19 +55,21 @@ void beginEngineMainLoop()
 
     // TODO: should prob just make serializationHelper some kind of global so don't need to pass it literally everywhere, and then gameobject can just have a add component of type method
     GameObject g0("g0");
-    SpriteRenderer* sr0 = (SpriteRenderer*)serializationHelper.getNewComponent(ComponentType::SPRITE_RENDERER); // NEED TO FREE THESE TOO!
-    g0.addVisualComponent(sr0);
+    g0.addComponentOfType(ComponentType::SPRITE_RENDERER);
+    // SpriteRenderer* sr0 = (SpriteRenderer*)SerializationHelper::getNewComponent(ComponentType::SPRITE_RENDERER); // NEED TO FREE THESE TOO!
+    // g0.addVisualComponent(sr0);
     GameObject g1("g1");
-    SpriteRenderer* sr1 = (SpriteRenderer*)serializationHelper.getNewComponent(ComponentType::SPRITE_RENDERER);
-    g1.addVisualComponent(sr1);
+    g1.addComponentOfType(ComponentType::SPRITE_RENDERER);
+    // SpriteRenderer* sr1 = (SpriteRenderer*)SerializationHelper::getNewComponent(ComponentType::SPRITE_RENDERER);
+    // g1.addVisualComponent(sr1);
     g1.transform.translate(Vec3 { -1,0,0 });
     GameObject g2("g2");
     GameObject g3("g3");
     GameObject g4("g4");
 
     GameObject camera("Camera");
-    CameraComponent* cameraComponent = (CameraComponent*)serializationHelper.getNewComponent(ComponentType::CAMERA);
-    camera.addComponent(cameraComponent);
+    camera.addComponentOfType(ComponentType::CAMERA);
+    CameraComponent* cameraComponent = (CameraComponent*)camera.getComponentOfType(ComponentType::CAMERA);
     camera.transform.translate(Vec3 { 0,0,5 });
     camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
     // camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
@@ -144,12 +146,9 @@ void beginEngineMainLoop()
         }
 #pragma endregion
 
-        // camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
-        // std::cout << "g0 position: " << g0.transform.getPosition().getData().x << ", " << g0.transform.getPosition().getData().y << ", " << g0.transform.getPosition().getData().z << std::endl;
-
         scene.updateGameObjects(deltaTime); // this should actually only happen in game build or during play mode
         cameraComponent->renderScene(scene);
-        showIgnisEngineGui(scene, cameraComponent->getOutputTexture(), serializationHelper);
+        showIgnisEngineGui(scene, cameraComponent->getOutputTexture());
 
 #pragma region Dear Imgui Remove This
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).

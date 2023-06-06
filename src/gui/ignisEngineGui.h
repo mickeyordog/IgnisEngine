@@ -7,12 +7,12 @@
 #include "guiSceneView.h"
 #include "scene.h"
 
-void showIgnisEngineGui(Scene& scene, RenderTexture& renderTexture, SerializationHelper& serializationHelper) {
+void showIgnisEngineGui(Scene& scene, RenderTexture& renderTexture) {
     static std::unordered_set<GameObject*> selectedGameObjects;
 
     showGuiHierarchyPanel(scene, selectedGameObjects);
 
-    showGuiInspectorPanel(selectedGameObjects, serializationHelper);
+    showGuiInspectorPanel(selectedGameObjects);
 
     showGuiFileSystemPanel();
 

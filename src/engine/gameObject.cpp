@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include "gameObject.h"
 #include "inputHandler.h"
+#include "serializationHelper.h"
 #include "objectTransform.h"
 
 GameObject::GameObject(const char* name) : name(name) {
@@ -50,16 +51,34 @@ void GameObject::render() {
     // but how should I set uniforms?
 }
 
+void GameObject::addComponentOfType(ComponentType type)
+{
+    Component* component = SerializationHelper::getNewComponent(type);
+    if (component->isVisual()) {
+        addVisualComponent((ComponentVisual*)component);
+    }
+    else {
+        addComponent(component);
+    }
+}
+
 void GameObject::addComponent(Component* component) {
     this->components.push_back(component);
     component->parentGameObject = this;
 }
 
-Component* GameObject::getComponentOfType(enum ComponentType type)
+Component* GameObject::getComponentOfType(ComponentType type)
 {
-    for (Component* component : this->components) {
+    for (Component* component : this->components)
+    {
         if (component->getType() == type) {
             return component;
+        }
+    }
+    for (ComponentVisual* visualComponent : this->visualComponents)
+    {
+        if (visualComponent->getType() == type) {
+            return visualComponent;
         }
     }
     return nullptr;
