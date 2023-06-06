@@ -46,9 +46,10 @@ void CameraComponent::renderScene(const Scene& scene)
             objectStack.push((*transformIt)->parentGameObject);
         }
 
-        for (ComponentVisual* visualComponent : currentObject->getVisualComponents()) {
-            if (!visualComponent->isActive)
+        for (Component* component : currentObject->getComponents()) {
+            if (!component->isActive || !component->isVisual())
                 continue;
+            ComponentVisual* visualComponent = (ComponentVisual*)component;
 
             Shader& shader = visualComponent->getShader();
             glm::mat4 model = currentObject->transform.getMatrix();

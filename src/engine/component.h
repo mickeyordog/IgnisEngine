@@ -19,6 +19,7 @@ public:
     GameObject* parentGameObject;
 
     virtual bool isVisual() { return false; }
+    virtual bool isPy() { return false; }
     bool isActive = true;
 
 private:

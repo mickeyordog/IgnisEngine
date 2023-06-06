@@ -13,9 +13,6 @@ GameObject::~GameObject() {
     for (Component* component : this->components) {
         delete component;
     }
-    for (ComponentVisual* visualComponent : this->visualComponents) {
-        delete visualComponent;
-    }
 }
 
 void GameObject::start()
@@ -23,9 +20,6 @@ void GameObject::start()
     transform.start();
     for (Component* component : this->components) {
         component->start();
-    }
-    for (ComponentVisual* visualComponent : this->visualComponents) {
-        visualComponent->start();
     }
 }
 
@@ -40,10 +34,6 @@ void GameObject::update(float dt) {
         if (component->isActive)
             component->update(dt);
     }
-    for (ComponentVisual* visualComponent : this->visualComponents) {
-        if (visualComponent->isActive)
-            visualComponent->update(dt);
-    }
 }
 
 void GameObject::render() {
@@ -54,12 +44,7 @@ void GameObject::render() {
 void GameObject::addComponentOfType(ComponentType type)
 {
     Component* component = SerializationHelper::getNewComponent(type);
-    if (component->isVisual()) {
-        addVisualComponent((ComponentVisual*)component);
-    }
-    else {
-        addComponent(component);
-    }
+    addComponent(component);
 }
 
 void GameObject::addComponent(Component* component) {
@@ -75,17 +60,5 @@ Component* GameObject::getComponentOfType(ComponentType type)
             return component;
         }
     }
-    for (ComponentVisual* visualComponent : this->visualComponents)
-    {
-        if (visualComponent->getType() == type) {
-            return visualComponent;
-        }
-    }
     return nullptr;
-}
-
-void GameObject::addVisualComponent(ComponentVisual* visualComponent)
-{
-    this->visualComponents.push_back(visualComponent);
-    visualComponent->parentGameObject = this;
 }

@@ -61,10 +61,6 @@ void showGuiInspectorPanel(const std::unordered_set<GameObject*>& selectedObject
         {
             showComponent(component);
         }
-        for (ComponentVisual* visualComponent : gameObject->getVisualComponents())
-        {
-            showComponent(visualComponent);
-        }
 
         ImGui::Button("Add Component");
         auto componentTypeNames = SerializationHelper::getComponentTypeNames();

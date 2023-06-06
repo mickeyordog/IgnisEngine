@@ -15,13 +15,9 @@ public:
     void render();
 
     void addComponentOfType(ComponentType type);
-    void addComponent(Component* component);
     void removeComponent(Component& component); // Should look for component of given type and remove it
     Component* getComponentOfType(ComponentType type);
     const std::vector<Component*>& getComponents() { return this->components; }
-
-    void addVisualComponent(ComponentVisual* visualComponent);
-    const std::vector<ComponentVisual*>& getVisualComponents() { return this->visualComponents; }
 
     bool isActive = true;
     
@@ -32,6 +28,6 @@ public:
 
 private:
     // TODO: have these be same list, just have virtual method that defines whether it is visual or not
+    void addComponent(Component* component);
     std::vector<Component*> components;
-    std::vector<ComponentVisual*> visualComponents;
 };

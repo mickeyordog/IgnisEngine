@@ -3,6 +3,7 @@ add_library(engine
     animatorComponent.cpp
     animationController.cpp
     component.cpp
+    componentPy.cpp
     componentVisual.cpp
     objectTransform.cpp
     vec3.cpp
@@ -30,6 +31,7 @@ target_include_directories(
     PUBLIC 
         ../input # need it like this bc it's relative to current. To fix could take reddit advice and move all into root
         ../visual
+        ../scripting-system
         ${STB_IMAGE_PATH}
         ${IMGUI_PATH}
 )
