@@ -24,9 +24,9 @@ private:
     void updateOutputTexture();
 
     std::vector<FieldDescription> fields = { 
-        { "width", FieldType::INT, &width, [&](){ this->updateOutputTexture(); } },
-        { "height", FieldType::INT, &height, [&]() { this->updateOutputTexture(); } },
-        { "orthographic", FieldType::BOOL, &orthographic, [&]() { this->setProjectionMatrix(); } }
+        { "width", FieldType::INT_FIELD, &width, [&](){ this->updateOutputTexture(); } },
+        { "height", FieldType::INT_FIELD, &height, [&]() { this->updateOutputTexture(); } },
+        { "orthographic", FieldType::BOOL_FIELD, &orthographic, [&]() { this->setProjectionMatrix(); } }
     };
     RenderTexture outputTexture;
     glm::mat4 projectionMatrix;

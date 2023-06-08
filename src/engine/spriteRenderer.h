@@ -22,8 +22,8 @@ private:
     // Not sure how I should serialize the reference though. Probably review game engine textbook because I think 
     // there was some discussion about how to save references in the context of going from scene to scene, so similar to here
     std::vector<FieldDescription> fields = {
-        { GET_NAME(texture), FieldType::POINTER, &texture },
-        { GET_NAME(shader), FieldType::POINTER, &shader }
+        { GET_NAME(texture), FieldType::POINTER_FIELD, &texture },
+        { GET_NAME(shader), FieldType::POINTER_FIELD, &shader }
     };
 
     GLuint VAO, VBO, EBO;

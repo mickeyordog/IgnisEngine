@@ -39,6 +39,8 @@
 void beginEngineMainLoop()
 {
     AssetManager::recursivelyRegisterAllAssetsInDirectory("../assets");
+    AssetManager::loadOrGetAsset(1);
+    return;
 
     // NOTE: if vs starts getting really buggy (eg intellisense) and laptop gets hot, try actually quitting app
     SDLContext sdlContext("Ignis Engine", 800, 800);

@@ -49,9 +49,9 @@ private:
 
     glm::vec3 guiEulerAngles = glm::vec3(0.0f);
     std::vector<FieldDescription> fields = {
-        { GET_NAME(position), FieldType::VEC3, &position, [&]() { this->updateMatrix(); } },
-        { GET_NAME(rotation), FieldType::VEC3, &guiEulerAngles, [&]() { this->setEulerRotation(guiEulerAngles); } },
-        { GET_NAME(scale), FieldType::VEC3, &scale, [&]() { this->updateMatrix(); } },
+        { GET_NAME(position), FieldType::VEC3_FIELD, &position, [&]() { this->updateMatrix(); } },
+        { GET_NAME(rotation), FieldType::VEC3_FIELD, &guiEulerAngles, [&]() { this->setEulerRotation(guiEulerAngles); } },
+        { GET_NAME(scale), FieldType::VEC3_FIELD, &scale, [&]() { this->updateMatrix(); } },
     };
 
     std::vector<ObjectTransform*> childTransforms;

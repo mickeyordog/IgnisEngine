@@ -6,11 +6,11 @@
 
 enum FieldType
 {
-    FLOAT,
-    INT,
-    BOOL,
-    VEC3,
-    POINTER
+    FLOAT_FIELD,
+    INT_FIELD,
+    BOOL_FIELD,
+    VEC3_FIELD,
+    POINTER_FIELD
 };
 
 struct FieldDescription

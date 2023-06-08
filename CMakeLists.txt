@@ -51,6 +51,14 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${IMGUI_PATH})
 target_link_libraries(${PROJECT_NAME} PUBLIC IMGUI)
 
 if (APPLE)
+    
+elseif (WIN32)
+    set(nlohmann_json_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/nlohmann_json)
+endif()
+find_package(nlohmann_json CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
+
+if (APPLE)
     set(glm_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/glm)
 elseif (WIN32)
     set(glm_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/glm)

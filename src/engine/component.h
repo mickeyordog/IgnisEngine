@@ -24,7 +24,7 @@ public:
 
 private:
     std::vector<FieldDescription> fields = { 
-        { "isActive", FieldType::BOOL, &isActive }
+        { "isActive", FieldType::BOOL_FIELD, &isActive }
     };
 };
 

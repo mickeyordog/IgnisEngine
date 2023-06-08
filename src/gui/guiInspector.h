@@ -17,23 +17,23 @@ void showComponent(Component* component) {
     {
         switch (f.type)
         {
-        case FieldType::INT:
+        case FieldType::INT_FIELD:
             if (ImGui::DragInt(f.name, (int*)f.ptr))
                 f.postUpdateFunction();
             break;
-        case FieldType::FLOAT:
+        case FieldType::FLOAT_FIELD:
             if (ImGui::DragFloat(f.name, (float*)f.ptr))
                 f.postUpdateFunction();
             break;
-        case FieldType::BOOL:
+        case FieldType::BOOL_FIELD:
             if (ImGui::Checkbox(f.name, (bool*)f.ptr))
                 f.postUpdateFunction();
             break;
-        case FieldType::VEC3:
+        case FieldType::VEC3_FIELD:
             if (ImGui::DragFloat3(f.name, (float*)f.ptr))
                 f.postUpdateFunction();
             break;
-        case FieldType::POINTER:
+        case FieldType::POINTER_FIELD:
             ImGui::Text("Pointer to %s: %p", f.name, *(void**)f.ptr);
             break;
         default:
