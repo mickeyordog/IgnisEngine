@@ -37,6 +37,7 @@ SpriteRenderer::SpriteRenderer(const Texture* texture, Shader* shader)
     glEnableVertexAttribArray(1);
 }
 
+#include "gameObject.h"
 SpriteRenderer::~SpriteRenderer()
 {
     glDeleteVertexArrays(1, &this->VAO);

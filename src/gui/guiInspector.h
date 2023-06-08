@@ -57,9 +57,9 @@ void showGuiInspectorPanel(const std::unordered_set<GameObject*>& selectedObject
         GameObject* gameObject = *selectedObjects.begin();
 
         showComponent(&gameObject->transform);
-        for (Component *component : gameObject->getComponents())
+        for (auto& component : gameObject->getComponents())
         {
-            showComponent(component);
+            showComponent(component.get());
         }
 
         ImGui::Button("Add Component");

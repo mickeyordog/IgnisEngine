@@ -27,6 +27,7 @@
 #include "cameraComponent.h"
 #include "animatorComponent.h"
 #include "renderTexture.h"
+#include "assetManager.h"
 
 #include <imgui.h>
 #include <imfilebrowser.h>
@@ -37,6 +38,8 @@
 
 void beginEngineMainLoop()
 {
+    AssetManager::recursivelyRegisterAllAssetsInDirectory("../assets");
+
     // NOTE: if vs starts getting really buggy (eg intellisense) and laptop gets hot, try actually quitting app
     SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);

@@ -2,6 +2,7 @@ add_library(engine
     animationClip.cpp
     animatorComponent.cpp
     animationController.cpp
+    assetManager.cpp
     component.cpp
     componentPy.cpp
     componentVisual.cpp

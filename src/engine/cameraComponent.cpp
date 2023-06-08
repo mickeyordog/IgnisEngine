@@ -45,11 +45,12 @@ void CameraComponent::renderScene(const Scene& scene)
         {
             objectStack.push((*transformIt)->parentGameObject);
         }
+        // TODO: it would be great to just be able to call gameObject.render() on each one, but need to get shader and set uniforms
 
-        for (Component* component : currentObject->getComponents()) {
+        for (auto& component : currentObject->getComponents()) {
             if (!component->isActive || !component->isVisual())
                 continue;
-            ComponentVisual* visualComponent = (ComponentVisual*)component;
+            ComponentVisual* visualComponent = (ComponentVisual*)component.get();
 
             Shader& shader = visualComponent->getShader();
             glm::mat4 model = currentObject->transform.getMatrix();

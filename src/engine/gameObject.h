@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include "component.h"
 #include "componentVisual.h"
 #include "objectTransform.h"
@@ -17,7 +18,7 @@ public:
     void addComponentOfType(ComponentType type);
     void removeComponent(Component& component); // Should look for component of given type and remove it
     Component* getComponentOfType(ComponentType type);
-    const std::vector<Component*>& getComponents() { return this->components; }
+    const std::vector<std::unique_ptr<Component>>& getComponents() { return this->components; }
 
     bool isActive = true;
     
@@ -27,7 +28,5 @@ public:
     GameObject* parentObject;
 
 private:
-    // TODO: have these be same list, just have virtual method that defines whether it is visual or not
-    void addComponent(Component* component);
-    std::vector<Component*> components;
+    std::vector<std::unique_ptr<Component>> components;
 };

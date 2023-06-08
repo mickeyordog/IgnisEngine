@@ -10,15 +10,13 @@ GameObject::GameObject(const char* name) : name(name) {
 
 GameObject::~GameObject() {
     // TODO: transform? Rn being stack allocated
-    for (Component* component : this->components) {
-        delete component;
-    }
 }
 
 void GameObject::start()
 {
     transform.start();
-    for (Component* component : this->components) {
+    for (auto& component : this->components)
+    {
         component->start();
     }
 }
@@ -30,7 +28,7 @@ void GameObject::update(float dt) {
     // x = 100 + 100 * cos(SDL_GetTicks() / 1000.0);
     // y = 100 + 100 * sin(SDL_GetTicks() / 1000.0);
     transform.update(dt);
-    for (Component* component : this->components) {
+    for (auto& component : this->components) {
         if (component->isActive)
             component->update(dt);
     }
@@ -44,20 +42,16 @@ void GameObject::render() {
 void GameObject::addComponentOfType(ComponentType type)
 {
     Component* component = SerializationHelper::getNewComponent(type);
-    addComponent(component);
-}
-
-void GameObject::addComponent(Component* component) {
-    this->components.push_back(component);
+    this->components.push_back(std::unique_ptr<Component>(component));
     component->parentGameObject = this;
 }
 
 Component* GameObject::getComponentOfType(ComponentType type)
 {
-    for (Component* component : this->components)
+    for (auto& component : this->components)
     {
         if (component->getType() == type) {
-            return component;
+            return component.get();
         }
     }
     return nullptr;
