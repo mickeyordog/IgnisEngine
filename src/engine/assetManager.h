@@ -6,6 +6,7 @@
 #include "asset.h"
 #include "texture.h"
 #include "shader.h"
+#include "scene.h"
 
 struct AssetFilepathInfo {
     std::string fullFilepath;
@@ -33,6 +34,7 @@ private:
     static Asset* loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& info);
     static Texture* loadTexture(std::string& filepath);
     static Shader* loadShader(std::string& filepath, std::string& fsFilepath);
+    static Scene* loadScene(std::string& filepath);
     static AssetFilepathInfo getFileExtensionInfoFromFilePath(std::string filepath);
     static std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> loadedAssets;
     static std::unordered_map<IgnisGUID, AssetFilepathInfo> registeredAssetMetaFilepaths; // Is this the right way to smart ptr to c string?

@@ -55,6 +55,7 @@ target_include_directories(
         ../input # need it like this bc it's relative to current. To fix could take reddit advice and move all into root
         ../visual
         ../scripting-system
+        ../util
         ${STB_IMAGE_PATH}
         ${IMGUI_PATH}
 )

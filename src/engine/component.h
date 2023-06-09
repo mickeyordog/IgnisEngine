@@ -2,10 +2,9 @@
 
 #include <vector>
 #include "serialization.h"
-// #include "gameObject.h"
+#include "asset.h"
 
 class GameObject;
-
 // TODO: if need List of smth that needs to be in inspector, prob make SerializedList vector class wrapper that will spit out correct fields vec
 class Component {
 public:
@@ -21,10 +20,12 @@ public:
     virtual bool isVisual() { return false; }
     virtual bool isPy() { return false; }
     bool isActive = true;
+    FileID fileID;
 
 private:
     std::vector<FieldDescription> fields = { 
-        { "isActive", FieldType::BOOL_FIELD, &isActive }
+        { GET_NAME(fileID), FieldType::LLONG_FIELD, &fileID },
+        { GET_NAME(isActive), FieldType::BOOL_FIELD, &isActive }
     };
 };
 

@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <vector>
 #include <memory>
+#include <nlohmann/json.hpp>
 #include "serialization.h"
 #include "component.h"
 #include "scene.h"
@@ -19,6 +20,7 @@ public:
     static enum ComponentType stringToComponentType(const char* name);
 
     static void serializeScene(Scene& scene);
+    static Scene* deserializeScene(const nlohmann::ordered_json& sceneJson);
 
 private:
     SerializationHelper() { }

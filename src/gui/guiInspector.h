@@ -34,7 +34,7 @@ void showComponent(Component* component) {
             if (ImGui::DragFloat3(f.name, (float*)f.ptr))
                 f.postUpdateFunction();
             break;
-        case FieldType::POINTER_FIELD:
+        case FieldType::ASSET_POINTER_FIELD:
             if (!ImGui::TreeNode(f.name, "Pointer to %s: %p", f.name, *(void**)f.ptr))
                 continue;
             for (auto& [guid, info] : AssetManager::getRegisteredAssetMetaFilepaths())

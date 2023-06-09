@@ -11,6 +11,7 @@
 class GameObject {
 public:
     GameObject(const char* name);
+    GameObject(const char* name, FileID fileID);
     ~GameObject();
 
     void start();
@@ -18,7 +19,7 @@ public:
     void render();
 
     void addComponentOfType(ComponentType type);
-    void removeComponent(Component& component); // Should look for component of given type and remove it
+    void removeComponent(Component& component);
     Component* getComponentOfType(ComponentType type);
     const std::vector<std::unique_ptr<Component>>& getComponents() { return this->components; }
 

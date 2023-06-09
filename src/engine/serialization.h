@@ -8,10 +8,12 @@ enum class FieldType
 {
     FLOAT_FIELD,
     INT_FIELD,
+    LLONG_FIELD,
     BOOL_FIELD,
+    STRING_FIELD,
     VEC3_FIELD,
-    POINTER_FIELD,
-    STRING_FIELD
+    ASSET_POINTER_FIELD,
+    COMPONENT_POINTER_FIELD,
 };
 
 struct FieldDescription

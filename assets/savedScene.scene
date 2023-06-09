@@ -1,38 +1,138 @@
 {
-    "0": {
-        "children": null,
+    "8883701561249512977": {
+        "name": "Camera",
+        "fileID": 8883701561249512977,
         "isActive": true,
-        "name": "Camera"
+        "children": null,
+        "components": {
+            "396918302436271159": {
+                "fileID": {
+                    "type": 2,
+                    "value": 396918302436271159
+                },
+                "type": 0,
+                "typeName": "Camera",
+                "isActive": {
+                    "type": 3,
+                    "value": true
+                },
+                "width": {
+                    "type": 1,
+                    "value": 800
+                },
+                "height": {
+                    "type": 1,
+                    "value": 800
+                },
+                "orthographic": {
+                    "type": 3,
+                    "value": false
+                }
+            }
+        }
     },
-    "1": {
+    "1698023897040820891": {
+        "name": "g0",
+        "fileID": 1698023897040820891,
+        "isActive": true,
         "children": [
-            6168094944,
-            6168094536,
-            6168094128
+            2489818019562748916,
+            3236358862776518497,
+            1179642254233195305
         ],
-        "isActive": true,
-        "name": "g0"
+        "components": {
+            "2476030146177456257": {
+                "fileID": {
+                    "type": 2,
+                    "value": 2476030146177456257
+                },
+                "type": 2,
+                "typeName": "Sprite Renderer",
+                "isActive": {
+                    "type": 3,
+                    "value": true
+                },
+                "texture": {
+                    "type": 6,
+                    "value": 1
+                },
+                "shader": {
+                    "type": 6,
+                    "value": 5
+                }
+            }
+        }
     },
-    "2": {
+    "2489818019562748916": {
+        "name": "g1",
+        "fileID": 2489818019562748916,
+        "isActive": true,
         "children": null,
-        "isActive": true,
-        "name": "g1"
+        "components": {
+            "4207915080997451680": {
+                "fileID": {
+                    "type": 2,
+                    "value": 4207915080997451680
+                },
+                "type": 2,
+                "typeName": "Sprite Renderer",
+                "isActive": {
+                    "type": 3,
+                    "value": true
+                },
+                "texture": {
+                    "type": 6,
+                    "value": 1
+                },
+                "shader": {
+                    "type": 6,
+                    "value": 5
+                }
+            }
+        }
     },
-    "3": {
+    "3236358862776518497": {
+        "name": "g2",
+        "fileID": 3236358862776518497,
+        "isActive": true,
         "children": null,
-        "isActive": true,
-        "name": "g2"
+        "components": {
+            "5537661936256914105": {
+                "fileID": {
+                    "type": 2,
+                    "value": 5537661936256914105
+                },
+                "type": 2,
+                "typeName": "Sprite Renderer",
+                "isActive": {
+                    "type": 3,
+                    "value": true
+                },
+                "texture": {
+                    "type": 6,
+                    "value": 1
+                },
+                "shader": {
+                    "type": 6,
+                    "value": 5
+                }
+            }
+        }
     },
-    "4": {
+    "1179642254233195305": {
+        "name": "g3",
+        "fileID": 1179642254233195305,
+        "isActive": true,
         "children": [
-            6168093760
+            49142333029145012
         ],
-        "isActive": true,
-        "name": "g3"
+        "components": null
     },
-    "5": {
-        "children": null,
+    "49142333029145012": {
+        "name": "g4",
+        "fileID": 49142333029145012,
         "isActive": true,
-        "name": "g4"
+        "children": null,
+        "components": null
     }
 }

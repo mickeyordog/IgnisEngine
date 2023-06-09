@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iostream>
 #include "texture.h"
+#include "serializationHelper.h"
 
 
 std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> AssetManager::loadedAssets;
@@ -49,6 +50,10 @@ Asset* AssetManager::loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& inf
         std::string vsFilepath = info.pathWithoutMetaExtension + ".vs";
         std::string fsFilepath = info.pathWithoutMetaExtension + ".fs";
         ret = loadShader(vsFilepath, fsFilepath);
+    }
+    else if (info.metaExtension == "scene")
+    {
+        ret = loadScene(info.actualFilePath);
     }
     else
     {
@@ -124,6 +129,14 @@ Shader* AssetManager::loadShader(std::string& vsFilepath, std::string& fsFilepat
     const char* fShaderCode = fragmentCode.c_str();
 
     return new Shader(vShaderCode, fShaderCode);
+}
+
+Scene* AssetManager::loadScene(std::string& filepath)
+{
+    std::ifstream i(filepath);
+    nlohmann::ordered_json sceneJson;
+    i >> sceneJson;
+    return SerializationHelper::deserializeScene(sceneJson);
 }
 
 AssetFilepathInfo AssetManager::getFileExtensionInfoFromFilePath(std::string filepath)

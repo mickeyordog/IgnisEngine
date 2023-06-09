@@ -3,8 +3,17 @@
 #include "inputHandler.h"
 #include "serializationHelper.h"
 #include "objectTransform.h"
+#include "randomNumberGenerator.h"
 
 GameObject::GameObject(const char* name) : name(name) {
+    // Idk if necessary but could guarantee these don't collide during player gameplay
+    // using a static counter, or maybe could keep track of generated ids and check for collision
+    fileID = RandomNumberGenerator::getRandomInteger();
+    this->transform.parentGameObject = this;
+}
+
+GameObject::GameObject(const char* name, FileID fileID) : name(name), fileID(fileID)
+{
     this->transform.parentGameObject = this;
 }
 
