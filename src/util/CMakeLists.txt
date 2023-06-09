@@ -7,3 +7,7 @@ target_link_libraries(
     PUBLIC
         SDL2::SDL2
 )
+
+set(util_files
+    timer.cpp
+)

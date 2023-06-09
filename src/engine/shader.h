@@ -3,11 +3,12 @@
 // #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "asset.h"
 
-class Shader
+class Shader : public Asset
 {
 public:
-    Shader(const char *vertexPath, const char *fragmentPath);
+    Shader(const char* vertexCode, const char* fragmentCode);
     ~Shader();
     void use() const;
     // TODO: prob use class wrapper for param

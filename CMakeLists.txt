@@ -51,7 +51,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${IMGUI_PATH})
 target_link_libraries(${PROJECT_NAME} PUBLIC IMGUI)
 
 if (APPLE)
-    
+    set(nlohmann_json_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/nlohmann_json)
 elseif (WIN32)
     set(nlohmann_json_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/nlohmann_json)
 endif()
@@ -66,7 +66,7 @@ endif()
 find_package(glm CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
 
-set(SRC_DIRECTORIES input engine visual util audio scripting-system gui)
+set(SRC_DIRECTORIES input engine visual util audio scripting_system gui)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
 foreach(DIR ${SRC_PATHS})
     add_subdirectory(${DIR})

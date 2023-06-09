@@ -1,8 +1,6 @@
 add_library(visual
     SDLContext.cpp
-    shader.cpp
     GLContext.cpp
-    texture.cpp
     dearImGuiContext.cpp
 )
 
@@ -15,6 +13,7 @@ target_link_libraries(
         STB_IMAGE
         IMGUI
         glm::glm
+        engine
 )
 
 # get_target_property(GLM_INCLUDE_DIR glm::glm INTERFACE_INCLUDE_DIRECTORIES)
@@ -27,4 +26,10 @@ target_include_directories(
         ${STB_IMAGE_PATH}
         ${IMGUI_PATH}
         # ${GLM_INCLUDE_DIR}
+)
+
+set(visual_files
+    SDLContext.cpp
+    GLContext.cpp
+    dearImGuiContext.cpp
 )

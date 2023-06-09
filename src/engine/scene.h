@@ -4,6 +4,8 @@
 #include "gameObject.h"
 
 // TODO: save to json by iterating over all go's and using FieldDescription
+// TODO: maybe want to generate a collection of all assets the scene needs, as a loading optimization so we don't unload from one to another
+// Otherwise, could just unload all assets, then iterate through new scene to load all new ones
 class Scene {
 public:
     Scene();

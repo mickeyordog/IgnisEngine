@@ -1,4 +1,6 @@
 #include "serializationHelper.h"
+#include <stack>
+#include <nlohmann/json.hpp>
 
 std::vector<ComponentClassInfo> SerializationHelper::componentClassInfos;
 std::vector<const char*> SerializationHelper::componentTypeNames;
@@ -38,5 +40,27 @@ enum ComponentType SerializationHelper::stringToComponentType(const char* name)
             return classInfo.type;
     }
     return ComponentType::UNKNOWN;
+}
+
+void SerializationHelper::serializeScene(Scene& scene)
+{
+    std::stack<GameObject*> objectStack;
+    for (auto gameObjectIt = scene.getRootGameObjects().rbegin(); gameObjectIt != scene.getRootGameObjects().rend(); ++gameObjectIt)
+    {
+        objectStack.push(*gameObjectIt);
+    }
+    while (objectStack.size() > 0)
+    {
+        GameObject* currentObject = objectStack.top();
+        objectStack.pop();
+
+
+
+        auto& transforms = currentObject->transform.getChildTransforms();
+        for (auto transformIt = transforms.rbegin(); transformIt != transforms.rend(); ++transformIt)
+        {
+            objectStack.push((*transformIt)->parentGameObject);
+        }
+    }
 }
 

@@ -19,9 +19,9 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
         GameObject* node_clicked = nullptr;
         std::stack<GameObject*> objectStack;
         std::stack<GameObject*> treePopStack;
-        for (auto gameObject = scene.getRootGameObjects().rbegin(); gameObject != scene.getRootGameObjects().rend(); ++gameObject)
+        for (auto gameObjectIt = scene.getRootGameObjects().rbegin(); gameObjectIt != scene.getRootGameObjects().rend(); ++gameObjectIt)
         {
-            objectStack.push(*gameObject);
+            objectStack.push(*gameObjectIt);
         }
         while (objectStack.size() > 0)
         {
@@ -48,9 +48,9 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
                 if (node_open)
                 {
                     auto& transforms = currentObject->transform.getChildTransforms();
-                    for (auto transform = transforms.rbegin(); transform != transforms.rend(); ++transform)
+                    for (auto transformIt = transforms.rbegin(); transformIt != transforms.rend(); ++transformIt)
                     {
-                        objectStack.push((*transform)->parentGameObject);
+                        objectStack.push((*transformIt)->parentGameObject);
                     }
                     treePopStack.push(transforms.back()->parentGameObject);
                 }

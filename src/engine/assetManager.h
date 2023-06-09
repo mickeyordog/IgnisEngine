@@ -3,15 +3,21 @@
 #include <unordered_map>
 #include <memory>
 #include <string>
+#include "asset.h"
 #include "texture.h"
+#include "shader.h"
 
-typedef unsigned long long IgnisGUID;
-
-class Asset {
-public:
-    IgnisGUID guid;
+struct AssetFilepathInfo {
+    std::string fullFilepath;
+    std::string pathWithoutMetaExtension;
+    std::string metaExtension;
+    std::string actualFilePath;
 };
 
+// There is a potential problem if e.g. I have a material asset that some objects use
+// Then if the asset file changes, how would I update the objects that use it?
+// To solve this, probably just have a button in engine that reloads all assets
+// If needed, could make a more elegant solution to only update assets that have changed
 class AssetManager {
 public:
     static Asset* loadOrGetAsset(IgnisGUID guid);
@@ -20,10 +26,15 @@ public:
     static void unloadAllAssets() { loadedAssets.clear(); }
     // TODO: should I move loadShader and loadTexture into here? Or should they stay in their classes
     // b/c they do have a bit of specific stuff in their constructors
+    static const std::unordered_map<IgnisGUID, AssetFilepathInfo>& getRegisteredAssetMetaFilepaths() { return registeredAssetMetaFilepaths; }
 
 private:
     AssetManager() {} // TODO: prob want to make this singleton so I can control lifetime
-    Texture* loadTexture(std::string& filepath);
+    static Asset* loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& info);
+    static Texture* loadTexture(std::string& filepath);
+    static Shader* loadShader(std::string& filepath, std::string& fsFilepath);
+    static AssetFilepathInfo getFileExtensionInfoFromFilePath(std::string filepath);
     static std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> loadedAssets;
-    static std::unordered_map<IgnisGUID, std::string> registeredAssetFilepaths; // Is this the right way to smart ptr to c string?
+    static std::unordered_map<IgnisGUID, AssetFilepathInfo> registeredAssetMetaFilepaths; // Is this the right way to smart ptr to c string?
+    // TODO: refactor into map from guid to AssetFilepathInfo
 };

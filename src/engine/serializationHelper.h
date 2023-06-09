@@ -5,6 +5,7 @@
 #include <memory>
 #include "serialization.h"
 #include "component.h"
+#include "scene.h"
 
 // This could maybe be replaced with a singleton if I want more control over its lifetime later
 class SerializationHelper
@@ -16,6 +17,8 @@ public:
 
     static const char* componentTypeToString(enum ComponentType type);
     static enum ComponentType stringToComponentType(const char* name);
+
+    static void serializeScene(Scene& scene);
 
 private:
     SerializationHelper() { }

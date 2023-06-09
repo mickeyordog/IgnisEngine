@@ -17,20 +17,21 @@ struct FieldDescription
 {
     const char* name;
     FieldType type;
-    const void* ptr;
+    void* ptr;
     std::function<void(void)> postUpdateFunction;
+    const char* validFileExtension;
 
-    FieldDescription(const char* name, FieldType type, const void* ptr, const std::function<void(void)> postUpdateFunction = []() { })
-        : name(name), type(type), ptr(ptr), postUpdateFunction(postUpdateFunction) { }
+    FieldDescription(const char* name, FieldType type, void* ptr, const std::function<void(void)> postUpdateFunction = []() { }, const char* validFileExtension = "")
+        : name(name), type(type), ptr(ptr), postUpdateFunction(postUpdateFunction), validFileExtension(validFileExtension) { }
 };
 
 enum class ComponentType
 {
-    CAMERA,
-    TRANSFORM,
-    SPRITE_RENDERER,
-    ANIMATOR,
-    UNKNOWN
+    CAMERA = 0,
+    TRANSFORM = 1,
+    SPRITE_RENDERER = 2,
+    ANIMATOR = 3,
+    UNKNOWN = 4
 };
 
 class Component;

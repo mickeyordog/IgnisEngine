@@ -6,6 +6,7 @@
 #include "serialization.h"
 #include "serializationHelper.h"
 #include "gameObject.h"
+#include "assetManager.h"
 
 void showComponent(Component* component) {
     // ImGui::Text("New Component:"); // TODO: component name, maybe FieldDescription meta info type
@@ -34,7 +35,18 @@ void showComponent(Component* component) {
                 f.postUpdateFunction();
             break;
         case FieldType::POINTER_FIELD:
-            ImGui::Text("Pointer to %s: %p", f.name, *(void**)f.ptr);
+            if (!ImGui::TreeNode(f.name, "Pointer to %s: %p", f.name, *(void**)f.ptr))
+                continue;
+            for (auto& [guid, info] : AssetManager::getRegisteredAssetMetaFilepaths())
+            {
+                if (info.metaExtension.compare(f.validFileExtension) != 0)
+                    continue;
+                if (ImGui::Selectable(info.actualFilePath.c_str()))
+                {
+                    *(Texture**)f.ptr = (Texture*)AssetManager::loadOrGetAsset(guid);
+                }
+            }
+            ImGui::TreePop();
             break;
         default:
             break;
@@ -62,7 +74,7 @@ void showGuiInspectorPanel(const std::unordered_set<GameObject*>& selectedObject
             showComponent(component.get());
         }
 
-        ImGui::Button("Add Component");
+        // ImGui::Button("Add Component");
         auto componentTypeNames = SerializationHelper::getComponentTypeNames();
         for (auto& name : componentTypeNames)
         {

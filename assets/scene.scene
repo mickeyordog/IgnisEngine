@@ -1,0 +1,21 @@
+{
+    "objects": [
+        {
+            "name": "g0",
+            "id": 1,
+            "components": [
+                {
+                    "id": 2,
+                    "type": "SPRITE_RENDERER",
+                    "note": "maybe instead type could be int of enum"
+                },
+                {
+                    "id": 3,
+                    "type": "integer"
+                },
+                "not positive this is how I wanna do it",
+                "in static dict in game, there should be a map from id to game object or component so they can ref each other"
+            ]
+        }
+    ]
+}

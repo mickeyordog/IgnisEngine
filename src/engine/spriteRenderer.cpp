@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <iostream>
 
-SpriteRenderer::SpriteRenderer(const Texture* texture, Shader* shader)
+SpriteRenderer::SpriteRenderer(Texture* texture, Shader* shader)
 {
     fields.insert(fields.begin(), ComponentVisual::getFields().begin(), ComponentVisual::getFields().end());
 
@@ -37,7 +37,6 @@ SpriteRenderer::SpriteRenderer(const Texture* texture, Shader* shader)
     glEnableVertexAttribArray(1);
 }
 
-#include "gameObject.h"
 SpriteRenderer::~SpriteRenderer()
 {
     glDeleteVertexArrays(1, &this->VAO);

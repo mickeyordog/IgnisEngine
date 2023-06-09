@@ -38,21 +38,22 @@
 
 void beginEngineMainLoop()
 {
-    AssetManager::recursivelyRegisterAllAssetsInDirectory("../assets");
-    AssetManager::loadOrGetAsset(1);
-    return;
+
 
     // NOTE: if vs starts getting really buggy (eg intellisense) and laptop gets hot, try actually quitting app
     SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);
     DearImGuiContext dearImGuiContext(&sdlContext, &glContext);
 
-    Texture texture("../assets/fire_penguin.png");
-    Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
+    AssetManager::recursivelyRegisterAllAssetsInDirectory("../assets");
 
+    // Texture texture("../assets/fire_penguin.png"); // For some reason this line was causing the last penguin to not render?
+    // Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
+
+    // TODO: how can I get a list of all available pngs in file system?
     SerializationHelper::registerComponentClass({ ComponentType::CAMERA, "Camera", []() { return new CameraComponent(800, 800); } });
     SerializationHelper::registerComponentClass({ ComponentType::TRANSFORM, "Transform", []() { return new ObjectTransform(); } });
-    SerializationHelper::registerComponentClass({ ComponentType::SPRITE_RENDERER, "Sprite Renderer", [&]() { return new SpriteRenderer(&texture, &shader); } });
+    SerializationHelper::registerComponentClass({ ComponentType::SPRITE_RENDERER, "Sprite Renderer", [&]() { return new SpriteRenderer((Texture*)AssetManager::loadOrGetAsset(1), (Shader*)AssetManager::loadOrGetAsset(5)); } });
     SerializationHelper::registerComponentClass({ ComponentType::ANIMATOR, "Animator", [&]() { return new AnimatorComponent(); } });
 
 

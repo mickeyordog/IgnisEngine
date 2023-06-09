@@ -12,8 +12,30 @@ add_library(engine
     gameObject.cpp
     cameraComponent.cpp
     renderTexture.cpp
+    shader.cpp
     spriteRenderer.cpp
     serializationHelper.cpp
+    texture.cpp
+)
+
+set(engine_files
+    animationClip.cpp
+    animatorComponent.cpp
+    animationController.cpp
+    assetManager.cpp
+    component.cpp
+    componentPy.cpp
+    componentVisual.cpp
+    objectTransform.cpp
+    vec3.cpp
+    scene.cpp
+    gameObject.cpp
+    cameraComponent.cpp
+    renderTexture.cpp
+    shader.cpp
+    spriteRenderer.cpp
+    serializationHelper.cpp
+    texture.cpp
 )
 
 target_link_libraries(

@@ -4,15 +4,7 @@
 #include "texture.h"
 #include "stb_image.h"
 
-Texture::Texture(const char *filePath)
-{
-    stbi_set_flip_vertically_on_load(true);
-    int width, height, nrChannels;
-    unsigned char *data = stbi_load(filePath, &width, &height, &nrChannels, 0); // Why did I have to set 3, but it thinks there are 4 channels in penguin?
-    if (data == NULL)
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
+Texture::Texture(unsigned char* data, int width, int height) {
     this->width = width;
     this->height = height;
 
@@ -26,9 +18,8 @@ Texture::Texture(const char *filePath)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    stbi_image_free(data);
 }
+
 
 Texture::~Texture()
 {
