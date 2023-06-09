@@ -1,0 +1,38 @@
+{
+    "0": {
+        "children": null,
+        "isActive": true,
+        "name": "Camera"
+    },
+    "1": {
+        "children": [
+            6168094944,
+            6168094536,
+            6168094128
+        ],
+        "isActive": true,
+        "name": "g0"
+    },
+    "2": {
+        "children": null,
+        "isActive": true,
+        "name": "g1"
+    },
+    "3": {
+        "children": null,
+        "isActive": true,
+        "name": "g2"
+    },
+    "4": {
+        "children": [
+            6168093760
+        ],
+        "isActive": true,
+        "name": "g3"
+    },
+    "5": {
+        "children": null,
+        "isActive": true,
+        "name": "g4"
+    }
+}

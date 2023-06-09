@@ -83,6 +83,9 @@ void beginEngineMainLoop()
     scene.addRootGameObject(&camera); // TODO: replace this with method that constructs and creates gameobject pointer itself
     scene.addRootGameObject(&g0);
 
+    SerializationHelper::serializeScene(scene);
+    return;
+
     static bool show_demo_window = false;
     bool show_another_window = false;
 

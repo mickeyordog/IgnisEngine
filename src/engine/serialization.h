@@ -4,13 +4,14 @@
 
 #define GET_NAME(variable) (#variable)
 
-enum FieldType
+enum class FieldType
 {
     FLOAT_FIELD,
     INT_FIELD,
     BOOL_FIELD,
     VEC3_FIELD,
-    POINTER_FIELD
+    POINTER_FIELD,
+    STRING_FIELD
 };
 
 struct FieldDescription

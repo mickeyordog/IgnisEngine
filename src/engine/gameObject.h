@@ -5,6 +5,8 @@
 #include "component.h"
 #include "componentVisual.h"
 #include "objectTransform.h"
+#include "asset.h"
+#include "serialization.h"
 
 class GameObject {
 public:
@@ -25,7 +27,13 @@ public:
     ObjectTransform transform;
 
     const char* name;
+    FileID fileID;
     GameObject* parentObject;
+
+    std::vector<FieldDescription> fields = {
+        { GET_NAME(name), FieldType::STRING_FIELD, &name },
+        { GET_NAME(isActive), FieldType::BOOL_FIELD, &isActive },
+    };
 
 private:
     std::vector<std::unique_ptr<Component>> components;
