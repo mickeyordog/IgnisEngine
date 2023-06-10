@@ -68,7 +68,6 @@ void showGuiInspectorPanel(const std::unordered_set<GameObject*>& selectedObject
     else if (selectedObjects.size() == 1) {
         GameObject* gameObject = *selectedObjects.begin();
 
-        showComponent(&gameObject->transform);
         for (auto& component : gameObject->getComponents())
         {
             showComponent(component.get());

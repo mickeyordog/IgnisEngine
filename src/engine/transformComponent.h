@@ -7,10 +7,10 @@
 #include "vec3.h"
 
 // TODO: rename TransformComponent to match others' convention
-class ObjectTransform : public Component {
+class TransformComponent : public Component {
 public:
-    ObjectTransform();
-    ~ObjectTransform();
+    TransformComponent();
+    ~TransformComponent();
 
     virtual void start() override;
     virtual void update(float dt) override;
@@ -22,9 +22,9 @@ public:
     void rotateAround(Vec3& axis, float angleDegrees);
     void lookAt(Vec3 target, Vec3 up);
 
-    void addChildTransform(ObjectTransform& transform);
-    void removeChildTransform(ObjectTransform& transform);
-    std::vector<ObjectTransform*>& getChildTransforms() { return childTransforms; };
+    void addChildTransform(TransformComponent* transform);
+    void removeChildTransform(TransformComponent* transform);
+    std::vector<TransformComponent*>& getChildTransforms() { return childTransforms; };
 
     const glm::mat4& getMatrix() const { return globalMatrix; };
     void setParentMatrix(glm::mat4& newParentMatrix);
@@ -35,7 +35,7 @@ public:
     virtual std::vector<FieldDescription>& getFields() override { return fields; };
     virtual enum ComponentType getType() override { return ComponentType::TRANSFORM; };
 
-    ObjectTransform* parentTransform;
+    TransformComponent* parentTransform = nullptr;
 
     void updateMatrix();
 private:
@@ -54,5 +54,5 @@ private:
         { GET_NAME(scale), FieldType::VEC3_FIELD, &scale, [&]() { this->updateMatrix(); } },
     };
 
-    std::vector<ObjectTransform*> childTransforms;
+    std::vector<TransformComponent*> childTransforms;
 };

@@ -2,19 +2,18 @@
 #include "gameObject.h"
 #include "inputHandler.h"
 #include "serializationHelper.h"
-#include "objectTransform.h"
+#include "transformComponent.h"
 #include "randomNumberGenerator.h"
 
-GameObject::GameObject(const char* name) : name(name) {
-    // Idk if necessary but could guarantee these don't collide during player gameplay
-    // using a static counter, or maybe could keep track of generated ids and check for collision
-    fileID = RandomNumberGenerator::getRandomInteger();
-    this->transform.parentGameObject = this;
-}
-
-GameObject::GameObject(const char* name, FileID fileID) : name(name), fileID(fileID)
+GameObject::GameObject(std::string name, FileID fileID) : name(name)
 {
-    this->transform.parentGameObject = this;
+    if (fileID == -1)
+        fileID = RandomNumberGenerator::getRandomInteger();
+    this->fileID = fileID;
+
+    TransformComponent* transformPtr = (TransformComponent*)addComponentOfType(ComponentType::TRANSFORM);
+    this->transform = transformPtr;
+    this->transform->gameObject = this;
 }
 
 GameObject::~GameObject() {
@@ -23,7 +22,6 @@ GameObject::~GameObject() {
 
 void GameObject::start()
 {
-    transform.start();
     for (auto& component : this->components)
     {
         component->start();
@@ -36,7 +34,6 @@ void GameObject::update(float dt) {
     // x -= InputHandler::getInstance().queryKeyPressed(SDLK_a) ? 1000 * dt : 0;
     // x = 100 + 100 * cos(SDL_GetTicks() / 1000.0);
     // y = 100 + 100 * sin(SDL_GetTicks() / 1000.0);
-    transform.update(dt);
     for (auto& component : this->components) {
         if (component->isActive)
             component->update(dt);
@@ -48,11 +45,12 @@ void GameObject::render() {
     // but how should I set uniforms?
 }
 
-void GameObject::addComponentOfType(ComponentType type)
+Component* GameObject::addComponentOfType(ComponentType type)
 {
     Component* component = SerializationHelper::getNewComponent(type);
     this->components.push_back(std::unique_ptr<Component>(component));
-    component->parentGameObject = this;
+    component->gameObject = this;
+    return component;
 }
 
 Component* GameObject::getComponentOfType(ComponentType type)
@@ -65,3 +63,4 @@ Component* GameObject::getComponentOfType(ComponentType type)
     }
     return nullptr;
 }
+

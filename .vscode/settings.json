@@ -119,7 +119,11 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "__tree": "cpp",
-        "any": "cpp"
+        "any": "cpp",
+        "memory_resource": "cpp",
+        "version": "cpp",
+        "*.def": "cpp",
+        "*.macros": "cpp"
     },
     // Adapted from https://github.com/microsoft/vscode-cmake-tools/issues/506
     // be careful, I think lldb is Mac specific

@@ -29,9 +29,9 @@ void Scene::startGameObjects()
     {
         GameObject* currentObject = objectStack.top();
         objectStack.pop();
-        for (auto transformIt = currentObject->transform.getChildTransforms().rbegin(); transformIt != currentObject->transform.getChildTransforms().rend(); ++transformIt)
+        for (auto transformIt = currentObject->transform->getChildTransforms().rbegin(); transformIt != currentObject->transform->getChildTransforms().rend(); ++transformIt)
         {
-            objectStack.push((*transformIt)->parentGameObject);
+            objectStack.push((*transformIt)->gameObject);
         }
 
         currentObject->start();
@@ -51,11 +51,29 @@ void Scene::updateGameObjects(float dt)
         objectStack.pop();
         if (!currentObject->isActive)
             continue;
-        for (auto transformIt = currentObject->transform.getChildTransforms().rbegin(); transformIt != currentObject->transform.getChildTransforms().rend(); ++transformIt)
+        for (auto transformIt = currentObject->transform->getChildTransforms().rbegin(); transformIt != currentObject->transform->getChildTransforms().rend(); ++transformIt)
         {
-            objectStack.push((*transformIt)->parentGameObject);
+            objectStack.push((*transformIt)->gameObject);
         }
 
         currentObject->update(dt);
     }
+}
+
+CameraComponent* Scene::findCamera()
+{
+    std::stack<GameObject*> objectStack;
+    for (auto gameObjectIt = rootObjects.rbegin(); gameObjectIt != rootObjects.rend(); ++gameObjectIt)
+    {
+        objectStack.push(*gameObjectIt);
+    }
+    while (objectStack.size() > 0)
+    {
+        GameObject* currentObject = objectStack.top();
+        objectStack.pop();
+
+        if (Component* camComponent = currentObject->getComponentOfType(ComponentType::CAMERA); camComponent != nullptr)
+            return (CameraComponent*)camComponent;
+    }
+    return nullptr;
 }

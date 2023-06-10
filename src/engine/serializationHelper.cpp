@@ -69,11 +69,16 @@ void SerializationHelper::serializeScene(Scene& scene)
         objectJson["isActive"] = currentObject->isActive;
 
         nlohmann::ordered_json childListJson;
-        for (auto& child : currentObject->transform.getChildTransforms())
+        for (auto& child : currentObject->transform->getChildTransforms())
         {
-            childListJson.push_back(child->parentGameObject->fileID);
+            childListJson.push_back(child->gameObject->fileID);
         }
         objectJson["children"] = childListJson;
+
+        if (currentObject->transform->parentTransform == nullptr)
+            objectJson["parent"] = -1;
+        else
+            objectJson["parent"] = currentObject->transform->parentTransform->gameObject->fileID;
 
         nlohmann::ordered_json componentsJsonList;
         for (auto& component : currentObject->getComponents())
@@ -101,6 +106,9 @@ void SerializationHelper::serializeScene(Scene& scene)
                     case FieldType::STRING_FIELD:
                         fieldJson["value"] = *(const char**)desc.ptr;
                         break;
+                    case FieldType::VEC3_FIELD:
+                        fieldJson["value"] = nlohmann::json::array({((glm::vec3*)desc.ptr)->x, ((glm::vec3*)desc.ptr)->y, ((glm::vec3*)desc.ptr)->z});
+                        break;
                     case FieldType::ASSET_POINTER_FIELD:
                         fieldJson["value"] = (*(Asset**)desc.ptr)->guid;
                         break;
@@ -116,10 +124,10 @@ void SerializationHelper::serializeScene(Scene& scene)
 
         rootJson[std::to_string(currentObject->fileID)] = objectJson;
         
-        auto& transforms = currentObject->transform.getChildTransforms();
+        auto& transforms = currentObject->transform->getChildTransforms();
         for (auto transformIt = transforms.rbegin(); transformIt != transforms.rend(); ++transformIt)
         {
-            objectStack.push((*transformIt)->parentGameObject);
+            objectStack.push((*transformIt)->gameObject);
         }
     }
 
@@ -133,7 +141,7 @@ Scene* SerializationHelper::deserializeScene(const nlohmann::ordered_json& scene
     std::map<FileID, GameObject*> fileIDToGameObjectMap;
     for (auto jsonIt = sceneJson.rbegin(); jsonIt != sceneJson.rend(); ++jsonIt)
     {
-        GameObject* gameObject = new GameObject((*jsonIt)["name"].dump().c_str(), (*jsonIt)["fileID"]);
+        GameObject* gameObject = new GameObject((*jsonIt)["name"].dump(), (*jsonIt)["fileID"]);
         gameObject->isActive = (*jsonIt)["isActive"];
         fileIDToGameObjectMap[gameObject->fileID] = gameObject;
     }
@@ -141,10 +149,56 @@ Scene* SerializationHelper::deserializeScene(const nlohmann::ordered_json& scene
         nlohmann::ordered_json objectJson = sceneJson[std::to_string(fileID)];
         nlohmann::ordered_json childrenJson = objectJson["children"];
         for (auto& childFileID : childrenJson) {
-            gameObject->transform.addChildTransform(fileIDToGameObjectMap[childFileID]->transform);
+            gameObject->transform->addChildTransform(fileIDToGameObjectMap[childFileID]->transform);
         }
+        if (objectJson["parent"] == -1) 
+            scene->addRootGameObject(gameObject);
+        else
+            fileIDToGameObjectMap[objectJson["parent"]]->transform->addChildTransform(gameObject->transform);
         for (auto& component : objectJson["components"]) {
             // get type of component, create new component of that type, iterate over getFields, pass in values
+            Component* newComponent;
+            if (component["type"] == static_cast<int>(ComponentType::TRANSFORM))
+                newComponent = gameObject->transform;
+            else
+                newComponent = gameObject->addComponentOfType(static_cast<ComponentType>(component["type"]));
+            for (const FieldDescription& field : newComponent->getFields()) {
+                switch (field.type) {
+                    case FieldType::INT_FIELD:
+                        *(int*)field.ptr = component[field.name]["value"];
+                        // field.postUpdateFunction();
+                        break;
+                    case FieldType::LLONG_FIELD:
+                        *(long long*)field.ptr = component[field.name]["value"];
+                        // field.postUpdateFunction();
+                        break;
+                    case FieldType::FLOAT_FIELD:
+                        *(float*)field.ptr = component[field.name]["value"];
+                        // field.postUpdateFunction();
+                        break;
+                    case FieldType::BOOL_FIELD:
+                        *(bool*)field.ptr = component[field.name]["value"];
+                        // field.postUpdateFunction();
+                        break;
+                    case FieldType::STRING_FIELD:
+                        // *(const char**)field.ptr = component[field.name]["value"];
+                        // field.postUpdateFunction();
+                        break;
+                    case FieldType::VEC3_FIELD:
+                        ((glm::vec3*)field.ptr)->x = component[field.name]["value"][0];
+                        ((glm::vec3*)field.ptr)->y = component[field.name]["value"][1];
+                        ((glm::vec3*)field.ptr)->z = component[field.name]["value"][2];
+                        field.postUpdateFunction();
+                        break;
+                    case FieldType::ASSET_POINTER_FIELD:
+                        *(Asset**)field.ptr = AssetManager::loadOrGetAsset(component[field.name]["value"]);
+                        // field.postUpdateFunction();
+                        break;
+                    default:
+                        std::cout << "Unknown field type " << static_cast<int>(field.type) << std::endl;
+                        break;
+                }
+            }
         }
     }
 

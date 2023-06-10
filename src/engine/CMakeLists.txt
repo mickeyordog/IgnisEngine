@@ -6,7 +6,7 @@ add_library(engine
     component.cpp
     componentPy.cpp
     componentVisual.cpp
-    objectTransform.cpp
+    transformComponent.cpp
     vec3.cpp
     scene.cpp
     gameObject.cpp

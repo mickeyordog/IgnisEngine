@@ -1,14 +1,51 @@
 {
-    "8883701561249512977": {
+    "8470284508889192226": {
         "name": "Camera",
-        "fileID": 8883701561249512977,
+        "fileID": 8470284508889192226,
         "isActive": true,
         "children": null,
+        "parent": -1,
         "components": {
-            "396918302436271159": {
+            "8037321344187192640": {
                 "fileID": {
                     "type": 2,
-                    "value": 396918302436271159
+                    "value": 8037321344187192640
+                },
+                "type": 1,
+                "typeName": "Transform",
+                "isActive": {
+                    "type": 3,
+                    "value": true
+                },
+                "position": {
+                    "type": 5,
+                    "value": [
+                        0.0,
+                        0.0,
+                        5.0
+                    ]
+                },
+                "rotation": {
+                    "type": 5,
+                    "value": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "scale": {
+                    "type": 5,
+                    "value": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                }
+            },
+            "5882994497225122432": {
+                "fileID": {
+                    "type": 2,
+                    "value": 5882994497225122432
                 },
                 "type": 0,
                 "typeName": "Camera",
@@ -31,20 +68,57 @@
             }
         }
     },
-    "1698023897040820891": {
+    "9031918811702177016": {
         "name": "g0",
-        "fileID": 1698023897040820891,
+        "fileID": 9031918811702177016,
         "isActive": true,
         "children": [
-            2489818019562748916,
-            3236358862776518497,
-            1179642254233195305
+            166898120970915847,
+            1843326191436406351,
+            372753053572842229
         ],
+        "parent": -1,
         "components": {
-            "2476030146177456257": {
+            "2413866295658560292": {
                 "fileID": {
                     "type": 2,
-                    "value": 2476030146177456257
+                    "value": 2413866295658560292
+                },
+                "type": 1,
+                "typeName": "Transform",
+                "isActive": {
+                    "type": 3,
+                    "value": true
+                },
+                "position": {
+                    "type": 5,
+                    "value": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "rotation": {
+                    "type": 5,
+                    "value": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "scale": {
+                    "type": 5,
+                    "value": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                }
+            },
+            "8004344761229624088": {
+                "fileID": {
+                    "type": 2,
+                    "value": 8004344761229624088
                 },
                 "type": 2,
                 "typeName": "Sprite Renderer",
@@ -63,16 +137,53 @@
             }
         }
     },
-    "2489818019562748916": {
+    "166898120970915847": {
         "name": "g1",
-        "fileID": 2489818019562748916,
+        "fileID": 166898120970915847,
         "isActive": true,
         "children": null,
+        "parent": 9031918811702177016,
         "components": {
-            "4207915080997451680": {
+            "1213531291608751763": {
                 "fileID": {
                     "type": 2,
-                    "value": 4207915080997451680
+                    "value": 1213531291608751763
+                },
+                "type": 1,
+                "typeName": "Transform",
+                "isActive": {
+                    "type": 3,
+                    "value": true
+                },
+                "position": {
+                    "type": 5,
+                    "value": [
+                        -1.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "rotation": {
+                    "type": 5,
+                    "value": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "scale": {
+                    "type": 5,
+                    "value": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                }
+            },
+            "2793209983870067202": {
+                "fileID": {
+                    "type": 2,
+                    "value": 2793209983870067202
                 },
                 "type": 2,
                 "typeName": "Sprite Renderer",
@@ -91,16 +202,53 @@
             }
         }
     },
-    "3236358862776518497": {
+    "1843326191436406351": {
         "name": "g2",
-        "fileID": 3236358862776518497,
+        "fileID": 1843326191436406351,
         "isActive": true,
         "children": null,
+        "parent": 9031918811702177016,
         "components": {
-            "5537661936256914105": {
+            "2089595455726154934": {
                 "fileID": {
                     "type": 2,
-                    "value": 5537661936256914105
+                    "value": 2089595455726154934
+                },
+                "type": 1,
+                "typeName": "Transform",
+                "isActive": {
+                    "type": 3,
+                    "value": true
+                },
+                "position": {
+                    "type": 5,
+                    "value": [
+                        1.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "rotation": {
+                    "type": 5,
+                    "value": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "scale": {
+                    "type": 5,
+                    "value": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                }
+            },
+            "2427328159606555459": {
+                "fileID": {
+                    "type": 2,
+                    "value": 2427328159606555459
                 },
                 "type": 2,
                 "typeName": "Sprite Renderer",
@@ -119,20 +267,96 @@
             }
         }
     },
-    "1179642254233195305": {
+    "372753053572842229": {
         "name": "g3",
-        "fileID": 1179642254233195305,
+        "fileID": 372753053572842229,
         "isActive": true,
         "children": [
-            49142333029145012
+            7681289098198248308
         ],
-        "components": null
+        "parent": 9031918811702177016,
+        "components": {
+            "5858961467875820993": {
+                "fileID": {
+                    "type": 2,
+                    "value": 5858961467875820993
+                },
+                "type": 1,
+                "typeName": "Transform",
+                "isActive": {
+                    "type": 3,
+                    "value": true
+                },
+                "position": {
+                    "type": 5,
+                    "value": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "rotation": {
+                    "type": 5,
+                    "value": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "scale": {
+                    "type": 5,
+                    "value": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                }
+            }
+        }
     },
-    "49142333029145012": {
+    "7681289098198248308": {
         "name": "g4",
-        "fileID": 49142333029145012,
+        "fileID": 7681289098198248308,
         "isActive": true,
         "children": null,
-        "components": null
+        "parent": 372753053572842229,
+        "components": {
+            "4385668834473209250": {
+                "fileID": {
+                    "type": 2,
+                    "value": 4385668834473209250
+                },
+                "type": 1,
+                "typeName": "Transform",
+                "isActive": {
+                    "type": 3,
+                    "value": true
+                },
+                "position": {
+                    "type": 5,
+                    "value": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "rotation": {
+                    "type": 5,
+                    "value": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "scale": {
+                    "type": 5,
+                    "value": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                }
+            }
+        }
     }
 }

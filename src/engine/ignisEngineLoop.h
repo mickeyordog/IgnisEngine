@@ -18,7 +18,7 @@
 #include "texture.h"
 #include "spriteRenderer.h"
 // #include "pythonEngine.h"
-#include "objectTransform.h"
+#include "transformComponent.h"
 #include "ignisEngineGui.h"
 #include "scene.h"
 #include "engineGuiManager.h"
@@ -36,14 +36,85 @@
 // #include "../libs/emscripten/emscripten_mainloop_stub.h" // uncomment later
 #endif
 
+
+#include <thread>
+#include <chrono>
+#include <future>
+#include <mutex>
 void beginEngineMainLoop()
 {
-
-
     // NOTE: if vs starts getting really buggy (eg intellisense) and laptop gets hot, try actually quitting app
     SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);
     DearImGuiContext dearImGuiContext(&sdlContext, &glContext);
+
+// TODO: try writing and loading a couple big files async vs not and see if time difference
+/*
+#pragma region TEST
+    Timer testTimer;
+    std::chrono::microseconds duration(1);
+    int size = 100;
+    auto printArray = [&](int array[]){ for (int i = 0; i < size; i++) { printf("%d,", array[i]); }; printf("\n"); };
+    int array[size];
+    for (int i = 0; i < size; i++) { array[i] = i; }
+    // printArray(array);
+
+    auto incArray = [&](int* array, int start, int end) { std::this_thread::sleep_for(duration); for (int i = start; i < end; i++) { array[i] += 100; };};
+    int num = 0;
+    int numTimes = 10;
+    std::mutex m;
+    auto incNum = [&](int numTimes) {
+        for (int i = 0; i < numTimes; i++) {
+            {
+                std::lock_guard<std::mutex> lk(m);
+                num++; 
+            }
+            std::this_thread::sleep_for(duration); 
+        } 
+    };
+    std::unordered_map<int, int> map;
+    for (int i = 0; i < numTimes; i++) { map[i] = i; }
+    auto findAndInc = [&]{
+        for (int i = 0; i < numTimes; i++) {
+            if (map[i] < i * 100) {
+                std::lock_guard<std::mutex> lk(m);
+                int n = map[i];
+                std::this_thread::sleep_for(duration);
+                map[i] *= 10;
+                std::cout << "Thread " << std::this_thread::get_id() << " changed map[" << i << "]" << std::endl;
+            }
+        }
+    };
+    int numThreads = 10;
+    std::future<void> futureArray[numThreads];
+    for (int i = 0; i < numThreads; i++)
+    {
+        // futureArray[i] = std::async(std::launch::async, incArray, (int*)array, 0, 100);
+        futureArray[i] = std::async(std::launch::async, findAndInc);
+    }
+    for (int i = 0; i < numThreads; i++)
+    {
+        futureArray[i].wait();
+        printf("%d Done at %f\n", i, testTimer.read());
+    }
+    printf("Done all %f\n", testTimer.read());
+    for (int i = 0; i < numTimes; i++) {
+        printf("Map[%d] = %d, ", i, map[i]);
+    }
+    // printArray(array);
+    // printf("Expected Num: %d, Actual Num: %d\n", numThreads * numTimes, num);
+    // Timer testTimer;
+    // std::chrono::seconds duration(1);
+    // auto func = [](){};
+    // auto f1 = std::async(std::launch::async, [&] { std::this_thread::sleep_for(duration); printf("1 Done! Time: %f\n", testTimer.read()); });
+    // auto f2 = std::async(std::launch::async, [&] { std::this_thread::sleep_for(duration); printf("2 Done! Time: %f\n", testTimer.read()); });
+    // f1.wait();
+    // f2.wait();
+    // printf("Total Time: %f\n", testTimer.read());
+
+
+#pragma endregion
+*/
 
     AssetManager::recursivelyRegisterAllAssetsInDirectory("../assets");
 
@@ -52,39 +123,42 @@ void beginEngineMainLoop()
 
     // TODO: how can I get a list of all available pngs in file system?
     SerializationHelper::registerComponentClass({ ComponentType::CAMERA, "Camera", []() { return new CameraComponent(800, 800); } });
-    SerializationHelper::registerComponentClass({ ComponentType::TRANSFORM, "Transform", []() { return new ObjectTransform(); } });
+    SerializationHelper::registerComponentClass({ ComponentType::TRANSFORM, "Transform", []() { return new TransformComponent(); } });
     SerializationHelper::registerComponentClass({ ComponentType::SPRITE_RENDERER, "Sprite Renderer", [&]() { return new SpriteRenderer((Texture*)AssetManager::loadOrGetAsset(1), (Shader*)AssetManager::loadOrGetAsset(5)); } });
     SerializationHelper::registerComponentClass({ ComponentType::ANIMATOR, "Animator", [&]() { return new AnimatorComponent(); } });
 
-
+    /*
     GameObject g0("g0");
     g0.addComponentOfType(ComponentType::SPRITE_RENDERER);
     GameObject g1("g1");
     g1.addComponentOfType(ComponentType::SPRITE_RENDERER);
-    g1.transform.translate(Vec3 { -1,0,0 });
+    g1.transform->translate(Vec3 { -1,0,0 });
     GameObject g2("g2");
     g2.addComponentOfType(ComponentType::SPRITE_RENDERER);
-    g2.transform.translate(Vec3 { 1,0,0 });
+    g2.transform->translate(Vec3 { 1,0,0 });
     GameObject g3("g3");
     GameObject g4("g4");
 
     GameObject camera("Camera");
     camera.addComponentOfType(ComponentType::CAMERA);
     CameraComponent* cameraComponent = (CameraComponent*)camera.getComponentOfType(ComponentType::CAMERA);
-    camera.transform.translate(Vec3 { 0,0,5 });
-    camera.transform.lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
+    camera.transform->translate(Vec3 { 0,0,5 });
+    camera.transform->lookAt(Vec3 { 0,0,0 }, Vec3 { 0,1,0 });
 
-    g0.transform.addChildTransform(g1.transform);
-    g0.transform.addChildTransform(g2.transform);
-    g0.transform.addChildTransform(g3.transform);
-    g3.transform.addChildTransform(g4.transform); // Opening this causes error for some reason
+    g0.transform->addChildTransform(g1.transform);
+    g0.transform->addChildTransform(g2.transform);
+    g0.transform->addChildTransform(g3.transform);
+    g3.transform->addChildTransform(g4.transform); // Opening this causes error for some reason
 
     Scene scene;
     scene.addRootGameObject(&camera); // TODO: replace this with method that constructs and creates gameobject pointer itself
     scene.addRootGameObject(&g0);
 
     SerializationHelper::serializeScene(scene);
-    return;
+    */
+    
+    Scene scene = *(Scene*)AssetManager::loadOrGetAsset(43540);
+    CameraComponent* cameraComponent = scene.findCamera();
 
     static bool show_demo_window = false;
     bool show_another_window = false;

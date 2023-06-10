@@ -14,8 +14,9 @@ public:
     virtual void update(float dt) = 0;
     virtual enum ComponentType getType() = 0;
 
+    void setField(const FieldDescription& field, void* value);
     virtual std::vector<FieldDescription>& getFields() { return fields; };
-    GameObject* parentGameObject;
+    GameObject* gameObject;
 
     virtual bool isVisual() { return false; }
     virtual bool isPy() { return false; }

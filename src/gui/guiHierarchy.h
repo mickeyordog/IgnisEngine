@@ -19,6 +19,7 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
         GameObject* node_clicked = nullptr;
         std::stack<GameObject*> objectStack;
         std::stack<GameObject*> treePopStack;
+        // TODO: I think can just do for gameObject : scene.getRootGameObjects().reverseIterator()
         for (auto gameObjectIt = scene.getRootGameObjects().rbegin(); gameObjectIt != scene.getRootGameObjects().rend(); ++gameObjectIt)
         {
             objectStack.push(*gameObjectIt);
@@ -34,9 +35,9 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
             const bool is_selected = selectedObjects.find(currentObject) != selectedObjects.end();
             if (is_selected)
                 node_flags |= ImGuiTreeNodeFlags_Selected;
-            if (currentObject->transform.getChildTransforms().size() > 0)
+            if (currentObject->transform->getChildTransforms().size() > 0)
             {
-                bool node_open = ImGui::TreeNodeEx(currentObject->name, node_flags);
+                bool node_open = ImGui::TreeNodeEx(currentObject->name.c_str(), node_flags);
                 if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
                     node_clicked = currentObject;
                 if (test_drag_and_drop && ImGui::BeginDragDropSource())
@@ -47,12 +48,12 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
                 }
                 if (node_open)
                 {
-                    auto& transforms = currentObject->transform.getChildTransforms();
+                    auto& transforms = currentObject->transform->getChildTransforms();
                     for (auto transformIt = transforms.rbegin(); transformIt != transforms.rend(); ++transformIt)
                     {
-                        objectStack.push((*transformIt)->parentGameObject);
+                        objectStack.push((*transformIt)->gameObject);
                     }
-                    treePopStack.push(transforms.back()->parentGameObject);
+                    treePopStack.push(transforms.back()->gameObject);
                 }
             }
             else
@@ -61,7 +62,7 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
                 // The only reason we use TreeNode at all is to allow selection of the leaf. Otherwise we can
                 // use BulletText() or advance the cursor by GetTreeNodeToLabelSpacing() and call Text().
                 node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
-                ImGui::TreeNodeEx(currentObject->name, node_flags);
+                ImGui::TreeNodeEx(currentObject->name.c_str(), node_flags);
                 if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
                     node_clicked = currentObject;
                 if (test_drag_and_drop && ImGui::BeginDragDropSource())

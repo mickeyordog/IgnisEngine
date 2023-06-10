@@ -41,9 +41,9 @@ void CameraComponent::renderScene(const Scene& scene)
         objectStack.pop();
         if (!currentObject->isActive)
             continue;
-        for (auto transformIt = currentObject->transform.getChildTransforms().rbegin(); transformIt != currentObject->transform.getChildTransforms().rend(); ++transformIt)
+        for (auto transformIt = currentObject->transform->getChildTransforms().rbegin(); transformIt != currentObject->transform->getChildTransforms().rend(); ++transformIt)
         {
-            objectStack.push((*transformIt)->parentGameObject);
+            objectStack.push((*transformIt)->gameObject);
         }
         // TODO: it would be great to just be able to call gameObject.render() on each one, but need to get shader and set uniforms
 
@@ -53,9 +53,9 @@ void CameraComponent::renderScene(const Scene& scene)
             ComponentVisual* visualComponent = (ComponentVisual*)component.get();
 
             Shader& shader = visualComponent->getShader();
-            glm::mat4 model = currentObject->transform.getMatrix();
+            glm::mat4 model = currentObject->transform->getMatrix();
             // TODO: I don't think taking inverse to get view is correct
-            glm::mat4 view = glm::inverse(this->parentGameObject->transform.getMatrix()); // Is compiler smart enough to only compute this once?
+            glm::mat4 view = glm::inverse(this->gameObject->transform->getMatrix()); // Is compiler smart enough to only compute this once?
             glm::mat4 projection = this->projectionMatrix;
             glm::mat4 mvp = projection * view * model;
             shader.setUniform("mvp", mvp);

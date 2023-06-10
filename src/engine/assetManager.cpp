@@ -46,7 +46,6 @@ Asset* AssetManager::loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& inf
     else if (info.metaExtension == "shader")
     {
         // TODO: should make shader an asset that points to 2 shader source assets
-        std::cout << "Loading shader" << std::endl;
         std::string vsFilepath = info.pathWithoutMetaExtension + ".vs";
         std::string fsFilepath = info.pathWithoutMetaExtension + ".fs";
         ret = loadShader(vsFilepath, fsFilepath);
