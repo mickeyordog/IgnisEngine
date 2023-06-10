@@ -78,5 +78,5 @@ void CameraComponent::setProjectionMatrix()
 
 void CameraComponent::updateOutputTexture()
 {
-    outputTexture = RenderTexture(width, height);
+    outputTexture = RenderTexture(width, height); // calling this function is what's corrupting my scene
 }

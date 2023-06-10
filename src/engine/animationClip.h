@@ -1,56 +1,35 @@
 #pragma once
 
 #include "component.h"
-#include "serialization.h"
 
-enum class AnimationClipVariableType {
-    FLOAT,
-    INT,
-    BOOL,
-    TRIGGER
-};
-
-struct AnimationClipVariable {
-    AnimationClipVariableType type;
-    char* name;
-    union {
-        float floatValue;
-        int intValue;
-        bool boolValue;
-    };
-};
-
-enum class AnimationClipConditionType {
-    EQUAL,
-    NOT_EQUAL,
-    LESS_THAN,
-    GREATER_THAN,
-    LESS_THAN_OR_EQUAL,
-    GREATER_THAN_OR_EQUAL,
-};
-
-struct AnimationClipCondition {
-    AnimationClipVariable variable;
-    AnimationClipConditionType type;
-};
-
-class AnimationClip;
-struct AnimationClipTransition {
-    AnimationClip* nextClip;
-    float transitionTime;
-    AnimationClipCondition condition;
-};
-
-enum class AnimationClipComponentModificationType {
+enum class KeyframeModificationType {
     FLOAT,
     INT,
     BOOL,
     POINTER
 };
 
-struct AnimationClipComponentModification {
+struct Keyframe {
+public:
     float timestampSeconds;
-    FieldDescription* fieldToModify;
+    KeyframeModificationType type;
+    FieldDescription& fieldToModify;
+    Keyframe(float timestampSeconds, KeyframeModificationType type, FieldDescription& fieldToModify) :
+        timestampSeconds(timestampSeconds), type(type), fieldToModify(fieldToModify) { }
+    virtual ~Keyframe() { }
+
+    virtual void applyModification() = 0;
+};
+
+#include "assetManager.h"
+struct SpriteKeyframe : public Keyframe {
+public:
+    IgnisGUID textureGuid;
+
+    virtual void applyModification() override {
+        *(Asset**)fieldToModify.ptr = AssetManager::loadOrGetAsset(textureGuid);
+
+    }
 };
 
 class AnimationClip {
@@ -59,14 +38,18 @@ public:
     ~AnimationClip();
 
     void update(float dt);
-    AnimationClipTransition transition;
 
-    float durationSeconds; // do I need this?
-
+private:
+    void incrementClip();
+    void applyModifications();
     // TODO: needs some kind of reference to the component it wants to change
     // Also needs to keep track of which sprites to use, but could also just be
     // values to move e.g. a transform position
     Component* componentToModify;
-    std::vector<AnimationClipComponentModification> modifications;
+    std::vector<Keyframe> modifications; // this could technically be optimized into a unique ptr to new int[]
+    int modificationIndex = 0;
+
+    float timeInClip = 0.0f;
+    float durationSeconds; // TODO: this should be calculated from the modifications at init
 };
 

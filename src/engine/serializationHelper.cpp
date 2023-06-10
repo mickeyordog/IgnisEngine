@@ -166,7 +166,7 @@ Scene* SerializationHelper::deserializeScene(const nlohmann::ordered_json& scene
                 switch (field.type) {
                     case FieldType::INT_FIELD:
                         *(int*)field.ptr = component[field.name]["value"];
-                        // field.postUpdateFunction();
+                        // field.postUpdateFunction(); // This is causing camera to not output properly for some reason
                         break;
                     case FieldType::LLONG_FIELD:
                         *(long long*)field.ptr = component[field.name]["value"];

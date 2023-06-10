@@ -223,6 +223,8 @@ void beginEngineMainLoop()
 
         scene.updateGameObjects(deltaTime); // this should actually only happen in game build or during play mode
         cameraComponent->renderScene(scene);
+
+        glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         showIgnisEngineGui(scene, cameraComponent->getOutputTexture());
 
 #pragma region Dear Imgui Remove This
@@ -266,7 +268,6 @@ void beginEngineMainLoop()
         }
 #pragma endregion
 
-        glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         dearImGuiContext.render();
 
         sdlContext.swapWindow();

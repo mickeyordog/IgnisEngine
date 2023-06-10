@@ -6,7 +6,6 @@ RenderTexture::RenderTexture(int width, int height) : width(width), height(heigh
     glGenFramebuffers(1, &this->frameBuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, this->frameBuffer);
 
-    // TODO: prob need to attach a depth texture with same process
     glGenTextures(1, &this->texture);
     glBindTexture(GL_TEXTURE_2D, this->texture);
     // TODO: pass in size

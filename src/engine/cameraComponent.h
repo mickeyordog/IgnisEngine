@@ -30,6 +30,6 @@ private:
     };
     RenderTexture outputTexture;
     glm::mat4 projectionMatrix;
-    int width, height; // TODO: these can't really be changed b/c being used to create render texture. Could recreate it maybe?
+    int width, height;
     bool orthographic;
 };
