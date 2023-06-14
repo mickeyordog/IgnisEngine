@@ -9,7 +9,5 @@ Component::Component()
 
 void Component::setField(const FieldDescription& field, void* value)
 {
-    switch(field.type) {
-        
-    }
+    
 }

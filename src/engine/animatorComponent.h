@@ -21,5 +21,7 @@ public:
     virtual std::vector<FieldDescription>& getFields() override { return fields; };
 
 private:
-    std::vector<FieldDescription> fields = { };
+    std::vector<FieldDescription> fields = {
+        { GET_NAME(controller), FieldType::ASSET_POINTER_FIELD, &controller}
+     };
 };

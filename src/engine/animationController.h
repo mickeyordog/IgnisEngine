@@ -40,7 +40,7 @@ struct AnimationClipTransition {
     AnimationTransitionCondition condition;
 };
 
-class AnimationController {
+class AnimationController : public Asset {
 public:
     AnimationController();
     ~AnimationController();

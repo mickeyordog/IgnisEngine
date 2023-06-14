@@ -8,6 +8,9 @@
 #include "shader.h"
 #include "scene.h"
 
+class AnimationController;
+class AnimationClip;
+
 struct AssetFilepathInfo {
     std::string fullFilepath;
     std::string pathWithoutMetaExtension;
@@ -25,8 +28,6 @@ public:
     static void recursivelyRegisterAllAssetsInDirectory(const char* directoryPath);
     static void unloadAsset(IgnisGUID guid) { loadedAssets.erase(guid); }
     static void unloadAllAssets() { loadedAssets.clear(); }
-    // TODO: should I move loadShader and loadTexture into here? Or should they stay in their classes
-    // b/c they do have a bit of specific stuff in their constructors
     static const std::unordered_map<IgnisGUID, AssetFilepathInfo>& getRegisteredAssetMetaFilepaths() { return registeredAssetMetaFilepaths; }
 
 private:
@@ -35,6 +36,8 @@ private:
     static Texture* loadTexture(std::string& filepath);
     static Shader* loadShader(std::string& filepath, std::string& fsFilepath);
     static Scene* loadScene(std::string& filepath);
+    static AnimationController* loadAnimationController(std::string& filepath);
+    static AnimationClip* loadAnimationClip(std::string& filepath);
     static AssetFilepathInfo getFileExtensionInfoFromFilePath(std::string filepath);
     static std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> loadedAssets;
     static std::unordered_map<IgnisGUID, AssetFilepathInfo> registeredAssetMetaFilepaths; // Is this the right way to smart ptr to c string?

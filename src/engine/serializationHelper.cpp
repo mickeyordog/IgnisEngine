@@ -8,6 +8,7 @@
 #include "randomNumberGenerator.h"
 #include "assetManager.h"
 #include "gameObject.h"
+#include "animationController.h"
 
 std::vector<ComponentClassInfo> SerializationHelper::componentClassInfos;
 std::vector<const char*> SerializationHelper::componentTypeNames;
@@ -203,5 +204,15 @@ Scene* SerializationHelper::deserializeScene(const nlohmann::ordered_json& scene
     }
 
     return scene;
+}
+
+AnimationController* SerializationHelper::deserializeAnimationController(const nlohmann::ordered_json& animControllerJson)
+{
+    return nullptr;
+}
+
+AnimationClip* SerializationHelper::deserializeAnimationClip(const nlohmann::ordered_json& animClipJson)
+{
+    return nullptr;
 }
 

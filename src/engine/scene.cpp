@@ -77,3 +77,8 @@ CameraComponent* Scene::findCamera()
     }
     return nullptr;
 }
+
+void Scene::render()
+{
+    mainCamera->renderScene(*this);
+}

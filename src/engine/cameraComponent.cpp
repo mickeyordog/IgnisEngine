@@ -1,6 +1,7 @@
 #include <stack>
 #include <iostream>
 #include "cameraComponent.h"
+#include "scene.h"
 
 CameraComponent::CameraComponent(int width, int height, bool orthographic) : width(width), height(height), orthographic(orthographic), outputTexture(width, height)
 {
@@ -24,8 +25,10 @@ void CameraComponent::update(float dt)
 
 }
 
+// #include "OpenGLContext.h"
 void CameraComponent::renderScene(const Scene& scene)
 {
+    // glCheckError();
     outputTexture.bind();
     glClearColor(1.0, 0.7, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

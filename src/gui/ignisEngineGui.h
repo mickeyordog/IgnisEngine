@@ -7,7 +7,7 @@
 #include "guiSceneView.h"
 #include "scene.h"
 
-void showIgnisEngineGui(Scene& scene, RenderTexture& renderTexture) {
+void runIgnisEngineGui(Scene& scene) {
     static std::unordered_set<GameObject*> selectedGameObjects;
 
     showGuiHierarchyPanel(scene, selectedGameObjects);
@@ -16,5 +16,5 @@ void showIgnisEngineGui(Scene& scene, RenderTexture& renderTexture) {
 
     showGuiFileSystemPanel();
 
-    showGuiScenePanel(renderTexture);
+    showGuiScenePanel(scene.mainCamera->getOutputTexture());
 }

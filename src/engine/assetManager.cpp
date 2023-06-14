@@ -9,6 +9,7 @@
 #include <iostream>
 #include "texture.h"
 #include "serializationHelper.h"
+#include "animationController.h"
 
 
 std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> AssetManager::loadedAssets;
@@ -53,6 +54,10 @@ Asset* AssetManager::loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& inf
     else if (info.metaExtension == "scene")
     {
         ret = loadScene(info.actualFilePath);
+    }
+    else if (info.metaExtension == "controller") 
+    {
+        ret = loadAnimationController(info.actualFilePath);
     }
     else
     {
@@ -130,12 +135,24 @@ Shader* AssetManager::loadShader(std::string& vsFilepath, std::string& fsFilepat
     return new Shader(vShaderCode, fShaderCode);
 }
 
-Scene* AssetManager::loadScene(std::string& filepath)
+nlohmann::json loadJson(std::string& filepath)
 {
     std::ifstream i(filepath);
-    nlohmann::ordered_json sceneJson;
-    i >> sceneJson;
+    nlohmann::ordered_json json;
+    i >> json;
+    return json;
+}
+
+Scene* AssetManager::loadScene(std::string& filepath)
+{
+    nlohmann::ordered_json sceneJson = loadJson(filepath);
     return SerializationHelper::deserializeScene(sceneJson);
+}
+
+AnimationController* AssetManager::loadAnimationController(std::string& filepath)
+{
+    nlohmann::ordered_json animControllerJson = loadJson(filepath);
+    return SerializationHelper::deserializeAnimationController(animControllerJson);
 }
 
 AssetFilepathInfo AssetManager::getFileExtensionInfoFromFilePath(std::string filepath)

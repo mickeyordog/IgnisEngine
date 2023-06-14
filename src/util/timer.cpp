@@ -22,3 +22,10 @@ float Timer::read()
     Uint64 currentTicks = SDL_GetPerformanceCounter();
     return (currentTicks - this->startTicks) / this->ticksPerSec;
 }
+
+float Timer::readAndReset()
+{
+    float time = read();
+    reset();
+    return time;
+}

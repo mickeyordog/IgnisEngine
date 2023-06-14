@@ -47,6 +47,7 @@ target_link_libraries(
         STB_IMAGE
         IMGUI
         glm::glm
+        visual
 )
 
 target_include_directories(

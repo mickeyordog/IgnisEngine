@@ -2,9 +2,9 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include "component.h"
-#include "scene.h"
 #include "renderTexture.h"
 
+class Scene;
 class CameraComponent : public Component {
 public:
     CameraComponent(int width, int height, bool orthographic = false);

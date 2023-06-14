@@ -6,6 +6,7 @@ public:
     ~Timer();
     void reset();
     float read();
+    float readAndReset();
 
 private:
     Uint64 startTicks;

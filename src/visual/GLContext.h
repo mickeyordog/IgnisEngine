@@ -1,5 +1,9 @@
 #pragma once
 
+#include <GL/glew.h>
+#include <stdio.h>
+#include <string>
+#include <iostream>
 #include "SDLContext.h"
 
 class GLContext {
@@ -13,3 +17,7 @@ public:
 private:
     SDL_GLContext context;
 };
+
+GLenum glCheckError_(const char* file, int line);
+
+#define glCheckError() glCheckError_(__FILE__, __LINE__) 

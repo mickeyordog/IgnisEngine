@@ -5,17 +5,12 @@
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_opengl3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include "SDLContext.h"
 #include "GLContext.h"
 #include "dearImGuiContext.h"
 #include "gameObject.h"
 #include "timer.h"
 #include "inputHandler.h"
-#include "shader.h"
-#include "texture.h"
 #include "spriteRenderer.h"
 // #include "pythonEngine.h"
 #include "transformComponent.h"
@@ -24,18 +19,30 @@
 #include "engineGuiManager.h"
 #include "serialization.h"
 #include "serializationHelper.h"
-#include "cameraComponent.h"
 #include "animatorComponent.h"
 #include "renderTexture.h"
 #include "assetManager.h"
 
-#include <imgui.h>
 #include <imfilebrowser.h>
 
 #ifdef __EMSCRIPTEN__
 // #include "../libs/emscripten/emscripten_mainloop_stub.h" // uncomment later
 #endif
 
+void processInput(SDLContext& sdlContext, bool& quit) {
+    SDL_Event e;
+    while (SDL_PollEvent(&e) != 0)
+    {
+        // TODO: io.WantMouseCapture etc for imgui
+        ImGui_ImplSDL2_ProcessEvent(&e);
+        sdlContext.handleEvents(&e);
+        if (e.type == SDL_QUIT)
+        {
+            quit = true;
+        }
+    }
+    InputHandler::getInstance().updateKeys();
+}
 
 #include <thread>
 #include <chrono>
@@ -47,6 +54,8 @@ void beginEngineMainLoop()
     SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);
     DearImGuiContext dearImGuiContext(&sdlContext, &glContext);
+
+    AssetManager::recursivelyRegisterAllAssetsInDirectory("../assets");
 
 // TODO: try writing and loading a couple big files async vs not and see if time difference
 /*
@@ -116,16 +125,10 @@ void beginEngineMainLoop()
 #pragma endregion
 */
 
-    AssetManager::recursivelyRegisterAllAssetsInDirectory("../assets");
-
-    // Texture texture("../assets/fire_penguin.png"); // For some reason this line was causing the last penguin to not render?
-    // Shader shader("../src/shader/vertex.vs", "../src/shader/fragment.fs");
-
-    // TODO: how can I get a list of all available pngs in file system?
     SerializationHelper::registerComponentClass({ ComponentType::CAMERA, "Camera", []() { return new CameraComponent(800, 800); } });
     SerializationHelper::registerComponentClass({ ComponentType::TRANSFORM, "Transform", []() { return new TransformComponent(); } });
     SerializationHelper::registerComponentClass({ ComponentType::SPRITE_RENDERER, "Sprite Renderer", [&]() { return new SpriteRenderer((Texture*)AssetManager::loadOrGetAsset(1), (Shader*)AssetManager::loadOrGetAsset(5)); } });
-    SerializationHelper::registerComponentClass({ ComponentType::ANIMATOR, "Animator", [&]() { return new AnimatorComponent(); } });
+    SerializationHelper::registerComponentClass({ ComponentType::ANIMATOR, "Animator", []() { return new AnimatorComponent(); } });
 
     /*
     GameObject g0("g0");
@@ -158,14 +161,10 @@ void beginEngineMainLoop()
     */
     
     Scene scene = *(Scene*)AssetManager::loadOrGetAsset(43540);
-    CameraComponent* cameraComponent = scene.findCamera();
-
-    static bool show_demo_window = false;
-    bool show_another_window = false;
+    scene.mainCamera = scene.findCamera(); // TODO: set this when loading scene, should be mainCam field in scene file with ref to gameobject fileid
 
     // glViewport(0, 0, 200, 100);
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
 
     Timer frameTimer;
     float deltaTime = 0;
@@ -186,24 +185,15 @@ void beginEngineMainLoop()
     while (!quit)
 #endif
     {
-        SDL_Event e;
-        while (SDL_PollEvent(&e) != 0)
-        {
-            // TODO: io.WantMouseCapture etc for imgui
-            ImGui_ImplSDL2_ProcessEvent(&e);
-            sdlContext.handleEvents(&e);
-            if (e.type == SDL_QUIT)
-            {
-                quit = true;
-            }
-        }
-        InputHandler::getInstance().updateKeys();
+        processInput(sdlContext, quit);
 
-        deltaTime = frameTimer.read();
-        frameTimer.reset();
+        deltaTime = frameTimer.readAndReset();
         // std::cout << 1.0f/deltaTime << " fps" << std::endl;
-
         dearImGuiContext.newFrame();
+
+        scene.updateGameObjects(deltaTime); // this should actually only happen in game build or during play mode
+        scene.render();
+
 
 #pragma region imfilebrowser
         if (ImGui::Begin("dummy window"))
@@ -220,14 +210,9 @@ void beginEngineMainLoop()
             fileDialog.ClearSelected();
         }
 #pragma endregion
-
-        scene.updateGameObjects(deltaTime); // this should actually only happen in game build or during play mode
-        cameraComponent->renderScene(scene);
-
-        glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        showIgnisEngineGui(scene, cameraComponent->getOutputTexture());
-
 #pragma region Dear Imgui Remove This
+        static bool show_demo_window = false;
+        static bool show_another_window = false;
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
@@ -268,8 +253,10 @@ void beginEngineMainLoop()
         }
 #pragma endregion
 
-        dearImGuiContext.render();
+        runIgnisEngineGui(scene);
 
+        glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        dearImGuiContext.render();
         sdlContext.swapWindow();
     }
 #ifdef __EMSCRIPTEN__

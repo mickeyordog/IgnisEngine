@@ -32,9 +32,9 @@ public:
     }
 };
 
-class AnimationClip {
+class AnimationClip : public Asset {
 public:
-    AnimationClip();
+    AnimationClip(GameObject* gameObject, std::vector<Keyframe> keyframes, ComponentType componentTypeToModify, std::string fieldToModifyName);
     ~AnimationClip();
 
     void update(float dt);
@@ -46,7 +46,7 @@ private:
     // Also needs to keep track of which sprites to use, but could also just be
     // values to move e.g. a transform position
     Component* componentToModify;
-    std::vector<Keyframe> modifications; // this could technically be optimized into a unique ptr to new int[]
+    std::vector<Keyframe> keyframes; // this could technically be optimized into a unique ptr to new int[]
     int modificationIndex = 0;
 
     float timeInClip = 0.0f;
