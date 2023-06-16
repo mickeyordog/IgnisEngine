@@ -8,7 +8,7 @@
 void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& selectedObjects)
 {
     ImGui::Begin("Hierarchy");
-    
+
     ImGui::SetNextItemOpen(true, ImGuiCond_Once);
     if (ImGui::TreeNode("Scene"))
     {
@@ -46,8 +46,8 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
                 if (node_open)
                 {
                     auto& transforms = currentObject->transform->getChildTransforms();
-                    skipChildren = false;
                     treePopStack.push(transforms.back()->gameObject);
+                    skipChildren = false;
                 }
             }
             else
