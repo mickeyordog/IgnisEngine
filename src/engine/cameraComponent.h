@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <memory>
 #include "component.h"
 #include "renderTexture.h"
 
@@ -17,7 +18,7 @@ public:
     virtual enum ComponentType getType() override { return ComponentType::CAMERA; };
 
     void renderScene(const Scene& scene);
-    RenderTexture& getOutputTexture() { return outputTexture; }
+    RenderTexture& getOutputTexture() { return *outputTexture; }
 
 private:
     void setProjectionMatrix();
@@ -28,7 +29,7 @@ private:
         { "height", FieldType::INT_FIELD, &height, [&]() { this->updateOutputTexture(); } },
         { "orthographic", FieldType::BOOL_FIELD, &orthographic, [&]() { this->setProjectionMatrix(); } }
     };
-    RenderTexture outputTexture;
+    RenderTexture* outputTexture = nullptr;
     glm::mat4 projectionMatrix;
     int width, height;
     bool orthographic;

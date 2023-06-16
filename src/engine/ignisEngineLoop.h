@@ -191,8 +191,7 @@ void beginEngineMainLoop()
         // std::cout << 1.0f/deltaTime << " fps" << std::endl;
         dearImGuiContext.newFrame();
 
-        scene.updateGameObjects(deltaTime); // this should actually only happen in game build or during play mode
-        scene.render();
+
 
 
 #pragma region imfilebrowser
@@ -254,6 +253,9 @@ void beginEngineMainLoop()
 #pragma endregion
 
         runIgnisEngineGui(scene);
+        
+        scene.updateGameObjects(deltaTime); // this should actually only happen in game build or during play mode
+        scene.render();
 
         glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         dearImGuiContext.render();

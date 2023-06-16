@@ -3,16 +3,18 @@
 #include "cameraComponent.h"
 #include "scene.h"
 
-CameraComponent::CameraComponent(int width, int height, bool orthographic) : width(width), height(height), orthographic(orthographic), outputTexture(width, height)
+CameraComponent::CameraComponent(int width, int height, bool orthographic) : width(width), height(height), orthographic(orthographic)
 {
     fields.insert(fields.begin(), Component::getFields().begin(), Component::getFields().end());
 
+    updateOutputTexture();
     setProjectionMatrix();
 }
 
 CameraComponent::~CameraComponent()
 {
-
+    if (outputTexture != nullptr)
+        delete outputTexture;
 }
 
 void CameraComponent::start()
@@ -25,11 +27,9 @@ void CameraComponent::update(float dt)
 
 }
 
-// #include "OpenGLContext.h"
 void CameraComponent::renderScene(const Scene& scene)
 {
-    // glCheckError();
-    outputTexture.bind();
+    outputTexture->bind();
     glClearColor(1.0, 0.7, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -67,7 +67,7 @@ void CameraComponent::renderScene(const Scene& scene)
         }
     }
 
-    outputTexture.unbind();
+    outputTexture->unbind();
 }
 
 void CameraComponent::setProjectionMatrix()
@@ -81,5 +81,8 @@ void CameraComponent::setProjectionMatrix()
 
 void CameraComponent::updateOutputTexture()
 {
-    outputTexture = RenderTexture(width, height); // calling this function is what's corrupting my scene
+    // outputTexture.~RenderTexture();
+    if (outputTexture != nullptr)
+        delete outputTexture;
+    outputTexture = new RenderTexture(width, height);
 }

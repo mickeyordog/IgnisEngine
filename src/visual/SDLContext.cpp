@@ -38,6 +38,12 @@ SDLContext::SDLContext(const char* name, int width, int height)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 #endif
 
+#ifdef DEBUG
+    int contextFlags;
+    SDL_GL_GetAttribute(SDL_GL_CONTEXT_FLAGS, &contextFlags);
+    contextFlags |= SDL_GL_CONTEXT_DEBUG_FLAG;
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, contextFlags);
+#endif
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
