@@ -4,31 +4,38 @@
 SceneIterator::SceneIterator(Scene& scene) {
     for (auto gameObjectIt = scene.getRootGameObjects().rbegin(); gameObjectIt != scene.getRootGameObjects().rend(); ++gameObjectIt)
     {
-        objectStack.push(*gameObjectIt);
+        objectStack.push({*gameObjectIt, 0});
     }
     current = objectStack.top();
 }
 
 GameObject* SceneIterator::getNext(bool skipChildren)
 {
-    if (current == nullptr)
-        return nullptr;
+    return getNextInfo(skipChildren).gameObject;
+}
 
-    GameObject* ret = current;
+SceneIteratorInfo SceneIterator::getNextInfo(bool skipChildren)
+{
+    if (current.gameObject == nullptr)
+        return current;
+
+    SceneIteratorInfo ret = current;
+    GameObject* currentGameObject = current.gameObject;
+    int currentDepth = current.depth;
     objectStack.pop();
 
     if (!skipChildren)
     {
-        for (auto transformIt = current->transform->getChildTransforms().rbegin(); transformIt != current->transform->getChildTransforms().rend(); ++transformIt)
+        for (auto transformIt = currentGameObject->transform->getChildTransforms().rbegin(); transformIt != currentGameObject->transform->getChildTransforms().rend(); ++transformIt)
         {
-            objectStack.push((*transformIt)->gameObject);
+            objectStack.push({(*transformIt)->gameObject, currentDepth + 1});
         }
     }
 
     if (objectStack.size() > 0)
         current = objectStack.top();
     else
-        current = nullptr;
+        current = { nullptr, -1 };
     return ret;
 }
 
@@ -42,7 +49,7 @@ Scene::~Scene()
     SceneIterator it = getIterator();
     while (GameObject* gameObject = it.getNext())
     {
-        delete gameObject; // TODO: this isn't working, need to instead implement option in iterator to do post order traversal, which will delete children first
+        // delete gameObject; // TODO: this isn't working, need to instead implement option in iterator to do post order traversal, which will delete children first
     }
 }
 

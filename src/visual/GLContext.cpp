@@ -28,6 +28,7 @@ GLContext::GLContext(SDLContext *sdlContext)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
 
+#ifdef WIN32
     int flags; glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
     if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
     {
@@ -36,6 +37,7 @@ GLContext::GLContext(SDLContext *sdlContext)
         glDebugMessageCallback(glDebugOutput, nullptr);
         glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
     }
+#endif
 }
 
 GLContext::~GLContext() {
@@ -53,6 +55,7 @@ SDL_GLContext* GLContext::getContext()
     return &this->context;
 }
 
+#ifdef WIN32
 void __stdcall glDebugOutput(GLenum source,
                             GLenum type,
                             unsigned int id,
@@ -99,6 +102,7 @@ void __stdcall glDebugOutput(GLenum source,
     } std::cout << std::endl;
     std::cout << std::endl;
 }
+#endif
 
 GLenum glCheckError_(const char* file, int line)
 {

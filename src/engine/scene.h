@@ -6,14 +6,20 @@
 #include "gameObject.h"
 #include "cameraComponent.h"
 
+struct SceneIteratorInfo {
+    GameObject* gameObject;
+    int depth;
+};
+
 class SceneIterator {
 public:
     SceneIterator(Scene& scene);
     GameObject* getNext(bool skipChildren = false);
+    SceneIteratorInfo getNextInfo(bool skipChildren = false);
 
 private:
-    GameObject* current;
-    std::stack<GameObject*> objectStack;
+    SceneIteratorInfo current;
+    std::stack<SceneIteratorInfo> objectStack;
 };
 
 // TODO: maybe want to generate a collection of all assets the scene needs, as a loading optimization so we don't unload from one to another

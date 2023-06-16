@@ -12,19 +12,20 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
     ImGui::SetNextItemOpen(true, ImGuiCond_Once);
     if (ImGui::TreeNode("Scene"))
     {
-        static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+        static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_NoTreePushOnOpen;
         // base_flags |= ImGuiTreeNodeFlags_DefaultOpen; 
         static bool test_drag_and_drop = true;
 
-        static int selection_mask = (1 << 2);
         GameObject* node_clicked = nullptr;
-        std::stack<GameObject*> treePopStack;
 
         SceneIterator it = scene.getIterator();
-        bool skipChildren = true;
-        while (GameObject* currentObject = it.getNext(skipChildren))
+        bool skipChildren = false;
+        for (SceneIteratorInfo info = it.getNextInfo(skipChildren); info.gameObject != nullptr; info = it.getNextInfo(skipChildren))
         {
-            skipChildren = true;
+            skipChildren = false;
+            GameObject* currentObject = info.gameObject;
+            int depth = info.depth;
+            for (int i = 0; i < depth; i++) ImGui::Indent();
             // Disable the default "open on single-click behavior" + set Selected flag according to our selection.
             // To alter selection we use IsItemClicked() && !IsItemToggledOpen(), so clicking on an arrow doesn't alter selection.
             ImGuiTreeNodeFlags node_flags = base_flags;
@@ -42,12 +43,8 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
                     ImGui::Text("This is a drag and drop source");
                     ImGui::EndDragDropSource();
                 }
-
-                if (node_open)
-                {
-                    auto& transforms = currentObject->transform->getChildTransforms();
-                    treePopStack.push(transforms.back()->gameObject);
-                    skipChildren = false;
+                if (!node_open) {
+                    skipChildren = true;
                 }
             }
             else
@@ -66,11 +63,7 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
                     ImGui::EndDragDropSource();
                 }
             }
-            if (treePopStack.size() > 0 && currentObject == treePopStack.top())
-            {
-                ImGui::TreePop();
-                treePopStack.pop();
-            }
+            for (int i = 0; i < depth; i++) ImGui::Unindent();
         }
         if (node_clicked != nullptr)
         {
