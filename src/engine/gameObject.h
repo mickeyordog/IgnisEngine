@@ -25,7 +25,7 @@ public:
 
     bool isActive = true;
     
-    TransformComponent* transform;
+    TransformComponent* transform; // TODO: can use transform->isActive instead of separate bool for gameobject
 
     std::string name;
     FileID fileID;

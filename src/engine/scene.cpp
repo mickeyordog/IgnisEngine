@@ -10,6 +10,11 @@ Scene::~Scene()
 {
     // TODO: iterate over all objects, from root upwards, and delete them
     // All gameobjects will need to be dynamically allocated
+    SceneIterator it = getIterator();
+    while (GameObject* gameObject = it.getNext())
+    {
+        delete gameObject;
+    }
 }
 
 void Scene::addRootGameObject(GameObject* gameObject)

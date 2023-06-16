@@ -29,12 +29,13 @@ Asset* AssetManager::loadOrGetAsset(IgnisGUID guid)
     else if (auto search = registeredAssetMetaFilepaths.find(guid); search != registeredAssetMetaFilepaths.end()) {
         return loadAndRegisterAsset(guid, search->second);
     }
-    // TODO: need to load asset
-    // I guess go through asset files, find the one with the matching GUID, and load it
-    // The file will also tell me what type it'll be, then can call corresponding
-    // AssetManager::load{AssetType} function
     std::cout << "Asset with GUID " << guid << " not found" << std::endl;
     return nullptr;
+}
+
+std::unique_ptr<Asset> AssetManager::loadOrGetAssetCopy(IgnisGUID guid)
+{
+    return std::unique_ptr<Asset>(loadOrGetAsset(guid)->clone()); // TODO: what if it's nullptr?
 }
 
 Asset* AssetManager::loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& info)
@@ -58,6 +59,10 @@ Asset* AssetManager::loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& inf
     else if (info.metaExtension == "controller") 
     {
         ret = loadAnimationController(info.actualFilePath);
+    }
+    else if (info.metaExtension == "clip")
+    {
+        ret = loadAnimationClip(info.actualFilePath);
     }
     else
     {
@@ -153,6 +158,12 @@ AnimationController* AssetManager::loadAnimationController(std::string& filepath
 {
     nlohmann::ordered_json animControllerJson = loadJson(filepath);
     return SerializationHelper::deserializeAnimationController(animControllerJson);
+}
+
+AnimationClip* AssetManager::loadAnimationClip(std::string& filepath)
+{
+    nlohmann::ordered_json animClipJson = loadJson(filepath);
+    return SerializationHelper::deserializeAnimationClip(animClipJson);
 }
 
 AssetFilepathInfo AssetManager::getFileExtensionInfoFromFilePath(std::string filepath)

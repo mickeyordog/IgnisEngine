@@ -19,5 +19,7 @@ enum class AssetType { // TODO: not positive I want to do it like this, don't th
 
 class Asset {
 public:
+    virtual ~Asset() = default;
+    virtual Asset* clone() = 0;
     IgnisGUID guid;
 };

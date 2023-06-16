@@ -167,23 +167,23 @@ Scene* SerializationHelper::deserializeScene(const nlohmann::ordered_json& scene
                 switch (field.type) {
                     case FieldType::INT_FIELD:
                         *(int*)field.ptr = component[field.name]["value"];
-                        // field.postUpdateFunction(); // This is causing camera to not output properly for some reason
+                        field.postUpdateFunction();
                         break;
                     case FieldType::LLONG_FIELD:
                         *(long long*)field.ptr = component[field.name]["value"];
-                        // field.postUpdateFunction();
+                        field.postUpdateFunction();
                         break;
                     case FieldType::FLOAT_FIELD:
                         *(float*)field.ptr = component[field.name]["value"];
-                        // field.postUpdateFunction();
+                        field.postUpdateFunction();
                         break;
                     case FieldType::BOOL_FIELD:
                         *(bool*)field.ptr = component[field.name]["value"];
-                        // field.postUpdateFunction();
+                        field.postUpdateFunction();
                         break;
                     case FieldType::STRING_FIELD:
                         // *(const char**)field.ptr = component[field.name]["value"];
-                        // field.postUpdateFunction();
+                        field.postUpdateFunction();
                         break;
                     case FieldType::VEC3_FIELD:
                         ((glm::vec3*)field.ptr)->x = component[field.name]["value"][0];
@@ -193,7 +193,7 @@ Scene* SerializationHelper::deserializeScene(const nlohmann::ordered_json& scene
                         break;
                     case FieldType::ASSET_POINTER_FIELD:
                         *(Asset**)field.ptr = AssetManager::loadOrGetAsset(component[field.name]["value"]);
-                        // field.postUpdateFunction();
+                        field.postUpdateFunction();
                         break;
                     default:
                         std::cout << "Unknown field type " << static_cast<int>(field.type) << std::endl;

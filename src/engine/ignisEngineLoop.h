@@ -191,9 +191,6 @@ void beginEngineMainLoop()
         // std::cout << 1.0f/deltaTime << " fps" << std::endl;
         dearImGuiContext.newFrame();
 
-
-
-
 #pragma region imfilebrowser
         if (ImGui::Begin("dummy window"))
         {
@@ -253,7 +250,7 @@ void beginEngineMainLoop()
 #pragma endregion
 
         runIgnisEngineGui(scene);
-        
+
         scene.updateGameObjects(deltaTime); // this should actually only happen in game build or during play mode
         scene.render();
 

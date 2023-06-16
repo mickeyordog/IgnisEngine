@@ -17,7 +17,7 @@ GameObject::GameObject(std::string name, FileID fileID) : name(name)
 }
 
 GameObject::~GameObject() {
-    // TODO: transform? Rn being stack allocated
+    delete transform;
 }
 
 void GameObject::start()

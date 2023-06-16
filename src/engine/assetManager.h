@@ -25,6 +25,7 @@ struct AssetFilepathInfo {
 class AssetManager {
 public:
     static Asset* loadOrGetAsset(IgnisGUID guid);
+    static std::unique_ptr<Asset> loadOrGetAssetCopy(IgnisGUID guid);
     static void recursivelyRegisterAllAssetsInDirectory(const char* directoryPath);
     static void unloadAsset(IgnisGUID guid) { loadedAssets.erase(guid); }
     static void unloadAllAssets() { loadedAssets.clear(); }

@@ -6,7 +6,8 @@
 class Texture : public Asset {
 public:
     Texture(unsigned char* data, int width, int height);
-    ~Texture();
+    virtual ~Texture() override;
+    virtual Asset* clone() override { return new Texture(*this); }
 
     void bind() const;
 // private:
