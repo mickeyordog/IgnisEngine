@@ -27,30 +27,20 @@ void CameraComponent::update(float dt)
 
 }
 
-void CameraComponent::renderScene(const Scene& scene)
+void CameraComponent::renderScene(Scene& scene)
 {
     outputTexture->bind();
     glClearColor(1.0, 0.7, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    std::stack<GameObject*> objectStack;
-    for (auto gameObjectIt = scene.getRootGameObjects().rbegin(); gameObjectIt != scene.getRootGameObjects().rend(); ++gameObjectIt)
-    {
-        objectStack.push(*gameObjectIt);
-    }
-    while (objectStack.size() > 0)
-    {
-        GameObject* currentObject = objectStack.top();
-        objectStack.pop();
+    auto sceneIterator = scene.getIterator();
+    while (GameObject* currentObject = sceneIterator.getNext()) {
         if (!currentObject->isActive)
             continue;
-        for (auto transformIt = currentObject->transform->getChildTransforms().rbegin(); transformIt != currentObject->transform->getChildTransforms().rend(); ++transformIt)
-        {
-            objectStack.push((*transformIt)->gameObject);
-        }
-        // TODO: it would be great to just be able to call gameObject.render() on each one, but need to get shader and set uniforms
 
-        for (auto& component : currentObject->getComponents()) {
+        // TODO: it would be great to just be able to call gameObject.render() on each one, but need to get shader and set uniforms
+        for (auto& component : currentObject->getComponents())
+        {
             if (!component->isActive || !component->isVisual())
                 continue;
             ComponentVisual* visualComponent = (ComponentVisual*)component.get();
@@ -66,7 +56,7 @@ void CameraComponent::renderScene(const Scene& scene)
             visualComponent->render();
         }
     }
-
+        
     outputTexture->unbind();
 }
 

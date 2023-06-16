@@ -17,7 +17,7 @@ public:
     virtual std::vector<FieldDescription>& getFields() override { return fields; };
     virtual enum ComponentType getType() override { return ComponentType::CAMERA; };
 
-    void renderScene(const Scene& scene);
+    void renderScene(Scene& scene);
     RenderTexture& getOutputTexture() { return *outputTexture; }
 
 private:

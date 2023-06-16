@@ -16,8 +16,10 @@ GameObject::GameObject(std::string name, FileID fileID) : name(name)
     this->transform->gameObject = this;
 }
 
+#include <iostream>
 GameObject::~GameObject() {
-    delete transform;
+    // delete transform; // TODO: this is not working, only destroying first
+    std::cout << "GameObject " << this->name << " destroyed" << std::endl;
 }
 
 void GameObject::start()

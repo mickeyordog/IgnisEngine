@@ -1,6 +1,37 @@
 #include <stack>
 #include "scene.h"
 
+SceneIterator::SceneIterator(Scene& scene) {
+    for (auto gameObjectIt = scene.getRootGameObjects().rbegin(); gameObjectIt != scene.getRootGameObjects().rend(); ++gameObjectIt)
+    {
+        objectStack.push(*gameObjectIt);
+    }
+    current = objectStack.top();
+}
+
+GameObject* SceneIterator::getNext(bool skipChildren)
+{
+    if (current == nullptr)
+        return nullptr;
+
+    GameObject* ret = current;
+    objectStack.pop();
+
+    if (!skipChildren)
+    {
+        for (auto transformIt = current->transform->getChildTransforms().rbegin(); transformIt != current->transform->getChildTransforms().rend(); ++transformIt)
+        {
+            objectStack.push((*transformIt)->gameObject);
+        }
+    }
+
+    if (objectStack.size() > 0)
+        current = objectStack.top();
+    else
+        current = nullptr;
+    return ret;
+}
+
 Scene::Scene()
 {
     
@@ -8,12 +39,10 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-    // TODO: iterate over all objects, from root upwards, and delete them
-    // All gameobjects will need to be dynamically allocated
     SceneIterator it = getIterator();
     while (GameObject* gameObject = it.getNext())
     {
-        delete gameObject;
+        delete gameObject; // TODO: this isn't working, need to instead implement option in iterator to do post order traversal, which will delete children first
     }
 }
 
@@ -24,60 +53,28 @@ void Scene::addRootGameObject(GameObject* gameObject)
 
 void Scene::startGameObjects()
 {
-    // TODO: repeating this code in updateGameObjects, guiHierarchy, and cameraComponent
-    std::stack<GameObject*> objectStack;
-    for (auto gameObjectIt = rootObjects.rbegin(); gameObjectIt != rootObjects.rend(); ++gameObjectIt)
+    SceneIterator it = getIterator();
+    while (GameObject* gameObject = it.getNext())
     {
-        objectStack.push(*gameObjectIt);
-    }
-    while (objectStack.size() > 0)
-    {
-        GameObject* currentObject = objectStack.top();
-        objectStack.pop();
-        for (auto transformIt = currentObject->transform->getChildTransforms().rbegin(); transformIt != currentObject->transform->getChildTransforms().rend(); ++transformIt)
-        {
-            objectStack.push((*transformIt)->gameObject);
-        }
-
-        currentObject->start();
+        gameObject->start();
     }
 }
 
 void Scene::updateGameObjects(float dt)
 {
-    std::stack<GameObject*> objectStack;
-    for (auto gameObjectIt = rootObjects.rbegin(); gameObjectIt != rootObjects.rend(); ++gameObjectIt)
+    SceneIterator it = getIterator();
+    while (GameObject* gameObject = it.getNext())
     {
-        objectStack.push(*gameObjectIt);
-    }
-    while (objectStack.size() > 0)
-    {
-        GameObject* currentObject = objectStack.top();
-        objectStack.pop();
-        if (!currentObject->isActive)
-            continue;
-        for (auto transformIt = currentObject->transform->getChildTransforms().rbegin(); transformIt != currentObject->transform->getChildTransforms().rend(); ++transformIt)
-        {
-            objectStack.push((*transformIt)->gameObject);
-        }
-
-        currentObject->update(dt);
+        gameObject->update(dt);
     }
 }
 
 CameraComponent* Scene::findCamera()
 {
-    std::stack<GameObject*> objectStack;
-    for (auto gameObjectIt = rootObjects.rbegin(); gameObjectIt != rootObjects.rend(); ++gameObjectIt)
+    SceneIterator it = getIterator();
+    while (GameObject* gameObject = it.getNext())
     {
-        objectStack.push(*gameObjectIt);
-    }
-    while (objectStack.size() > 0)
-    {
-        GameObject* currentObject = objectStack.top();
-        objectStack.pop();
-
-        if (Component* camComponent = currentObject->getComponentOfType(ComponentType::CAMERA); camComponent != nullptr)
+        if (Component* camComponent = gameObject->getComponentOfType(ComponentType::CAMERA); camComponent != nullptr)
             return (CameraComponent*)camComponent;
     }
     return nullptr;

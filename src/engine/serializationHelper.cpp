@@ -9,6 +9,7 @@
 #include "assetManager.h"
 #include "gameObject.h"
 #include "animationController.h"
+#include "scene.h"
 
 std::vector<ComponentClassInfo> SerializationHelper::componentClassInfos;
 std::vector<const char*> SerializationHelper::componentTypeNames;
@@ -52,18 +53,11 @@ enum ComponentType SerializationHelper::stringToComponentType(const char* name)
 
 void SerializationHelper::serializeScene(Scene& scene)
 {
-    std::stack<GameObject*> objectStack;
     int currentID = 0;
     nlohmann::ordered_json rootJson;
-    for (auto gameObjectIt = scene.getRootGameObjects().rbegin(); gameObjectIt != scene.getRootGameObjects().rend(); ++gameObjectIt)
+    SceneIterator it = scene.getIterator();
+    while (GameObject* currentObject = it.getNext())
     {
-        objectStack.push(*gameObjectIt);
-    }
-    while (objectStack.size() > 0)
-    {
-        GameObject* currentObject = objectStack.top();
-        objectStack.pop();
-
         nlohmann::ordered_json objectJson;
         objectJson["name"] = currentObject->name;
         objectJson["fileID"] = currentObject->fileID;
@@ -124,12 +118,6 @@ void SerializationHelper::serializeScene(Scene& scene)
         objectJson["components"] = componentsJsonList;
 
         rootJson[std::to_string(currentObject->fileID)] = objectJson;
-        
-        auto& transforms = currentObject->transform->getChildTransforms();
-        for (auto transformIt = transforms.rbegin(); transformIt != transforms.rend(); ++transformIt)
-        {
-            objectStack.push((*transformIt)->gameObject);
-        }
     }
 
     std::ofstream o("../assets/savedScene.scene"); // where should this path come from?
@@ -140,24 +128,26 @@ Scene* SerializationHelper::deserializeScene(const nlohmann::ordered_json& scene
 {
     Scene* scene = new Scene();
     std::map<FileID, GameObject*> fileIDToGameObjectMap;
-    for (auto jsonIt = sceneJson.rbegin(); jsonIt != sceneJson.rend(); ++jsonIt)
+    std::vector<FileID> insertionOrder;
+    for (auto jsonIt = sceneJson.begin(); jsonIt != sceneJson.end(); ++jsonIt)
     {
-        GameObject* gameObject = new GameObject((*jsonIt)["name"].dump(), (*jsonIt)["fileID"]);
+        std::string name = (*jsonIt)["name"].dump();
+        FileID fileID = (*jsonIt)["fileID"];
+        GameObject* gameObject = new GameObject(name, fileID);
         gameObject->isActive = (*jsonIt)["isActive"];
         fileIDToGameObjectMap[gameObject->fileID] = gameObject;
+        insertionOrder.push_back(gameObject->fileID);
     }
-    for (auto& [fileID, gameObject] : fileIDToGameObjectMap) {
+    for (FileID fileID : insertionOrder) {
+        GameObject* gameObject = fileIDToGameObjectMap[fileID];
         nlohmann::ordered_json objectJson = sceneJson[std::to_string(fileID)];
         nlohmann::ordered_json childrenJson = objectJson["children"];
-        for (auto& childFileID : childrenJson) {
-            gameObject->transform->addChildTransform(fileIDToGameObjectMap[childFileID]->transform);
-        }
+
         if (objectJson["parent"] == -1) 
             scene->addRootGameObject(gameObject);
         else
             fileIDToGameObjectMap[objectJson["parent"]]->transform->addChildTransform(gameObject->transform);
         for (auto& component : objectJson["components"]) {
-            // get type of component, create new component of that type, iterate over getFields, pass in values
             Component* newComponent;
             if (component["type"] == static_cast<int>(ComponentType::TRANSFORM))
                 newComponent = gameObject->transform;

@@ -8,6 +8,7 @@
 void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& selectedObjects)
 {
     ImGui::Begin("Hierarchy");
+    
     ImGui::SetNextItemOpen(true, ImGuiCond_Once);
     if (ImGui::TreeNode("Scene"))
     {
@@ -17,18 +18,13 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
 
         static int selection_mask = (1 << 2);
         GameObject* node_clicked = nullptr;
-        std::stack<GameObject*> objectStack;
         std::stack<GameObject*> treePopStack;
-        // TODO: I think can just do for gameObject : scene.getRootGameObjects().reverseIterator()
-        for (auto gameObjectIt = scene.getRootGameObjects().rbegin(); gameObjectIt != scene.getRootGameObjects().rend(); ++gameObjectIt)
-        {
-            objectStack.push(*gameObjectIt);
-        }
-        while (objectStack.size() > 0)
-        {
-            GameObject* currentObject = objectStack.top();
-            objectStack.pop();
 
+        SceneIterator it = scene.getIterator();
+        bool skipChildren = true;
+        while (GameObject* currentObject = it.getNext(skipChildren))
+        {
+            skipChildren = true;
             // Disable the default "open on single-click behavior" + set Selected flag according to our selection.
             // To alter selection we use IsItemClicked() && !IsItemToggledOpen(), so clicking on an arrow doesn't alter selection.
             ImGuiTreeNodeFlags node_flags = base_flags;
@@ -46,13 +42,11 @@ void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& select
                     ImGui::Text("This is a drag and drop source");
                     ImGui::EndDragDropSource();
                 }
+
                 if (node_open)
                 {
                     auto& transforms = currentObject->transform->getChildTransforms();
-                    for (auto transformIt = transforms.rbegin(); transformIt != transforms.rend(); ++transformIt)
-                    {
-                        objectStack.push((*transformIt)->gameObject);
-                    }
+                    skipChildren = false;
                     treePopStack.push(transforms.back()->gameObject);
                 }
             }
