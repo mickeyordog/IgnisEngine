@@ -71,7 +71,6 @@ void CameraComponent::setProjectionMatrix()
 
 void CameraComponent::updateOutputTexture()
 {
-    // outputTexture.~RenderTexture();
     if (outputTexture != nullptr)
         delete outputTexture;
     outputTexture = new RenderTexture(width, height);

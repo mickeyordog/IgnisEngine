@@ -131,7 +131,7 @@ Scene* SerializationHelper::deserializeScene(const nlohmann::ordered_json& scene
     std::vector<FileID> insertionOrder;
     for (auto jsonIt = sceneJson.begin(); jsonIt != sceneJson.end(); ++jsonIt)
     {
-        std::string name = (*jsonIt)["name"].dump();
+        std::string name = (*jsonIt)["name"];
         FileID fileID = (*jsonIt)["fileID"];
         GameObject* gameObject = new GameObject(name, fileID);
         gameObject->isActive = (*jsonIt)["isActive"];

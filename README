@@ -7,7 +7,7 @@ Run the following commands:
 - ./vcpkg/bootstrap-vcpkg.sh
 - cd ./vcpkg
 MAC:
-- ./vcpkg install sdl2 python3 glew(?) glm nlohmann-json
+- ./vcpkg install sdl2 python3 glew glm nlohmann-json
 WINDOWS:
 - ./vcpkg install sdl2:x64-windows-static
 - ./vcpkg install python3:x64-windows-static
