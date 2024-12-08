@@ -12,7 +12,14 @@ void Quat::lookAt(const Vec3& position, const Vec3& target, const Vec3& up)
     data = glm::quat_cast(glm::lookAt(position.getData(), target.getData(), up.getData()));
 }
 
-void Quat::rotateAboutAxisEuler(const Vec3& axis, float angleDegrees)
+void Quat::rotateAboutAxis(const Vec3& axis, float angleDegrees)
+{
+    // don't quite understand why this works changing the mult order
+    glm::quat rotation = glm::angleAxis(glm::radians(angleDegrees), glm::normalize(axis.getData()));
+    data = rotation * data;
+}
+
+void Quat::rotateAboutAxisLocal(const Vec3& axis, float angleDegrees)
 { 
     data *= glm::angleAxis(glm::radians(angleDegrees), glm::normalize(axis.getData()));
 }

@@ -55,14 +55,13 @@ void TransformComponent::setEulerRotation(const Vec3& eulerRotationDegrees)
 
 void TransformComponent::rotateAround(const Vec3& axis, float angleDegrees)
 {
-    rotation.rotateAboutAxisEuler(axis, angleDegrees);
+    rotation.rotateAboutAxis(axis, angleDegrees);
     updateMatrix();
 }
 
 void TransformComponent::rotateAroundLocal(const Vec3& axis, float angleDegrees)
 {
-    // TODO: in one of these, prob just have to transform axis by globalMatrix
-    rotation.rotateAboutAxisEuler(axis, angleDegrees);
+    rotation.rotateAboutAxisLocal(axis, angleDegrees);
     updateMatrix();
 }
 

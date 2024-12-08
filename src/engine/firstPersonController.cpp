@@ -71,6 +71,6 @@ void FirstPersonController::update(float dt)
     {
         rotationX -= this->rotationSpeed * dt;
     }
-    gameObject->transform->rotateAround(Vec3::RIGHT, rotationX);
+    gameObject->transform->rotateAroundLocal(Vec3::RIGHT, rotationX);
 
 }

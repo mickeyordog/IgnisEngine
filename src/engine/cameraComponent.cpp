@@ -33,8 +33,7 @@ void CameraComponent::renderScene(Scene& scene)
     glClearColor(1.0, 0.7, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    Mat4 view = this->gameObject->transform->getMatrix();
-    view.invert();
+    Mat4 view = this->gameObject->transform->getMatrix().inverted();
     const Mat4& projection = this->projectionMatrix;
 
     auto sceneIterator = scene.getIterator();

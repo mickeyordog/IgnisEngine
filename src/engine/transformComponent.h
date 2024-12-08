@@ -34,6 +34,10 @@ public:
     void updateChildTransforms();
 
     const Vec3& getPosition() { return position; };
+    // These 3 methods could potentially be faster by just getting the columns
+    Vec3 getLocalForward() { return globalMatrix.getLocalForward(); };
+    Vec3 getLocalRight() { return globalMatrix.getLocalRight(); };
+    Vec3 getLocalUp() { return globalMatrix.getLocalUp(); };
     const Quat& getRotation() { return rotation; };
 
     virtual std::vector<FieldDescription>& getFields() override { return fields; };

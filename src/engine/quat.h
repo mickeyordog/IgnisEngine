@@ -16,7 +16,8 @@ public:
     Mat4 toMat4() const;
 
     void lookAt(const Vec3& position, const Vec3& target, const Vec3& up);
-    void rotateAboutAxisEuler(const Vec3& axis, float angleDegrees);
+    void rotateAboutAxis(const Vec3& axis, float angleDegrees);
+    void rotateAboutAxisLocal(const Vec3& axis, float angleDegrees);
 
     static Vec3 toEuler(const Quat& quat);
     static Quat fromEuler(const Vec3& eulerRotationDegrees);

@@ -2,7 +2,6 @@
 
 // TODO: extension that lets you add includes more easily
 // TODO: fix window resizing
-// TODO: set up camera, render scene to texture, render texture to screen
 // TODO: set up scene editor
 // TODO: fancier scene rendering, eg 3D stuff
 // TODO: could make vscode plugin that helps you add includes easily (give you window to top of class)

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/string_cast.hpp>
 #include "serialization.h"
 #include "quat.h"
 
@@ -36,3 +37,9 @@ private:
     glm::vec3 data;
     // NB: "fields" not needed here because it's just accessed through Vec3 ptr
 };
+
+inline std::ostream& operator<<(std::ostream& str, Vec3 const& v)
+{
+    str << glm::to_string(v.getData());
+    return str;
+}
