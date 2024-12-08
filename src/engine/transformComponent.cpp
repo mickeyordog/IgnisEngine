@@ -22,36 +22,43 @@ void TransformComponent::update(float dt)
 
 }
 
-void TransformComponent::setPosition(Vec3 position)
+void TransformComponent::setPosition(const Vec3& position)
 {
     this->position = position.getData();
     updateMatrix();
 }
 
-void TransformComponent::translate(Vec3 translation)
+void TransformComponent::translate(const Vec3& translation)
 {
     this->position += translation.getData();
     updateMatrix();
 }
 
-void TransformComponent::setScale(Vec3 scale)
+void TransformComponent::translateLocal(const Vec3& translation)
+{ 
+    Vec3 globalTranslation = this->rotation * translation.getData();
+    translate(globalTranslation);
+}
+
+void TransformComponent::setScale(const Vec3& scale)
 {
     this->scale = scale.getData();
     updateMatrix();
 }
 
-void TransformComponent::setEulerRotation(Vec3 eulerRotationDegrees)
+void TransformComponent::setEulerRotation(const Vec3& eulerRotationDegrees)
 {
     rotation = glm::quat(glm::radians(eulerRotationDegrees.getData()));
     updateMatrix();
 }
 
-void TransformComponent::rotateAround(Vec3& axis, float angleDegrees)
+void TransformComponent::rotateAround(const Vec3& axis, float angleDegrees)
 {
-    // this->globalMatrix = glm::rotate(this->globalMatrix, glm::radians(angleDegrees), glm::normalize(axis.getData()));
+    rotation = glm::rotate(this->globalMatrix, glm::radians(angleDegrees), glm::normalize(axis.getData()));
+    updateMatrix();
 }
 
-void TransformComponent::lookAt(Vec3 target, Vec3 up)
+void TransformComponent::lookAt(const Vec3& target, const Vec3& up)
 {
     glm::mat4 viewMatrix = glm::lookAt(this->position, target.getData(), up.getData());
     this->rotation = glm::quat_cast(viewMatrix);

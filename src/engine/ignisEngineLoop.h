@@ -12,6 +12,8 @@
 #include "timer.h"
 #include "inputHandler.h"
 #include "spriteRenderer.h"
+#include "meshRenderer.h"
+#include "firstPersonController.h"
 // #include "pythonEngine.h"
 #include "transformComponent.h"
 #include "ignisEngineGui.h"
@@ -129,6 +131,9 @@ void beginEngineMainLoop()
     SerializationHelper::registerComponentClass({ ComponentType::TRANSFORM, "Transform", []() { return new TransformComponent(); } });
     SerializationHelper::registerComponentClass({ ComponentType::SPRITE_RENDERER, "Sprite Renderer", [&]() { return new SpriteRenderer((Texture*)AssetManager::loadOrGetAsset(1), (Shader*)AssetManager::loadOrGetAsset(5)); } });
     SerializationHelper::registerComponentClass({ ComponentType::ANIMATOR, "Animator", []() { return new AnimatorComponent(); } });
+    SerializationHelper::registerComponentClass({ ComponentType::MESH_RENDERER, "Mesh Renderer", []() { return new MeshRenderer((Texture*)AssetManager::loadOrGetAsset(10980), (Shader*)AssetManager::loadOrGetAsset(5)); } });
+    SerializationHelper::registerComponentClass({ ComponentType::FIRST_PERSON_CONTROLLER, "First Person Controller", []() { return new FirstPersonController(5.0, 180.0); } });
+
 
     /*
     GameObject g0("g0");

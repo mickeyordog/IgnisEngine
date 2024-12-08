@@ -20,6 +20,7 @@ private:
 
 public:
     void updateKeys();
+    bool keyPressed(SDL_Scancode key);
 private:
     const Uint8* currentKeyStates;
 };

@@ -50,7 +50,7 @@ SDLContext::SDLContext(const char* name, int width, int height)
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
 	this->window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE );
-	if(this->window == NULL)
+	if (this->window == NULL)
 	{
 		printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 	}

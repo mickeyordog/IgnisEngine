@@ -6,16 +6,19 @@ add_library(engine
     component.cpp
     componentPy.cpp
     componentVisual.cpp
+    firstPersonController.cpp
     transformComponent.cpp
-    vec3.cpp
     scene.cpp
     gameObject.cpp
     cameraComponent.cpp
+    inputHandler.cpp
+    meshRenderer.cpp
     renderTexture.cpp
     shader.cpp
     spriteRenderer.cpp
     serializationHelper.cpp
     texture.cpp
+    vec3.cpp
 )
 
 set(engine_files

@@ -16,6 +16,7 @@ enum class FieldType
     COMPONENT_POINTER_FIELD,
 };
 
+// Could optimize this by just storing an offset instead of a ptr, then could be static per class
 struct FieldDescription
 {
     const char* name;
@@ -34,7 +35,9 @@ enum class ComponentType
     TRANSFORM = 1,
     SPRITE_RENDERER = 2,
     ANIMATOR = 3,
-    UNKNOWN = 4
+    MESH_RENDERER = 4,
+    FIRST_PERSON_CONTROLLER = 5,
+    UNKNOWN
 };
 
 class Component;

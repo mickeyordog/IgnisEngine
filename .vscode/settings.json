@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.yarnproject": "jsonc",
         "__bit_reference": "cpp",
         "__bits": "cpp",
         "__config": "cpp",
@@ -123,7 +124,9 @@
         "memory_resource": "cpp",
         "version": "cpp",
         "*.def": "cpp",
-        "*.macros": "cpp"
+        "*.macros": "cpp",
+        "numbers": "cpp",
+        "*.tcc": "cpp"
     },
     // Adapted from https://github.com/microsoft/vscode-cmake-tools/issues/506
     // be careful, I think lldb is Mac specific

@@ -8,6 +8,10 @@
 // - preferable stored as an enum
 void InputHandler::updateKeys()
 {
-    int numKeys;
-    this->currentKeyStates = SDL_GetKeyboardState(&numKeys);
+    this->currentKeyStates = SDL_GetKeyboardState(nullptr);
+}
+
+bool InputHandler::keyPressed(SDL_Scancode key)
+{
+    return this->currentKeyStates[key];
 }

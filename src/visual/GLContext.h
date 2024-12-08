@@ -18,15 +18,13 @@ private:
     SDL_GLContext context;
 };
 
-#ifdef WIN32
-void __stdcall glDebugOutput(GLenum source,
+void GLAPIENTRY glDebugOutput(GLenum source,
                             GLenum type,
                             unsigned int id,
                             GLenum severity,
                             GLsizei length,
                             const char* message,
                             const void* userParam);
-#endif
 
 
 GLenum glCheckError_(const char* file, int line);

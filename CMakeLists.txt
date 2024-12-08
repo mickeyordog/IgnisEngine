@@ -67,7 +67,7 @@ endif()
 find_package(glm CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
 
-set(SRC_DIRECTORIES input engine visual util audio scripting_system gui)
+set(SRC_DIRECTORIES engine visual util audio scripting_system gui)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
 foreach(DIR ${SRC_PATHS})
     add_subdirectory(${DIR})

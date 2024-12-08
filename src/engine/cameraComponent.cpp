@@ -47,7 +47,6 @@ void CameraComponent::renderScene(Scene& scene)
 
             Shader& shader = visualComponent->getShader();
             glm::mat4 model = currentObject->transform->getMatrix();
-            // TODO: I don't think taking inverse to get view is correct
             glm::mat4 view = glm::inverse(this->gameObject->transform->getMatrix()); // Is compiler smart enough to only compute this once?
             glm::mat4 projection = this->projectionMatrix;
             glm::mat4 mvp = projection * view * model;

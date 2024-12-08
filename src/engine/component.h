@@ -29,5 +29,3 @@ private:
         { GET_NAME(isActive), FieldType::BOOL_FIELD, &isActive }
     };
 };
-
-
