@@ -5,10 +5,21 @@
 #include <glm/gtx/quaternion.hpp>
 #include "serialization.h"
 
+struct Mat4;
+struct Vec3;
+
 struct Quat {
 public:
-    // TODO: could potentially have fromEuler constructor
+    Quat() : data() { };
     Quat(glm::quat data) : data(data) { };
+
+    Mat4 toMat4() const;
+
+    void lookAt(const Vec3& position, const Vec3& target, const Vec3& up);
+    void rotateAboutAxisEuler(const Vec3& axis, float angleDegrees);
+
+    static Vec3 toEuler(const Quat& quat);
+    static Quat fromEuler(const Vec3& eulerRotationDegrees);
 
     const glm::quat& getData() const { return this->data; }
 

@@ -36,7 +36,7 @@ void FirstPersonController::update(float dt)
         velocity.x() += 1.0;
     }
     if (velocity.x() != 0.0 || velocity.z() != 0.0) {
-        velocity *= gameObject->transform->getRotation();
+        velocity.applyRotation(gameObject->transform->getRotation());
         velocity.y() = 0.0;
         velocity.normalize();
         velocity *= dt * this->movementSpeed;

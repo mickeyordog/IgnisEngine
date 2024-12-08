@@ -33,11 +33,17 @@ void CameraComponent::renderScene(Scene& scene)
     glClearColor(1.0, 0.7, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    Mat4 view = this->gameObject->transform->getMatrix();
+    view.invert();
+    const Mat4& projection = this->projectionMatrix;
+
     auto sceneIterator = scene.getIterator();
     while (GameObject* currentObject = sceneIterator.getNext()) {
         if (!currentObject->isActive)
             continue;
 
+        const Mat4& model = currentObject->transform->getMatrix();
+        Mat4 mvp = projection * view * model;
         // TODO: it would be great to just be able to call gameObject.render() on each one, but need to get shader and set uniforms
         for (auto& component : currentObject->getComponents())
         {
@@ -46,11 +52,7 @@ void CameraComponent::renderScene(Scene& scene)
             ComponentVisual* visualComponent = (ComponentVisual*)component.get();
 
             Shader& shader = visualComponent->getShader();
-            glm::mat4 model = currentObject->transform->getMatrix();
-            glm::mat4 view = glm::inverse(this->gameObject->transform->getMatrix()); // Is compiler smart enough to only compute this once?
-            glm::mat4 projection = this->projectionMatrix;
-            glm::mat4 mvp = projection * view * model;
-            shader.setUniform("mvp", mvp);
+            shader.setUniform("mvp", mvp.getData());
 
             visualComponent->render();
         }
@@ -63,9 +65,9 @@ void CameraComponent::setProjectionMatrix()
 {
     if (orthographic)
         // projectionMatrix = glm::ortho(-(float)width / 2, (float)width / 2, -(float)height / 2, (float)height / 2, 0.1f, 1000.0f);
-        projectionMatrix = glm::ortho(-0.5f, 0.5f, -0.5f, 0.5f, 0.1f, 1000.0f); // TODO: find good way to make this work
+        projectionMatrix = Mat4(glm::ortho(-0.5f, 0.5f, -0.5f, 0.5f, 0.1f, 1000.0f)); // TODO: find good way to make this work
     else
-        projectionMatrix = glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 100.0f);
+        projectionMatrix = Mat4(glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 100.0f));
 }
 
 void CameraComponent::updateOutputTexture()

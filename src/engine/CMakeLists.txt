@@ -13,6 +13,7 @@ add_library(engine
     cameraComponent.cpp
     inputHandler.cpp
     meshRenderer.cpp
+    quat.cpp
     renderTexture.cpp
     shader.cpp
     spriteRenderer.cpp

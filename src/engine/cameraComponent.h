@@ -4,6 +4,7 @@
 #include <memory>
 #include "component.h"
 #include "renderTexture.h"
+#include "mat4.h"
 
 class Scene;
 class CameraComponent : public Component {
@@ -30,7 +31,7 @@ private:
         { "orthographic", FieldType::BOOL_FIELD, &orthographic, [&]() { this->setProjectionMatrix(); } }
     };
     RenderTexture* outputTexture = nullptr;
-    glm::mat4 projectionMatrix;
+    Mat4 projectionMatrix = Mat4(1.0f);
     int width, height;
     bool orthographic;
 };

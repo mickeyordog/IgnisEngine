@@ -24,44 +24,51 @@ void TransformComponent::update(float dt)
 
 void TransformComponent::setPosition(const Vec3& position)
 {
-    this->position = position.getData();
+    this->position = position;
     updateMatrix();
 }
 
 void TransformComponent::translate(const Vec3& translation)
 {
-    this->position += translation.getData();
+    this->position += translation;
     updateMatrix();
 }
 
 void TransformComponent::translateLocal(const Vec3& translation)
 { 
-    Vec3 globalTranslation = this->rotation * translation.getData();
+    Vec3 globalTranslation = translation;
+    globalTranslation.applyRotation(rotation);
     translate(globalTranslation);
 }
 
 void TransformComponent::setScale(const Vec3& scale)
 {
-    this->scale = scale.getData();
+    this->scale = scale;
     updateMatrix();
 }
 
 void TransformComponent::setEulerRotation(const Vec3& eulerRotationDegrees)
 {
-    rotation = glm::quat(glm::radians(eulerRotationDegrees.getData()));
+    rotation = Quat::fromEuler(eulerRotationDegrees);
     updateMatrix();
 }
 
 void TransformComponent::rotateAround(const Vec3& axis, float angleDegrees)
 {
-    rotation = glm::rotate(this->globalMatrix, glm::radians(angleDegrees), glm::normalize(axis.getData()));
+    rotation.rotateAboutAxisEuler(axis, angleDegrees);
+    updateMatrix();
+}
+
+void TransformComponent::rotateAroundLocal(const Vec3& axis, float angleDegrees)
+{
+    // TODO: in one of these, prob just have to transform axis by globalMatrix
+    rotation.rotateAboutAxisEuler(axis, angleDegrees);
     updateMatrix();
 }
 
 void TransformComponent::lookAt(const Vec3& target, const Vec3& up)
 {
-    glm::mat4 viewMatrix = glm::lookAt(this->position, target.getData(), up.getData());
-    this->rotation = glm::quat_cast(viewMatrix);
+    rotation.lookAt(position, target, up);
     updateMatrix();
 }
 
@@ -71,7 +78,12 @@ void TransformComponent::addChildTransform(TransformComponent* transform)
     transform->parentTransform = this;
 }
 
-void TransformComponent::setParentMatrix(glm::mat4& newParentMatrix)
+void TransformComponent::removeChildTransform(TransformComponent* transform)
+{ 
+    // TODO
+}
+
+void TransformComponent::setParentMatrix(const Mat4& newParentMatrix)
 {
     this->parentMatrix = newParentMatrix;
     updateMatrix();
@@ -87,10 +99,15 @@ void TransformComponent::updateChildTransforms()
 
 void TransformComponent::updateMatrix()
 {
-    glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
-    glm::mat4 rotationMatrix = glm::toMat4(rotation);
-    glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
+    Mat4 translationMatrix = Mat4(1.0f);
+    translationMatrix.translate(position);
+    Mat4 rotationMatrix = rotation.toMat4();
+    Mat4 scaleMatrix = Mat4(1.0f);
+    scaleMatrix.scale(scale);
     this->globalMatrix = parentMatrix * translationMatrix * rotationMatrix * scaleMatrix;
+
+    // TODO: This should only really happen in editor
+    guiEulerAngles = Quat::toEuler(rotation);
 
     updateChildTransforms();
 }
