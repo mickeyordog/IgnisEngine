@@ -94,13 +94,13 @@ void AssetManager::recursivelyRegisterAllAssetsInDirectory(const char* directory
 Texture* AssetManager::loadTexture(std::string& filepath)
 {
     stbi_set_flip_vertically_on_load(true); // can prob remove this and change flipping back on image part
-    int width, height, nrChannels;
-    unsigned char* data = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 0);
+    int width, height, numChannels;
+    unsigned char* data = stbi_load(filepath.c_str(), &width, &height, &numChannels, 0);
     if (data == NULL)
     {
         std::cout << "Failed to load texture" << std::endl;
     }
-    Texture* texture = new Texture(data, width, height);
+    Texture* texture = new Texture(data, width, height, numChannels);
     stbi_image_free(data);
 
     return texture;

@@ -5,7 +5,7 @@
 
 class Texture : public Asset {
 public:
-    Texture(unsigned char* data, int width, int height);
+    Texture(unsigned char* data, int width, int height, int numChannels);
     virtual ~Texture() override;
     virtual Asset* clone() override { return new Texture(*this); }
 

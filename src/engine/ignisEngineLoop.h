@@ -168,6 +168,9 @@ void beginEngineMainLoop()
     Scene scene = *(Scene*)AssetManager::loadOrGetAsset(43540);
     scene.mainCamera = scene.findCamera(); // TODO: set this when loading scene, should be mainCam field in scene file with ref to gameobject fileid
     scene.mainCamera->gameObject->addComponentOfType(ComponentType::FIRST_PERSON_CONTROLLER);
+    GameObject* cube = new GameObject("Cube");
+    cube->addComponentOfType(ComponentType::MESH_RENDERER);
+    scene.addRootGameObject(cube);
 
     // glViewport(0, 0, 200, 100);
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
