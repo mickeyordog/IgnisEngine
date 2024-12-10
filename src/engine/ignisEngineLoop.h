@@ -10,6 +10,9 @@
 #include "dearImGuiContext.h"
 #define LIGHTMAPPER_IMPLEMENTATION
 #include <lightmapper.h>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 #include "gameObject.h"
 #include "timer.h"
 #include "inputHandler.h"
@@ -174,67 +177,69 @@ void beginEngineMainLoop()
     cube->addComponentOfType(ComponentType::MESH_RENDERER);
     scene.addRootGameObject(cube);
 
-#pragma region lightmapper
-    lm_context* ctx = lmCreate(
-        64,               // hemicube rendering resolution/quality
-        0.001f, 100.0f,   // zNear, zFar
-        1.0f, 1.0f, 1.0f, // sky/clear color
-        2, 0.01f,         // hierarchical selective interpolation for speedup (passes, threshold)
-        0.0f);            // modifier for camera-to-surface distance for hemisphere rendering.
-    // tweak this to trade-off between interpolated vertex normal quality and other artifacts (see declaration).
-    if (!ctx)
-    {
-        printf("Could not initialize lightmapper.\n");
-        exit(-1);
-    }
+// #pragma region lightmapper
+//     lm_context* ctx = lmCreate(
+//         64,               // hemicube rendering resolution/quality
+//         0.001f, 100.0f,   // zNear, zFar
+//         1.0f, 1.0f, 1.0f, // sky/clear color
+//         2, 0.01f,         // hierarchical selective interpolation for speedup (passes, threshold)
+//         0.0f);            // modifier for camera-to-surface distance for hemisphere rendering.
+//     // tweak this to trade-off between interpolated vertex normal quality and other artifacts (see declaration).
+//     if (!ctx)
+//     {
+//         printf("Could not initialize lightmapper.\n");
+//         exit(-1);
+//     }
 
-    for (int b = 0; b < bounces; b++)
-    {
-        // render all geometry to their lightmaps
-        for (int i = 0; i < meshes; i++)
-        {
-            memset(mesh[i].lightmap, 0, sizeof(float) * mesh[i].lightmapWidth * mesh[i].lightmapHeight * 3); // clear lightmap to black
-            lmSetTargetLightmap(ctx, mesh[i].lightmap, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3);
+//     for (int b = 0; b < bounces; b++)
+//     {
+//         // render all geometry to their lightmaps
+//         for (int i = 0; i < meshes; i++)
+//         {
+//             memset(mesh[i].lightmap, 0, sizeof(float) * mesh[i].lightmapWidth * mesh[i].lightmapHeight * 3); // clear lightmap to black
+//             lmSetTargetLightmap(ctx, mesh[i].lightmap, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3);
 
-            lmSetGeometry(ctx, mesh[i].modelMatrix,
-                          LM_FLOAT, (uint8_t*)mesh[i].vertices + positionOffset, vertexSize,
-                          LM_NONE, NULL, 0, // optional vertex normals for smooth surfaces
-                          LM_FLOAT, (uint8_t*)mesh[i].vertices + lightmapUVOffset, vertexSize,
-                          mesh[i].indexCount, LM_UNSIGNED_SHORT, mesh[i].indices);
+//             lmSetGeometry(ctx, mesh[i].modelMatrix,
+//                           LM_FLOAT, (uint8_t*)mesh[i].vertices + positionOffset, vertexSize,
+//                           LM_NONE, NULL, 0, // optional vertex normals for smooth surfaces
+//                           LM_FLOAT, (uint8_t*)mesh[i].vertices + lightmapUVOffset, vertexSize,
+//                           mesh[i].indexCount, LM_UNSIGNED_SHORT, mesh[i].indices);
 
-            int vp[4];
-            mat4 view, proj;
-            while (lmBegin(ctx, vp, &view[0][0], &proj[0][0]))
-            {
-                // don't glClear on your own here!
-                glViewport(vp[0], vp[1], vp[2], vp[3]);
-                drawScene(view, proj);
-                printf("\r%6.2f%%", lmProgress(ctx) * 100.0f); // don't actually call printf that often ;) it's slow.
-                lmEnd(ctx);
-            }
-    }
+//             int vp[4];
+//             mat4 view, proj;
+//             while (lmBegin(ctx, vp, &view[0][0], &proj[0][0]))
+//             {
+//                 // don't glClear on your own here!
+//                 glViewport(vp[0], vp[1], vp[2], vp[3]);
+//                 drawScene(view, proj);
+//                 printf("\r%6.2f%%", lmProgress(ctx) * 100.0f); // don't actually call printf that often ;) it's slow.
+//                 lmEnd(ctx);
+//             }
+//     }
 
-        // postprocess and upload all lightmaps to the GPU now to use them for indirect lighting during the next bounce.
-        for (int i = 0; i < meshes; i++)
-        {
-            // you can also call other lmImage* here to postprocess the lightmap.
-            lmImageDilate(mesh[i].lightmap, temp, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3);
-            lmImageDilate(temp, mesh[i].lightmap, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3);
+//         // postprocess and upload all lightmaps to the GPU now to use them for indirect lighting during the next bounce.
+//         for (int i = 0; i < meshes; i++)
+//         {
+//             // you can also call other lmImage* here to postprocess the lightmap.
+//             lmImageDilate(mesh[i].lightmap, temp, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3);
+//             lmImageDilate(temp, mesh[i].lightmap, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3);
 
-            glBindTexture(GL_TEXTURE_2D, mesh[i].lightmapHandle);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 0, GL_RGB, GL_FLOAT, data);
-        }
-}
+//             glBindTexture(GL_TEXTURE_2D, mesh[i].lightmapHandle);
+//             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 0, GL_RGB, GL_FLOAT, data);
+//         }
+// }
 
-    lmDestroy(ctx);
+//     lmDestroy(ctx);
 
-    // gamma correct and save lightmaps to disk
-    for (int i = 0; i < meshes; i++)
-    {
-        lmImagePower(mesh[i].lightmap, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3, 1.0f / 2.2f);
-        lmImageSaveTGAf(mesh[i].lightmapFilename, mesh[i].lightmap, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3);
-    }
-    #pragma endregion
+//     // gamma correct and save lightmaps to disk
+//     for (int i = 0; i < meshes; i++)
+//     {
+//         lmImagePower(mesh[i].lightmap, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3, 1.0f / 2.2f);
+//         lmImageSaveTGAf(mesh[i].lightmapFilename, mesh[i].lightmap, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3);
+//     }
+//     #pragma endregion
+
+    Assimp::Importer import;
 
     // glViewport(0, 0, 200, 100);
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);

@@ -12,7 +12,9 @@ add_library(engine
     gameObject.cpp
     cameraComponent.cpp
     inputHandler.cpp
+    mesh.cpp
     meshRenderer.cpp
+    model.cpp
     quat.cpp
     renderTexture.cpp
     shader.cpp
@@ -52,6 +54,7 @@ target_link_libraries(
         IMGUI
         glm::glm
         visual
+        assimp
 )
 
 target_include_directories(
@@ -64,4 +67,5 @@ target_include_directories(
         ${STB_IMAGE_PATH}
         ${IMGUI_PATH}
         ${LIGHTMAPPER_PATH}
+        assimp
 )

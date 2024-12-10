@@ -25,13 +25,13 @@ target_link_libraries(${PROJECT_NAME}
 
 # got warning "WARNING: Static builds of Python will not have C extension modules available." on Windows. If Python doesn't work here that's why
 # currently using my system python which doesnt have debug, instead of vendored 3.10
-# if (APPLE)
-#     set(Python3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/python3)
-# elseif (WIN32)
-#     set(Python3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows/share/python3)
-# endif()
-# find_package(Python3 COMPONENTS Development REQUIRED)
-# target_link_libraries(${PROJECT_NAME} PRIVATE Python3::Python)
+if (APPLE)
+    set(Python3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/python3)
+elseif (WIN32)
+    set(Python3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows/share/python3)
+endif()
+find_package(Python3 COMPONENTS Development REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE Python3::Python)
 
 if (WIN32)
     set(GLEW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/glew)
@@ -70,6 +70,20 @@ elseif (WIN32)
 endif()
 find_package(glm CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
+
+include(FetchContent)
+set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/libs CACHE PATH "" FORCE)
+# assimp
+FetchContent_Declare(assimp
+GIT_REPOSITORY https://github.com/assimp/assimp.git
+GIT_TAG master)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE)
+set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(assimp)
+target_include_directories(${PROJECT_NAME} PRIVATE libs/assimp-src/include)
+target_link_libraries(${PROJECT_NAME} PRIVATE assimp)
 
 set(SRC_DIRECTORIES engine visual util audio scripting_system gui)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)

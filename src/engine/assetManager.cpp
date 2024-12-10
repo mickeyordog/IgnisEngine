@@ -35,6 +35,7 @@ Asset* AssetManager::loadOrGetAsset(IgnisGUID guid)
 
 std::unique_ptr<Asset> AssetManager::loadOrGetAssetCopy(IgnisGUID guid)
 {
+    // This is kinda weird, why am I doing this again? Would ideally just be using sharedptrs instead of cloning
     return std::unique_ptr<Asset>(loadOrGetAsset(guid)->clone()); // TODO: what if it's nullptr?
 }
 
@@ -100,7 +101,7 @@ Texture* AssetManager::loadTexture(std::string& filepath)
     {
         std::cout << "Failed to load texture" << std::endl;
     }
-    Texture* texture = new Texture(data, width, height, numChannels);
+    Texture* texture = new Texture(data, width, height, numChannels, TextureType::DIFFUSE);
     stbi_image_free(data);
 
     return texture;

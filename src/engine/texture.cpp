@@ -4,11 +4,8 @@
 #include "texture.h"
 #include "stb_image.h"
 
-Texture::Texture(unsigned char* data, int width, int height, int numChannels)
+Texture::Texture(unsigned char* data, int width, int height, int numChannels, TextureType type) : width(width), height(height), type(type)
 {
-    this->width = width;
-    this->height = height;
-
     glGenTextures(1, &this->textureHandle);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->textureHandle);
