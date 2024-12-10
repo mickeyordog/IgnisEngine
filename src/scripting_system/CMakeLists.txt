@@ -6,7 +6,7 @@ target_link_libraries(
     scripting_system
     PUBLIC
         SDL2::SDL2
-        PRIVATE Python3::Python
+        # PRIVATE Python3::Python
         # visual
 )
 

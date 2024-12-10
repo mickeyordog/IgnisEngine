@@ -25,13 +25,13 @@ target_link_libraries(${PROJECT_NAME}
 
 # got warning "WARNING: Static builds of Python will not have C extension modules available." on Windows. If Python doesn't work here that's why
 # currently using my system python which doesnt have debug, instead of vendored 3.10
-if (APPLE)
-    set(Python3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/python3)
-elseif (WIN32)
-    set(Python3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows/share/python3)
-endif()
-find_package(Python3 COMPONENTS Development REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE Python3::Python)
+# if (APPLE)
+#     set(Python3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/python3)
+# elseif (WIN32)
+#     set(Python3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows/share/python3)
+# endif()
+# find_package(Python3 COMPONENTS Development REQUIRED)
+# target_link_libraries(${PROJECT_NAME} PRIVATE Python3::Python)
 
 if (WIN32)
     set(GLEW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/glew)
@@ -44,6 +44,10 @@ set(STB_IMAGE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/cross-platform/stb_imag
 add_library(STB_IMAGE ${STB_IMAGE_PATH}/stb_image.cpp)
 target_include_directories(${PROJECT_NAME} PUBLIC ${STB_IMAGE_PATH})
 target_link_libraries(${PROJECT_NAME} PUBLIC STB_IMAGE)
+
+# TODO: prob remove this
+set(LIGHTMAPPER_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/cross-platform/lightmapper)
+target_include_directories(${PROJECT_NAME} PUBLIC ${LIGHTMAPPER_PATH})
 
 set(IMGUI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/cross-platform/dear-imgui)
 add_library(IMGUI ${IMGUI_PATH}/imgui.cpp ${IMGUI_PATH}/imgui_demo.cpp ${IMGUI_PATH}/imgui_draw.cpp ${IMGUI_PATH}/imgui_widgets.cpp ${IMGUI_PATH}/imgui_impl_sdl2.cpp ${IMGUI_PATH}/imgui_impl_opengl3.cpp ${IMGUI_PATH}/imgui_tables.cpp)

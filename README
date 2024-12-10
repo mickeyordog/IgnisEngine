@@ -23,3 +23,4 @@ Run:
 - ./build/IgnisEngine
 
 # TODO: build everything from source with CMake so I don't need separate libs for each OS, remove vcpkg
+# many of these have cmakelists so can just clone them as git submodules and have them live in project, compile for each platform
