@@ -79,7 +79,7 @@ GIT_REPOSITORY https://github.com/assimp/assimp.git
 GIT_TAG master)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE)
+set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE) # potentially would want to turn this on for release build
 set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(assimp)
 target_include_directories(${PROJECT_NAME} PRIVATE libs/assimp-src/include)

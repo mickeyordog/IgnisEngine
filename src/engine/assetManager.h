@@ -7,6 +7,7 @@
 #include "texture.h"
 #include "shader.h"
 #include "scene.h"
+#include "model.h"
 
 class AnimationController;
 class AnimationClip;
@@ -25,6 +26,7 @@ struct AssetFilepathInfo {
 class AssetManager {
 public:
     static Asset* loadOrGetAsset(IgnisGUID guid);
+    static Asset* loadOrGetAsset(const std::string& filepath);
     static std::unique_ptr<Asset> loadOrGetAssetCopy(IgnisGUID guid);
     static void recursivelyRegisterAllAssetsInDirectory(const char* directoryPath);
     static void unloadAsset(IgnisGUID guid) { loadedAssets.erase(guid); }
@@ -34,13 +36,13 @@ public:
 private:
     AssetManager() {} // TODO: prob want to make this singleton so I can control lifetime
     static Asset* loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& info);
-    static Texture* loadTexture(std::string& filepath);
+    static Texture* loadTexture(const std::string& filepath);
     static Shader* loadShader(std::string& filepath, std::string& fsFilepath);
     static Scene* loadScene(std::string& filepath);
     static AnimationController* loadAnimationController(std::string& filepath);
     static AnimationClip* loadAnimationClip(std::string& filepath);
+    static Model* loadModel(std::string& filepath);
     static AssetFilepathInfo getFileExtensionInfoFromFilePath(std::string filepath);
     static std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> loadedAssets;
     static std::unordered_map<IgnisGUID, AssetFilepathInfo> registeredAssetMetaFilepaths; // Is this the right way to smart ptr to c string?
-    // TODO: refactor into map from guid to AssetFilepathInfo
 };

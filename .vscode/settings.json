@@ -126,7 +126,9 @@
         "*.def": "cpp",
         "*.macros": "cpp",
         "numbers": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "rope": "cpp",
+        "slist": "cpp"
     },
     // Adapted from https://github.com/microsoft/vscode-cmake-tools/issues/506
     // be careful, I think lldb is Mac specific

@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <assimp/Importer.hpp>
 #include "texture.h"
 #include "serializationHelper.h"
 #include "animationController.h"
@@ -14,6 +15,15 @@
 
 std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> AssetManager::loadedAssets;
 std::unordered_map<IgnisGUID, AssetFilepathInfo> AssetManager::registeredAssetMetaFilepaths;
+
+// TODO: what happens if file not found or file not json?
+nlohmann::json loadJson(const std::string& filepath)
+{
+    std::ifstream i(filepath);
+    nlohmann::ordered_json json;
+    i >> json;
+    return json;
+}
 
 // TODO: this will be called by gameobject on each reference to asset it has, so it can get their pointer
 // Will probably be AssetManager's job to free all memory at end, or at end of scene
@@ -33,6 +43,12 @@ Asset* AssetManager::loadOrGetAsset(IgnisGUID guid)
     return nullptr;
 }
 
+Asset* AssetManager::loadOrGetAsset(const std::string& filepath)
+{
+    nlohmann::json metaFile = loadJson(filepath + ".meta");
+    return nullptr;
+}
+
 std::unique_ptr<Asset> AssetManager::loadOrGetAssetCopy(IgnisGUID guid)
 {
     // This is kinda weird, why am I doing this again? Would ideally just be using sharedptrs instead of cloning
@@ -42,7 +58,7 @@ std::unique_ptr<Asset> AssetManager::loadOrGetAssetCopy(IgnisGUID guid)
 Asset* AssetManager::loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& info)
 {
     Asset* ret;
-    if (info.metaExtension == "png")
+    if (info.metaExtension == "png" || info.metaExtension == "jpg")
     {
         ret = loadTexture(info.actualFilePath);
     }
@@ -65,6 +81,10 @@ Asset* AssetManager::loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& inf
     {
         ret = loadAnimationClip(info.actualFilePath);
     }
+    else if (info.metaExtension == "obj")
+    {
+        ret = loadModel(info.actualFilePath);
+    }
     else
     {
         std::cout << info.actualFilePath << " is not a supported file type" << std::endl;
@@ -75,6 +95,7 @@ Asset* AssetManager::loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& inf
     return ret;
 }
 
+// TODO: this should also add .meta files for all assets that don't have one
 void AssetManager::recursivelyRegisterAllAssetsInDirectory(const char* directoryPath)
 {
     for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
@@ -92,7 +113,7 @@ void AssetManager::recursivelyRegisterAllAssetsInDirectory(const char* directory
     }
 }
 
-Texture* AssetManager::loadTexture(std::string& filepath)
+Texture* AssetManager::loadTexture(const std::string& filepath)
 {
     stbi_set_flip_vertically_on_load(true); // can prob remove this and change flipping back on image part
     int width, height, numChannels;
@@ -141,14 +162,6 @@ Shader* AssetManager::loadShader(std::string& vsFilepath, std::string& fsFilepat
     return new Shader(vShaderCode, fShaderCode);
 }
 
-nlohmann::json loadJson(std::string& filepath)
-{
-    std::ifstream i(filepath);
-    nlohmann::ordered_json json;
-    i >> json;
-    return json;
-}
-
 Scene* AssetManager::loadScene(std::string& filepath)
 {
     nlohmann::ordered_json sceneJson = loadJson(filepath);
@@ -165,6 +178,21 @@ AnimationClip* AssetManager::loadAnimationClip(std::string& filepath)
 {
     nlohmann::ordered_json animClipJson = loadJson(filepath);
     return SerializationHelper::deserializeAnimationClip(animClipJson);
+}
+
+Model* AssetManager::loadModel(std::string& filepath)
+{
+    Assimp::Importer importer;
+    // consider also flags aiProcess_GenNormals and aiProcess_OptimizeMeshes
+    const aiScene* scene = importer.ReadFile(filepath, aiProcess_Triangulate | aiProcess_FlipUVs);
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    {
+        std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+        return nullptr;
+    }
+    // directory = path.substr(0, path.find_last_of('/'));
+
+    return new Model(scene);
 }
 
 AssetFilepathInfo AssetManager::getFileExtensionInfoFromFilePath(std::string filepath)

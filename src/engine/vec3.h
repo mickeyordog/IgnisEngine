@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <sstream>
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>

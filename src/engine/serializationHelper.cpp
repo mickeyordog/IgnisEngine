@@ -182,7 +182,7 @@ Scene* SerializationHelper::deserializeScene(const nlohmann::ordered_json& scene
                         field.postUpdateFunction();
                         break;
                     case FieldType::ASSET_POINTER_FIELD:
-                        *(Asset**)field.ptr = AssetManager::loadOrGetAsset(component[field.name]["value"]);
+                        *(Asset**)field.ptr = AssetManager::loadOrGetAsset(static_cast<IgnisGUID>(component[field.name]["value"]));
                         field.postUpdateFunction();
                         break;
                     default:
