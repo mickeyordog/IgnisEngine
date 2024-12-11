@@ -206,9 +206,10 @@ Model* AssetManager::loadModel(const std::string& filepath)
         std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
         return nullptr;
     }
-    std::string directory = filepath.substr(0, filepath.find_last_of('/') + 1);
 
-    return new Model(scene, directory);
+    // TODO: ideally would replace all strings here with filepath types. Can use .stem() and .extension() instead of manual decomposition
+    std::filesystem::path path(filepath);
+    return new Model(scene, path.parent_path().string());
 }
 
 AssetFilepathInfo AssetManager::getFileExtensionInfoFromFilePath(const std::string& filepath)

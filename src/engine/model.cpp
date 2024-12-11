@@ -2,7 +2,7 @@
 #include <iostream>
 #include "assetManager.h"
 
-Model::Model(const aiScene* assimpScene, const std::string& directory)
+Model::Model(const aiScene* assimpScene, const std::filesystem::path& directory)
 {
     processNode(assimpScene->mRootNode, assimpScene, directory);
 }
@@ -20,7 +20,7 @@ void Model::render(Shader& shader)
     }
 }
 
-void Model::processNode(aiNode* node, const aiScene* scene, const std::string& directory)
+void Model::processNode(aiNode* node, const aiScene* scene, const std::filesystem::path& directory)
 { 
     // process all the node’s meshes (if any)
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -36,7 +36,7 @@ void Model::processNode(aiNode* node, const aiScene* scene, const std::string& d
     }
 }
 
-Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, const std::string& directory)
+Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, const std::filesystem::path& directory)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -76,14 +76,14 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, const std::string& d
     return Mesh(vertices, indices, textures);
 }
 
-std::vector<Texture*> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType textureType, const std::string& directory)
+std::vector<Texture*> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType textureType, const std::filesystem::path& directory)
 {
     std::vector<Texture*> textures;
     for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
     {
         aiString path;
         mat->GetTexture(type, i, &path);
-        Texture* texture = (Texture*)AssetManager::loadOrGetAsset(directory + path.C_Str());
+        Texture* texture = (Texture*)AssetManager::loadOrGetAsset((directory / path.C_Str()).string());
         textures.push_back(texture);
     }
     return textures;
