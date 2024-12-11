@@ -30,7 +30,7 @@ void Mesh::render(const Shader& shader)
             default:
                 break;
         }
-        shader.setFloat(("material." + name + number).c_str(), i);
+        shader.setInt((/*"material." + */name + number).c_str(), i);
         glBindTexture(GL_TEXTURE_2D, textures[i]->textureHandle);
     }
     glActiveTexture(GL_TEXTURE0);

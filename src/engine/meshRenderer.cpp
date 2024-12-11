@@ -77,7 +77,7 @@
 
 MeshRenderer::MeshRenderer(Model* model, Shader* shader) : model(model), shader(shader)
 { 
-
+    fields.insert(fields.begin(), ComponentVisual::getFields().begin(), ComponentVisual::getFields().end());
 }
 
 MeshRenderer::~MeshRenderer()

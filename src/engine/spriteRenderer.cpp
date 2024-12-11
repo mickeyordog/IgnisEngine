@@ -2,12 +2,10 @@
 #include <GL/glew.h>
 #include <iostream>
 
-SpriteRenderer::SpriteRenderer(Texture* texture, Shader* shader)
+SpriteRenderer::SpriteRenderer(Texture* texture, Shader* shader) : texture(texture), shader(shader)
 {
     fields.insert(fields.begin(), ComponentVisual::getFields().begin(), ComponentVisual::getFields().end());
 
-    this->texture = texture;
-    this->shader = shader;
     // x, y, z, u, v
     const float vertices[] = {
         0.5f, 0.5f, 0.0f, 1.0f, 1.0f,   // top right

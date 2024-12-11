@@ -8,18 +8,12 @@
 #include "SDLContext.h"
 #include "GLContext.h"
 #include "dearImGuiContext.h"
-#define LIGHTMAPPER_IMPLEMENTATION
-#include <lightmapper.h>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include "gameObject.h"
 #include "timer.h"
 #include "inputHandler.h"
 #include "spriteRenderer.h"
 #include "meshRenderer.h"
 #include "firstPersonController.h"
-// #include "pythonEngine.h"
 #include "transformComponent.h"
 #include "ignisEngineGui.h"
 #include "scene.h"
@@ -134,7 +128,7 @@ void beginEngineMainLoop()
 
     SerializationHelper::registerComponentClass({ ComponentType::CAMERA, "Camera", []() { return new CameraComponent(800, 800); } });
     SerializationHelper::registerComponentClass({ ComponentType::TRANSFORM, "Transform", []() { return new TransformComponent(); } });
-    SerializationHelper::registerComponentClass({ ComponentType::SPRITE_RENDERER, "Sprite Renderer", [&]() { return new SpriteRenderer((Texture*)AssetManager::loadOrGetAsset(1), (Shader*)AssetManager::loadOrGetAsset(523457802578)); } });
+    SerializationHelper::registerComponentClass({ ComponentType::SPRITE_RENDERER, "Sprite Renderer", []() { return new SpriteRenderer((Texture*)AssetManager::loadOrGetAsset(1), (Shader*)AssetManager::loadOrGetAsset(523457802578)); } });
     SerializationHelper::registerComponentClass({ ComponentType::ANIMATOR, "Animator", []() { return new AnimatorComponent(); } });
     SerializationHelper::registerComponentClass({ ComponentType::MESH_RENDERER, "Mesh Renderer", []() { return new MeshRenderer((Model*)AssetManager::loadOrGetAsset(43423423423), (Shader*)AssetManager::loadOrGetAsset(5)); } });
     SerializationHelper::registerComponentClass({ ComponentType::FIRST_PERSON_CONTROLLER, "First Person Controller", []() { return new FirstPersonController(5.0, 180.0); } });
@@ -238,8 +232,6 @@ void beginEngineMainLoop()
 //         lmImageSaveTGAf(mesh[i].lightmapFilename, mesh[i].lightmap, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3);
 //     }
 //     #pragma endregion
-
-    Assimp::Importer import;
 
     // glViewport(0, 0, 200, 100);
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);

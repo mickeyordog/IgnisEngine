@@ -81,13 +81,9 @@ std::vector<Texture*> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType
     std::vector<Texture*> textures;
     for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
     {
-        // TODO: this needs to be just loading texture if has already been loaded
         aiString path;
         mat->GetTexture(type, i, &path);
         Texture* texture = (Texture*)AssetManager::loadOrGetAsset(directory + path.C_Str());
-        // texture.id = TextureFromFile(path.C_Str(), directory);
-        // texture.type = textureType;
-        // texture.path = path;
         textures.push_back(texture);
     }
     return textures;

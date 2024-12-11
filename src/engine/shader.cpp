@@ -63,7 +63,7 @@ void Shader::use() const
     glUseProgram(this->id);
 }
 
-void Shader::setUniform(const char* name, const glm::mat4& value)
+void Shader::setUniform(const char* name, const glm::mat4& value) const
 {
     this->use(); // could micro optimize this b/c doesn't need to be called if several uniforms set at once
     GLuint uniformLocation = glGetUniformLocation(this->id, name);
@@ -75,4 +75,11 @@ void Shader::setFloat(const char* name, float value) const
     this->use();
     GLuint uniformLocation = glGetUniformLocation(this->id, name);
     glUniform1f(uniformLocation, value);
+}
+
+void Shader::setInt(const char* name, int value) const
+{
+    this->use();
+    GLuint uniformLocation = glGetUniformLocation(this->id, name);
+    glUniform1i(uniformLocation, value);
 }
