@@ -16,12 +16,25 @@
 std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> AssetManager::loadedAssets;
 std::unordered_map<IgnisGUID, AssetFilepathInfo> AssetManager::registeredAssetMetaFilepaths;
 
-// TODO: what happens if file not found or file not json?
+// TODO: need to go through here and everywhere assets loaded to make sure they can handle being passed nullptr if not found
 nlohmann::json loadJson(const std::string& filepath)
 {
-    std::ifstream i(filepath);
     nlohmann::ordered_json json;
-    i >> json;
+    try
+    {
+        std::ifstream i(filepath);
+        i >> json;
+    }
+    catch (nlohmann::json::exception e)
+    {
+        std::cout << "ERROR::JSON filepath: " << filepath << std::endl << e.what() << std::endl;
+        return nullptr;
+    }
+    catch (std::exception e)
+    {
+        std::cout << "ERROR::JSONLOAD filepath: " << filepath << std::endl << e.what() << std::endl;
+        return nullptr;
+    }
     return json;
 }
 
@@ -30,7 +43,7 @@ nlohmann::json loadJson(const std::string& filepath)
 // Can maybe have asset manager load all assets that will be used by the scene when loading the scene itself
 // At some point also need to autogenerate meta files, e.g. png meta that lets me slice and specify mip maps and all that
 // TODO: do I want to add some type safety here? Currently you need to cast Asset* into e.g. Texture* which might cause crash if unexpected type
-Asset* AssetManager::loadOrGetAsset(IgnisGUID guid)
+Asset* AssetManager::loadOrGetAsset(const IgnisGUID guid)
 {
     if (auto search = loadedAssets.find(guid); search != loadedAssets.end())
     {
@@ -43,19 +56,22 @@ Asset* AssetManager::loadOrGetAsset(IgnisGUID guid)
     return nullptr;
 }
 
+// TODO: if loading by path prob shouldn't assume it has a meta file, would also make it easier for me
 Asset* AssetManager::loadOrGetAsset(const std::string& filepath)
 {
     nlohmann::json metaFile = loadJson(filepath + ".meta");
-    return nullptr;
+    if (metaFile == nullptr)
+        return nullptr;
+    return AssetManager::loadOrGetAsset((IgnisGUID)metaFile["guid"]);
 }
 
-std::unique_ptr<Asset> AssetManager::loadOrGetAssetCopy(IgnisGUID guid)
+std::unique_ptr<Asset> AssetManager::loadOrGetAssetCopy(const IgnisGUID guid)
 {
     // This is kinda weird, why am I doing this again? Would ideally just be using sharedptrs instead of cloning
     return std::unique_ptr<Asset>(loadOrGetAsset(guid)->clone()); // TODO: what if it's nullptr?
 }
 
-Asset* AssetManager::loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& info)
+Asset* AssetManager::loadAndRegisterAsset(const IgnisGUID guid, const AssetFilepathInfo& info)
 {
     Asset* ret;
     if (info.metaExtension == "png" || info.metaExtension == "jpg")
@@ -128,7 +144,7 @@ Texture* AssetManager::loadTexture(const std::string& filepath)
     return texture;
 }
 
-Shader* AssetManager::loadShader(std::string& vsFilepath, std::string& fsFilepath)
+Shader* AssetManager::loadShader(const std::string& vsFilepath, const std::string& fsFilepath)
 {
     std::string vertexCode;
     std::string fragmentCode;
@@ -162,25 +178,25 @@ Shader* AssetManager::loadShader(std::string& vsFilepath, std::string& fsFilepat
     return new Shader(vShaderCode, fShaderCode);
 }
 
-Scene* AssetManager::loadScene(std::string& filepath)
+Scene* AssetManager::loadScene(const std::string& filepath)
 {
     nlohmann::ordered_json sceneJson = loadJson(filepath);
     return SerializationHelper::deserializeScene(sceneJson);
 }
 
-AnimationController* AssetManager::loadAnimationController(std::string& filepath)
+AnimationController* AssetManager::loadAnimationController(const std::string& filepath)
 {
     nlohmann::ordered_json animControllerJson = loadJson(filepath);
     return SerializationHelper::deserializeAnimationController(animControllerJson);
 }
 
-AnimationClip* AssetManager::loadAnimationClip(std::string& filepath)
+AnimationClip* AssetManager::loadAnimationClip(const std::string& filepath)
 {
     nlohmann::ordered_json animClipJson = loadJson(filepath);
     return SerializationHelper::deserializeAnimationClip(animClipJson);
 }
 
-Model* AssetManager::loadModel(std::string& filepath)
+Model* AssetManager::loadModel(const std::string& filepath)
 {
     Assimp::Importer importer;
     // consider also flags aiProcess_GenNormals and aiProcess_OptimizeMeshes
@@ -190,12 +206,12 @@ Model* AssetManager::loadModel(std::string& filepath)
         std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
         return nullptr;
     }
-    // directory = path.substr(0, path.find_last_of('/'));
+    std::string directory = filepath.substr(0, filepath.find_last_of('/') + 1);
 
-    return new Model(scene);
+    return new Model(scene, directory);
 }
 
-AssetFilepathInfo AssetManager::getFileExtensionInfoFromFilePath(std::string filepath)
+AssetFilepathInfo AssetManager::getFileExtensionInfoFromFilePath(const std::string& filepath)
 {
     // Maybe I could store type in file and avoid doing this nonsense
     int lastDotIndex = -1;

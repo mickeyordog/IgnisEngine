@@ -27,22 +27,22 @@ class AssetManager {
 public:
     static Asset* loadOrGetAsset(IgnisGUID guid);
     static Asset* loadOrGetAsset(const std::string& filepath);
-    static std::unique_ptr<Asset> loadOrGetAssetCopy(IgnisGUID guid);
+    static std::unique_ptr<Asset> loadOrGetAssetCopy(const IgnisGUID guid);
     static void recursivelyRegisterAllAssetsInDirectory(const char* directoryPath);
-    static void unloadAsset(IgnisGUID guid) { loadedAssets.erase(guid); }
+    static void unloadAsset(const IgnisGUID guid) { loadedAssets.erase(guid); }
     static void unloadAllAssets() { loadedAssets.clear(); }
     static const std::unordered_map<IgnisGUID, AssetFilepathInfo>& getRegisteredAssetMetaFilepaths() { return registeredAssetMetaFilepaths; }
 
 private:
     AssetManager() {} // TODO: prob want to make this singleton so I can control lifetime
-    static Asset* loadAndRegisterAsset(IgnisGUID guid, AssetFilepathInfo& info);
+    static Asset* loadAndRegisterAsset(const IgnisGUID guid, const AssetFilepathInfo& info);
     static Texture* loadTexture(const std::string& filepath);
-    static Shader* loadShader(std::string& filepath, std::string& fsFilepath);
-    static Scene* loadScene(std::string& filepath);
-    static AnimationController* loadAnimationController(std::string& filepath);
-    static AnimationClip* loadAnimationClip(std::string& filepath);
-    static Model* loadModel(std::string& filepath);
-    static AssetFilepathInfo getFileExtensionInfoFromFilePath(std::string filepath);
+    static Shader* loadShader(const std::string& filepath, const std::string& fsFilepath);
+    static Scene* loadScene(const std::string& filepath);
+    static AnimationController* loadAnimationController(const std::string& filepath);
+    static AnimationClip* loadAnimationClip(const std::string& filepath);
+    static Model* loadModel(const std::string& filepath);
+    static AssetFilepathInfo getFileExtensionInfoFromFilePath(const std::string& filepath);
     static std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> loadedAssets;
     static std::unordered_map<IgnisGUID, AssetFilepathInfo> registeredAssetMetaFilepaths; // Is this the right way to smart ptr to c string?
 };

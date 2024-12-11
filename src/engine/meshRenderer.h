@@ -3,10 +3,14 @@
 #include "texture.h"
 #include "shader.h"
 #include "componentVisual.h"
+#include "model.h"
 
+// TODO: rename to ModelRenderer?
+// should prob have a sharedptr to model
 class MeshRenderer : public ComponentVisual {
 public:
-    MeshRenderer(Texture* texture, Shader* shader);
+    // MeshRenderer(Texture* texture, Shader* shader);
+    MeshRenderer(Model* model, Shader* shader);
     ~MeshRenderer();
     virtual void start() override;
     virtual void update(float dt) override;
@@ -18,13 +22,12 @@ public:
 
 private:
     std::vector<FieldDescription> fields = {
-        { GET_NAME(texture), FieldType::ASSET_POINTER_FIELD, &texture, []() { }, "png" },
-        { GET_NAME(shader), FieldType::ASSET_POINTER_FIELD, &shader, []() { }, "shader" }
+        // { GET_NAME(texture), FieldType::ASSET_POINTER_FIELD, &texture, []() { }, "png" },
+        // { GET_NAME(shader), FieldType::ASSET_POINTER_FIELD, &shader, []() { }, "shader" }
     };
-    // TODO: this no longer needs vao vbo or texture as that will be gotten from mesh property
-    // Think still need the shader though
-    // Actually maybe shader is part of a material class that also contains texture
-    GLuint VAO, VBO;
-    Texture* texture;
+    // GLuint VAO, VBO;
+    // Texture* texture;
+    // Shader* shader;
+    Model* model;
     Shader* shader;
 };

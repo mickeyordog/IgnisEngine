@@ -8,7 +8,8 @@
 
 class Model : public Asset {
 public:
-    Model(const aiScene* assimpScene);
+    // don't like having to pass around directory like this
+    Model(const aiScene* assimpScene, const std::string& directory);
 
     void render(Shader& shader);
     virtual ~Model() override;
@@ -17,8 +18,7 @@ public:
 private:
     // model data
     std::vector<Mesh> meshes;
-    std::string directory;
-    void processNode(aiNode* node, const aiScene* scene);
-    Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-    std::vector<Texture*> loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType textureType);
+    void processNode(aiNode* node, const aiScene* scene, const std::string& directory);
+    Mesh processMesh(aiMesh* mesh, const aiScene* scene, const std::string& directory);
+    std::vector<Texture*> loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType textureType, const std::string& directory);
 };

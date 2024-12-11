@@ -2,9 +2,9 @@
 #include <iostream>
 #include "assetManager.h"
 
-Model::Model(const aiScene* assimpScene)
+Model::Model(const aiScene* assimpScene, const std::string& directory)
 {
-    processNode(assimpScene->mRootNode, assimpScene);
+    processNode(assimpScene->mRootNode, assimpScene, directory);
 }
 
 Model::~Model()
@@ -20,23 +20,23 @@ void Model::render(Shader& shader)
     }
 }
 
-void Model::processNode(aiNode* node, const aiScene* scene)
+void Model::processNode(aiNode* node, const aiScene* scene, const std::string& directory)
 { 
     // process all the node’s meshes (if any)
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(processMesh(mesh, scene));
+        meshes.push_back(processMesh(mesh, scene, directory));
     }
 
     // then do the same for each of its children
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        processNode(node->mChildren[i], scene);
+        processNode(node->mChildren[i], scene, directory);
     }
 }
 
-Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
+Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, const std::string& directory)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -68,15 +68,15 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        std::vector<Texture*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::DIFFUSE);
+        std::vector<Texture*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::DIFFUSE, directory);
         textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-        std::vector<Texture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, TextureType::SPECULAR);
+        std::vector<Texture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, TextureType::SPECULAR, directory);
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
     return Mesh(vertices, indices, textures);
 }
 
-std::vector<Texture*> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType textureType)
+std::vector<Texture*> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType textureType, const std::string& directory)
 {
     std::vector<Texture*> textures;
     for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
