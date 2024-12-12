@@ -84,7 +84,13 @@ std::vector<Texture*> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType
     {
         aiString path;
         mat->GetTexture(type, i, &path);
-        Texture* texture = (Texture*)AssetManager::loadOrGetAsset((directory / path.C_Str()).string());
+        std::string filepathStr = path.C_Str();
+        // path can return with backslashes, replace them with forward slashes so it works on other platforms
+        std::replace(filepathStr.begin(), filepathStr.end(), '\\', '/');
+        std::filesystem::path filepath(filepathStr);
+        filepath.make_preferred();
+        Texture* texture = (Texture*)AssetManager::loadOrGetAsset(directory / filepath);
+        
         textures.push_back(texture);
     }
     return textures;

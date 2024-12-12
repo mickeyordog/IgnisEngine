@@ -17,6 +17,7 @@ enum class FieldType
 };
 
 // Could optimize this by just storing an offset instead of a ptr, then could be static per class
+// TODO: should not specify valid file extension here, that should be per asset type
 struct FieldDescription
 {
     const char* name;
