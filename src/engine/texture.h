@@ -15,6 +15,7 @@ public:
     Texture(unsigned char* data, int width, int height, int numChannels, TextureType type);
     virtual ~Texture() override;
     virtual Asset* clone() override { return new Texture(*this); }
+    virtual AssetType getAssetType() const override { return AssetType::TEXTURE; }
 
     void bind() const;
     TextureType type;

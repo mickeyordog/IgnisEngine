@@ -37,13 +37,12 @@ void showComponent(Component* component) {
         case FieldType::ASSET_POINTER_FIELD:
             if (!ImGui::TreeNode(f.name, "Pointer to %s: %p", f.name, *(void**)f.ptr))
                 continue;
-            for (auto& [guid, info] : AssetManager::getRegisteredAssetMetaFilepaths())
+            for (const auto& [guid, filepath] : AssetManager::getRegisteredAssetMetaFilepaths())
             {
-                if (info.metaExtension.compare(f.validFileExtension) != 0)
+                if (filepath.extension().string() != f.validFileExtension)
                     continue;
-                if (ImGui::Selectable(info.actualFilePath.c_str()))
-                {
-                    *(Texture**)f.ptr = (Texture*)AssetManager::loadOrGetAsset(guid);
+                if (ImGui::Selectable(filepath.c_str())) {
+                    *(Asset**)f.ptr = (Asset*)AssetManager::loadOrGetAsset(guid);
                 }
             }
             ImGui::TreePop();

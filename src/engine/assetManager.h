@@ -12,13 +12,6 @@
 class AnimationController;
 class AnimationClip;
 
-struct AssetFilepathInfo {
-    std::string fullFilepath;
-    std::string pathWithoutMetaExtension;
-    std::string metaExtension;
-    std::string actualFilePath;
-};
-
 // There is a potential problem if e.g. I have a material asset that some objects use
 // Then if the asset file changes, how would I update the objects that use it?
 // To solve this, probably just have a button in engine that reloads all assets
@@ -26,23 +19,33 @@ struct AssetFilepathInfo {
 class AssetManager {
 public:
     static Asset* loadOrGetAsset(IgnisGUID guid);
-    static Asset* loadOrGetAsset(const std::string& filepath);
+    static Asset* loadOrGetAsset(const std::filesystem::path& filepath);
     static std::unique_ptr<Asset> loadOrGetAssetCopy(const IgnisGUID guid);
-    static void recursivelyRegisterAllAssetsInDirectory(const char* directoryPath);
+    static void recursivelyRegisterAllAssetsInDirectory(const std::filesystem::path& directoryPath);
     static void unloadAsset(const IgnisGUID guid) { loadedAssets.erase(guid); }
     static void unloadAllAssets() { loadedAssets.clear(); }
-    static const std::unordered_map<IgnisGUID, AssetFilepathInfo>& getRegisteredAssetMetaFilepaths() { return registeredAssetMetaFilepaths; }
+    static const std::unordered_map<IgnisGUID, std::filesystem::path>& getRegisteredAssetMetaFilepaths() { return registeredAssetMetaFilepaths; }
 
 private:
-    AssetManager() {} // TODO: prob want to make this singleton so I can control lifetime
-    static Asset* loadAndRegisterAsset(const IgnisGUID guid, const AssetFilepathInfo& info);
-    static Texture* loadTexture(const std::string& filepath);
-    static Shader* loadShader(const std::string& filepath, const std::string& fsFilepath);
-    static Scene* loadScene(const std::string& filepath);
-    static AnimationController* loadAnimationController(const std::string& filepath);
-    static AnimationClip* loadAnimationClip(const std::string& filepath);
-    static Model* loadModel(const std::string& filepath);
-    static AssetFilepathInfo getFileExtensionInfoFromFilePath(const std::string& filepath);
-    static std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> loadedAssets;
-    static std::unordered_map<IgnisGUID, AssetFilepathInfo> registeredAssetMetaFilepaths; // Is this the right way to smart ptr to c string?
+    AssetManager() {} // TODO: prob want to make this singleton so I can control lifetime. Otherwise delete ctor
+    static Asset* loadAndRegisterAsset(const IgnisGUID guid, const std::filesystem::path& filepath);
+    static Texture* loadTexture(const std::filesystem::path& filepath);
+    static Shader* loadShader(const std::filesystem::path& vsFilepath, const std::filesystem::path& fsFilepath);
+    static Scene* loadScene(const std::filesystem::path& filepath);
+    static AnimationController* loadAnimationController(const std::filesystem::path& filepath);
+    static AnimationClip* loadAnimationClip(const std::filesystem::path& filepath);
+    static Model* loadModel(const std::filesystem::path& filepath);
+
+    inline static std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> loadedAssets;
+    inline static std::unordered_map<IgnisGUID, std::filesystem::path> registeredAssetMetaFilepaths; // Is this the right way to smart ptr to c string?
+    inline static const std::unordered_map<AssetType, std::unordered_set<std::string>> assetTypeToValidExts {
+        {AssetType::SHADER, {".shader"}},
+        {AssetType::TEXTURE, {".png"}},
+        {AssetType::MODEL, {".fbx"}},
+        {AssetType::SCENE, {".scene"}},
+    };
+
+    inline static const char* GUID_STR = "guid";
+    inline static const char* META_EXT = ".meta";
+
 };

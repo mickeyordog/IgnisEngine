@@ -11,13 +11,11 @@
 #include "texture.h"
 #include "serializationHelper.h"
 #include "animationController.h"
+#include <randomNumberGenerator.h>
 
-
-std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> AssetManager::loadedAssets;
-std::unordered_map<IgnisGUID, AssetFilepathInfo> AssetManager::registeredAssetMetaFilepaths;
 
 // TODO: need to go through here and everywhere assets loaded to make sure they can handle being passed nullptr if not found
-nlohmann::json loadJson(const std::string& filepath)
+nlohmann::json loadJson(const std::filesystem::path& filepath)
 {
     nlohmann::ordered_json json;
     try
@@ -57,9 +55,11 @@ Asset* AssetManager::loadOrGetAsset(const IgnisGUID guid)
 }
 
 // TODO: if loading by path prob shouldn't assume it has a meta file, would also make it easier for me
-Asset* AssetManager::loadOrGetAsset(const std::string& filepath)
+Asset* AssetManager::loadOrGetAsset(const std::filesystem::path& filepath)
 {
-    nlohmann::json metaFile = loadJson(filepath + ".meta");
+    std::filesystem::path metaPath = filepath;
+    metaPath.replace_extension(filepath.extension().string() + META_EXT);
+    nlohmann::json metaFile = loadJson(metaPath);
     if (metaFile == nullptr)
         return nullptr;
     return AssetManager::loadOrGetAsset((IgnisGUID)metaFile["guid"]);
@@ -71,39 +71,38 @@ std::unique_ptr<Asset> AssetManager::loadOrGetAssetCopy(const IgnisGUID guid)
     return std::unique_ptr<Asset>(loadOrGetAsset(guid)->clone()); // TODO: what if it's nullptr?
 }
 
-Asset* AssetManager::loadAndRegisterAsset(const IgnisGUID guid, const AssetFilepathInfo& info)
+Asset* AssetManager::loadAndRegisterAsset(const IgnisGUID guid, const std::filesystem::path& filepath)
 {
-    Asset* ret;
-    if (info.metaExtension == "png" || info.metaExtension == "jpg")
-    {
-        ret = loadTexture(info.actualFilePath);
+    Asset* ret = nullptr;
+    for (const auto& [assetType, extSet] : assetTypeToValidExts) {
+        if (extSet.find(filepath.extension()) != extSet.end())
+        {
+            switch (assetType) {
+                case AssetType::SHADER:
+                {
+                    // TODO: should make shader an asset that points to 2 shader source assets with guids
+                    std::filesystem::path stem = filepath;
+                    stem.replace_extension("");
+                    ret = loadShader(stem.string() + ".vs", stem.string() + ".fs");
+                    break;
+                }
+                case AssetType::TEXTURE:
+                    ret = loadTexture(filepath);
+                    break;
+                case AssetType::MODEL:
+                    ret = loadModel(filepath);
+                    break;
+                case AssetType::SCENE:
+                    ret = loadScene(filepath);
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
     }
-    else if (info.metaExtension == "shader")
-    {
-        // TODO: should make shader an asset that points to 2 shader source assets
-        std::string vsFilepath = info.pathWithoutMetaExtension + ".vs";
-        std::string fsFilepath = info.pathWithoutMetaExtension + ".fs";
-        ret = loadShader(vsFilepath, fsFilepath);
-    }
-    else if (info.metaExtension == "scene")
-    {
-        ret = loadScene(info.actualFilePath);
-    }
-    else if (info.metaExtension == "controller") 
-    {
-        ret = loadAnimationController(info.actualFilePath);
-    }
-    else if (info.metaExtension == "clip")
-    {
-        ret = loadAnimationClip(info.actualFilePath);
-    }
-    else if (info.metaExtension == "obj" || info.metaExtension == "fbx")
-    {
-        ret = loadModel(info.actualFilePath);
-    }
-    else
-    {
-        std::cout << info.actualFilePath << " is not a supported file type" << std::endl;
+    if (ret == nullptr) {
+        std::cout << "Loaded asset is nullptr, " << filepath << " may not be a supported file type" << std::endl;
         return nullptr;
     }
     AssetManager::loadedAssets[guid] = std::unique_ptr<Asset>(ret);
@@ -111,25 +110,54 @@ Asset* AssetManager::loadAndRegisterAsset(const IgnisGUID guid, const AssetFilep
     return ret;
 }
 
-// TODO: this should also add .meta files for all assets that don't have one
-void AssetManager::recursivelyRegisterAllAssetsInDirectory(const char* directoryPath)
+void AssetManager::recursivelyRegisterAllAssetsInDirectory(const std::filesystem::path& directoryPath)
 {
-    for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
-        if (entry.path().extension().compare(".meta") == 0) {
-            // TODO: this uses std::string which textbook guy said not to. However it only does it once per game startup so probably fine. But maybe look into removing, I couldn't figure it out
-            AssetFilepathInfo info = getFileExtensionInfoFromFilePath(entry.path().string());
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(directoryPath)) {
+        if (entry.is_regular_file()) {
+            if (entry.path().extension().compare(META_EXT) == 0)
+            {
+                // TODO: this uses std::string which textbook guy said not to. However it only does it once per game startup so probably fine. But maybe look into removing, I couldn't figure it out
+                // solution: just use filesystem::path, don't need to store all these separate stringse
 
-            std::ifstream f(entry.path());
-            nlohmann::json json = nlohmann::json::parse(f); // Is this alright to do? It probably copies the string yeah?
-            registeredAssetMetaFilepaths[json["guid"]] = info; 
-        }
-        else if (entry.is_directory()) {
-            recursivelyRegisterAllAssetsInDirectory(entry.path().string().c_str());
+                std::ifstream f(entry.path());
+                nlohmann::json json = nlohmann::json::parse(f);
+                IgnisGUID guid = json[GUID_STR];
+                if (registeredAssetMetaFilepaths.find(guid) == registeredAssetMetaFilepaths.end()) {
+                    // Register path without .meta
+                    std::string path = entry.path().string();
+                    registeredAssetMetaFilepaths[guid] = path.substr(0, path.length() - strlen(META_EXT));
+                }
+            } else {
+                // check if it's a valid asset extension
+                for (const auto& pair : assetTypeToValidExts) {
+                    const auto& extSet = pair.second;
+                    const std::string ext = entry.path().extension();
+                    if (extSet.find(ext) != extSet.end()) {
+                        // Check if meta file already exists
+                        std::filesystem::path metaPath = entry.path();
+                        metaPath.replace_extension(ext + META_EXT);
+                        if (!std::filesystem::exists(metaPath))
+                        {
+                            // Create meta file
+                            std::ofstream f(metaPath);
+                            nlohmann::json json;
+                            std::cout << "Creating meta file: " << metaPath << std::endl;
+                            // TODO: could check if guid already used?
+                            IgnisGUID guid = RandomNumberGenerator::getRandomInteger();
+                            json[GUID_STR] = guid;
+                            f << std::setw(4) << json << std::endl;
+                            registeredAssetMetaFilepaths[guid] = entry.path();
+                            // TODO: this doesn't put assets into inspector on first time for some reason
+                        }
+                        break;
+                    }
+                }
+            }
         }
     }
 }
 
-Texture* AssetManager::loadTexture(const std::string& filepath)
+Texture* AssetManager::loadTexture(const std::filesystem::path& filepath)
 {
     // Don't flip vertically so we match up with uv coordinates
     // stbi_set_flip_vertically_on_load(true); // can prob remove this and change flipping back on image part
@@ -145,7 +173,7 @@ Texture* AssetManager::loadTexture(const std::string& filepath)
     return texture;
 }
 
-Shader* AssetManager::loadShader(const std::string& vsFilepath, const std::string& fsFilepath)
+Shader* AssetManager::loadShader(const std::filesystem::path& vsFilepath, const std::filesystem::path& fsFilepath)
 {
     std::string vertexCode;
     std::string fragmentCode;
@@ -179,25 +207,25 @@ Shader* AssetManager::loadShader(const std::string& vsFilepath, const std::strin
     return new Shader(vShaderCode, fShaderCode);
 }
 
-Scene* AssetManager::loadScene(const std::string& filepath)
+Scene* AssetManager::loadScene(const std::filesystem::path& filepath)
 {
     nlohmann::ordered_json sceneJson = loadJson(filepath);
     return SerializationHelper::deserializeScene(sceneJson);
 }
 
-AnimationController* AssetManager::loadAnimationController(const std::string& filepath)
+AnimationController* AssetManager::loadAnimationController(const std::filesystem::path& filepath)
 {
     nlohmann::ordered_json animControllerJson = loadJson(filepath);
     return SerializationHelper::deserializeAnimationController(animControllerJson);
 }
 
-AnimationClip* AssetManager::loadAnimationClip(const std::string& filepath)
+AnimationClip* AssetManager::loadAnimationClip(const std::filesystem::path& filepath)
 {
     nlohmann::ordered_json animClipJson = loadJson(filepath);
     return SerializationHelper::deserializeAnimationClip(animClipJson);
 }
 
-Model* AssetManager::loadModel(const std::string& filepath)
+Model* AssetManager::loadModel(const std::filesystem::path& filepath)
 {
     Assimp::Importer importer;
     // consider also flags aiProcess_GenNormals and aiProcess_OptimizeMeshes and aiProcess_JoinIdenticalVertices  
@@ -213,34 +241,34 @@ Model* AssetManager::loadModel(const std::string& filepath)
     return new Model(scene, path.parent_path().string());
 }
 
-AssetFilepathInfo AssetManager::getFileExtensionInfoFromFilePath(const std::string& filepath)
-{
-    // Maybe I could store type in file and avoid doing this nonsense
-    int lastDotIndex = -1;
-    int secondLastDotIndex = -1;
-    for (int i = filepath.length() - 1; i >= 0; i--)
-    {
-        if (filepath[i] == '.')
-        {
-            if (lastDotIndex == -1)
-            {
-                lastDotIndex = i;
-            }
-            else
-            {
-                secondLastDotIndex = i;
-                break;
-            }
-        }
-    }
-    if (secondLastDotIndex == -1)
-    {
-        // TODO: need better way of dealing with errors like this
-        std::cout << "Error: file name " << filepath << " has incorrect format" << std::endl;
-    }
+// AssetFilepathInfo AssetManager::getFileExtensionInfoFromFilePath(const std::filesystem::path& filepath)
+// {
+//     // Maybe I could store type in file and avoid doing this nonsense
+//     int lastDotIndex = -1;
+//     int secondLastDotIndex = -1;
+//     for (int i = filepath.string().length() - 1; i >= 0; i--)
+//     {
+//         if (filepath.string()[i] == '.')
+//         {
+//             if (lastDotIndex == -1)
+//             {
+//                 lastDotIndex = i;
+//             }
+//             else
+//             {
+//                 secondLastDotIndex = i;
+//                 break;
+//             }
+//         }
+//     }
+//     if (secondLastDotIndex == -1)
+//     {
+//         // TODO: need better way of dealing with errors like this
+//         std::cout << "Error: file name " << filepath << " has incorrect format" << std::endl;
+//     }
 
-    std::string pathWithoutMetaExtension = filepath.substr(0, secondLastDotIndex);
-    std::string metaExtension = filepath.substr(secondLastDotIndex + 1, lastDotIndex - secondLastDotIndex - 1);
-    std::string actualFileExtension = filepath.substr(0, lastDotIndex);
-    return { filepath, pathWithoutMetaExtension, metaExtension, actualFileExtension };
-}
+//     std::string pathWithoutMetaExtension = filepath.string().substr(0, secondLastDotIndex);
+//     std::string metaExtension = filepath.string().substr(secondLastDotIndex + 1, lastDotIndex - secondLastDotIndex - 1);
+//     std::string actualFileExtension = filepath.string().substr(0, lastDotIndex);
+//     return { filepath, pathWithoutMetaExtension, metaExtension, actualFileExtension };
+// }

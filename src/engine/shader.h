@@ -10,6 +10,7 @@ public:
     Shader(const char* vertexCode, const char* fragmentCode);
     virtual ~Shader() override;
     virtual Asset* clone() override { return new Shader(*this); }
+    virtual AssetType getAssetType() const override { return AssetType::SHADER; }
     void use() const;
     // TODO: prob use class wrapper for param
     void setUniform(const char* name, const glm::mat4& value) const;

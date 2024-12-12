@@ -61,7 +61,6 @@ void SerializationHelper::serializeScene(Scene& scene)
         nlohmann::ordered_json objectJson;
         objectJson["name"] = currentObject->name;
         objectJson["fileID"] = currentObject->fileID;
-        objectJson["isActive"] = currentObject->isActive;
 
         nlohmann::ordered_json childListJson;
         for (auto& child : currentObject->transform->getChildTransforms())
@@ -134,7 +133,6 @@ Scene* SerializationHelper::deserializeScene(const nlohmann::ordered_json& scene
         std::string name = (*jsonIt)["name"];
         FileID fileID = (*jsonIt)["fileID"];
         GameObject* gameObject = new GameObject(name, fileID);
-        gameObject->isActive = (*jsonIt)["isActive"];
         fileIDToGameObjectMap[gameObject->fileID] = gameObject;
         insertionOrder.push_back(gameObject->fileID);
     }

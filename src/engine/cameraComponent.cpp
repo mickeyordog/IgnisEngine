@@ -37,9 +37,13 @@ void CameraComponent::renderScene(Scene& scene)
     const Mat4& projection = this->projectionMatrix;
 
     auto sceneIterator = scene.getIterator();
-    while (GameObject* currentObject = sceneIterator.getNext()) {
-        if (!currentObject->isActive)
+    bool skipChildren = false;
+    while (GameObject* currentObject = sceneIterator.getNext(skipChildren)) {
+        if (!currentObject->transform->isActive) {
+            skipChildren = true;
             continue;
+        }
+        skipChildren = false;
 
         const Mat4& model = currentObject->transform->getMatrix();
         Mat4 mvp = projection * view * model;

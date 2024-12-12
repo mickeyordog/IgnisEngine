@@ -11,6 +11,7 @@ struct SceneIteratorInfo {
     int depth;
 };
 
+// This class creates a stack (ie uses heap memory) every time, might not be worth it
 class SceneIterator {
 public:
     SceneIterator(Scene& scene);
@@ -29,6 +30,8 @@ public:
     Scene();
     virtual ~Scene() override;
     virtual Asset* clone() override { return new Scene(*this); }
+    virtual AssetType getAssetType() const override { return AssetType::SCENE; }
+
 
     void addRootGameObject(GameObject* gameObject);
     void startGameObjects();

@@ -15,6 +15,7 @@ public:
     void render(Shader& shader);
     virtual ~Model() override;
     virtual Asset* clone() override { return new Model(*this); }
+    virtual AssetType getAssetType() const override { return AssetType::MODEL; }
 
 private:
     // model data

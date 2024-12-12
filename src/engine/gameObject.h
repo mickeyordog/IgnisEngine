@@ -23,8 +23,6 @@ public:
     Component* getComponentOfType(ComponentType type);
     const std::vector<std::unique_ptr<Component>>& getComponents() { return this->components; }
 
-    bool isActive = true;
-    
     TransformComponent* transform; // TODO: can use transform->isActive instead of separate bool for gameobject
 
     std::string name;
@@ -32,7 +30,6 @@ public:
 
     std::vector<FieldDescription> fields = {
         { GET_NAME(name), FieldType::STRING_FIELD, &name },
-        { GET_NAME(isActive), FieldType::BOOL_FIELD, &isActive },
     };
 
 private:

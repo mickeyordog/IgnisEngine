@@ -17,14 +17,13 @@ enum class FieldType
 };
 
 // Could optimize this by just storing an offset instead of a ptr, then could be static per class
-// TODO: should not specify valid file extension here, that should be per asset type
 struct FieldDescription
 {
     const char* name;
     FieldType type;
     void* ptr;
     std::function<void(void)> postUpdateFunction;
-    const char* validFileExtension;
+    const char* validFileExtension; // This should be replaced with an AssetType
 
     FieldDescription(const char* name, FieldType type, void* ptr, const std::function<void(void)> postUpdateFunction = []() { }, const char* validFileExtension = "")
         : name(name), type(type), ptr(ptr), postUpdateFunction(postUpdateFunction), validFileExtension(validFileExtension) { }

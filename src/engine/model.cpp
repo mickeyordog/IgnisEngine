@@ -4,6 +4,13 @@
 
 Model::Model(const aiScene* assimpScene, const std::filesystem::path& directory)
 {
+    // double factor(0.0);
+    // if (assimpScene->mMetaData->Get("UnitScaleFactor", factor)) {
+    //     std::cout << "Unit scale factor is " << factor << std::endl;
+    // }
+    // else {
+    //     std::cout << "Failed to get unit scale factor!" << std::endl;
+    // }
     processNode(assimpScene->mRootNode, assimpScene, directory);
 }
 
@@ -46,6 +53,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, const std::filesyste
     {
         Vertex vertex;
         vertex.Position = { mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
+        // std::cout << vertex.Position << std::endl;
         vertex.Normal = { mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z };
         if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
         {
@@ -90,7 +98,7 @@ std::vector<Texture*> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType
         std::filesystem::path filepath(filepathStr);
         filepath.make_preferred();
         Texture* texture = (Texture*)AssetManager::loadOrGetAsset(directory / filepath);
-        
+
         textures.push_back(texture);
     }
     return textures;

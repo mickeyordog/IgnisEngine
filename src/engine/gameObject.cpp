@@ -1,3 +1,4 @@
+#include <iostream>
 #include <SDL.h>
 #include "gameObject.h"
 #include "inputHandler.h"
@@ -16,7 +17,6 @@ GameObject::GameObject(std::string name, FileID fileID) : name(name)
     this->transform->gameObject = this;
 }
 
-#include <iostream>
 GameObject::~GameObject() {
     // delete transform; // TODO: this is not working, only destroying first
     std::cout << "GameObject " << this->name << " destroyed" << std::endl;
@@ -24,6 +24,7 @@ GameObject::~GameObject() {
 
 void GameObject::start()
 {
+    // TODO: if not active should I not do this?
     for (auto& component : this->components)
     {
         component->start();
@@ -31,11 +32,13 @@ void GameObject::start()
 }
 
 void GameObject::update(float dt) {
-    // TODO: this causes weird behavior on hold down
     // x += InputHandler::getInstance().queryKeyPressed(SDLK_d) ? 1000 * dt : 0;
     // x -= InputHandler::getInstance().queryKeyPressed(SDLK_a) ? 1000 * dt : 0;
     // x = 100 + 100 * cos(SDL_GetTicks() / 1000.0);
     // y = 100 + 100 * sin(SDL_GetTicks() / 1000.0);
+    if (!transform->isActive)
+        return;
+
     for (auto& component : this->components) {
         if (component->isActive)
             component->update(dt);

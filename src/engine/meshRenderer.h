@@ -22,8 +22,8 @@ public:
 
 private:
     std::vector<FieldDescription> fields = {
-        { GET_NAME(model), FieldType::ASSET_POINTER_FIELD, &model, []() { }, "fbx" },
-        { GET_NAME(shader), FieldType::ASSET_POINTER_FIELD, &shader, []() { }, "shader" }
+        { GET_NAME(model), FieldType::ASSET_POINTER_FIELD, &model, []() { }, ".fbx" },
+        { GET_NAME(shader), FieldType::ASSET_POINTER_FIELD, &shader, []() { }, ".shader" }
     };
     // GLuint VAO, VBO;
     // Texture* texture;
