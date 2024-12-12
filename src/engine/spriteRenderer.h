@@ -8,7 +8,7 @@
 class SpriteRenderer : public ComponentVisual {
 public:
     SpriteRenderer(Texture* texture, Shader* shader);
-    ~SpriteRenderer();
+    virtual ~SpriteRenderer();
     virtual void start() override;
     virtual void update(float dt) override;
     virtual void render() override;

@@ -12,6 +12,7 @@ add_library(engine
     gameObject.cpp
     cameraComponent.cpp
     inputHandler.cpp
+    lightComponent.cpp
     mesh.cpp
     meshRenderer.cpp
     model.cpp

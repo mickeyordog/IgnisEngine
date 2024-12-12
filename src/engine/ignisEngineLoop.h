@@ -27,7 +27,7 @@
 #include <imfilebrowser.h>
 
 #ifdef __EMSCRIPTEN__
-// #include "../libs/emscripten/emscripten_mainloop_stub.h" // uncomment later
+#include "../libs/emscripten/emscripten_mainloop_stub.h" // uncomment later
 #endif
 
 void processInput(SDLContext& sdlContext, bool& quit) {
@@ -165,13 +165,12 @@ void beginEngineMainLoop()
     */
     
     Scene scene = *(Scene*)AssetManager::loadOrGetAsset(43540);
-    scene.mainCamera = scene.findCamera(); // TODO: set this when loading scene, should be mainCam field in scene file with ref to gameobject fileid
     scene.mainCamera->gameObject->addComponentOfType(ComponentType::FIRST_PERSON_CONTROLLER);
     GameObject* cube = new GameObject("Cube");
     cube->addComponentOfType(ComponentType::MESH_RENDERER);
     scene.addRootGameObject(cube);
 
-// #pragma region lightmapper
+#pragma region lightmapper
 //     lm_context* ctx = lmCreate(
 //         64,               // hemicube rendering resolution/quality
 //         0.001f, 100.0f,   // zNear, zFar
@@ -231,7 +230,7 @@ void beginEngineMainLoop()
 //         lmImagePower(mesh[i].lightmap, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3, 1.0f / 2.2f);
 //         lmImageSaveTGAf(mesh[i].lightmapFilename, mesh[i].lightmap, mesh[i].lightmapWidth, mesh[i].lightmapHeight, 3);
 //     }
-//     #pragma endregion
+    #pragma endregion
 
     // glViewport(0, 0, 200, 100);
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);

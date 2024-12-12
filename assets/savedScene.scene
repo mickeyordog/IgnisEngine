@@ -2,23 +2,25 @@
     "8470284508889192226": {
         "name": "Camera",
         "fileID": 8470284508889192226,
-        "isActive": true,
         "children": null,
         "parent": -1,
         "components": {
             "8037321344187192640": {
                 "fileID": {
                     "type": 2,
+                    "valueType_dbg": "llong",
                     "value": 8037321344187192640
                 },
                 "type": 1,
-                "typeName": "Transform",
+                "typeName_dbg": "Transform",
                 "isActive": {
                     "type": 3,
+                    "valueType_dbg": "bool",
                     "value": true
                 },
                 "position": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         0.0,
                         0.0,
@@ -27,14 +29,16 @@
                 },
                 "rotation": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         0.0,
-                        0.0,
+                        -0.0,
                         0.0
                     ]
                 },
                 "scale": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         1.0,
                         1.0,
@@ -45,25 +49,54 @@
             "5882994497225122432": {
                 "fileID": {
                     "type": 2,
+                    "valueType_dbg": "llong",
                     "value": 5882994497225122432
                 },
                 "type": 0,
-                "typeName": "Camera",
+                "typeName_dbg": "Camera",
                 "isActive": {
                     "type": 3,
+                    "valueType_dbg": "bool",
                     "value": true
                 },
                 "width": {
                     "type": 1,
+                    "valueType_dbg": "int",
                     "value": 800
                 },
                 "height": {
                     "type": 1,
+                    "valueType_dbg": "int",
                     "value": 800
                 },
                 "orthographic": {
                     "type": 3,
+                    "valueType_dbg": "bool",
                     "value": false
+                }
+            },
+            "649963876407167925": {
+                "fileID": {
+                    "type": 2,
+                    "valueType_dbg": "llong",
+                    "value": 649963876407167925
+                },
+                "type": 5,
+                "typeName_dbg": "First Person Controller",
+                "isActive": {
+                    "type": 3,
+                    "valueType_dbg": "bool",
+                    "value": true
+                },
+                "movementSpeed": {
+                    "type": 0,
+                    "valueType_dbg": "float",
+                    "value": 5.0
+                },
+                "rotationSpeed": {
+                    "type": 0,
+                    "valueType_dbg": "float",
+                    "value": 180.0
                 }
             }
         }
@@ -71,7 +104,6 @@
     "9031918811702177016": {
         "name": "g0",
         "fileID": 9031918811702177016,
-        "isActive": true,
         "children": [
             166898120970915847,
             1843326191436406351,
@@ -82,16 +114,19 @@
             "2413866295658560292": {
                 "fileID": {
                     "type": 2,
+                    "valueType_dbg": "llong",
                     "value": 2413866295658560292
                 },
                 "type": 1,
-                "typeName": "Transform",
+                "typeName_dbg": "Transform",
                 "isActive": {
                     "type": 3,
+                    "valueType_dbg": "bool",
                     "value": true
                 },
                 "position": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         0.0,
                         0.0,
@@ -100,14 +135,16 @@
                 },
                 "rotation": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         0.0,
-                        0.0,
+                        -0.0,
                         0.0
                     ]
                 },
                 "scale": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         1.0,
                         1.0,
@@ -118,20 +155,24 @@
             "8004344761229624088": {
                 "fileID": {
                     "type": 2,
+                    "valueType_dbg": "llong",
                     "value": 8004344761229624088
                 },
                 "type": 2,
-                "typeName": "Sprite Renderer",
+                "typeName_dbg": "Sprite Renderer",
                 "isActive": {
                     "type": 3,
+                    "valueType_dbg": "bool",
                     "value": true
                 },
                 "texture": {
                     "type": 6,
+                    "valueType_dbg": "asset_pointer",
                     "value": 1
                 },
                 "shader": {
                     "type": 6,
+                    "valueType_dbg": "asset_pointer",
                     "value": 523457802578
                 }
             }
@@ -140,23 +181,25 @@
     "166898120970915847": {
         "name": "g1",
         "fileID": 166898120970915847,
-        "isActive": true,
         "children": null,
         "parent": 9031918811702177016,
         "components": {
             "1213531291608751763": {
                 "fileID": {
                     "type": 2,
+                    "valueType_dbg": "llong",
                     "value": 1213531291608751763
                 },
                 "type": 1,
-                "typeName": "Transform",
+                "typeName_dbg": "Transform",
                 "isActive": {
                     "type": 3,
+                    "valueType_dbg": "bool",
                     "value": true
                 },
                 "position": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         -1.0,
                         0.0,
@@ -165,14 +208,16 @@
                 },
                 "rotation": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         0.0,
-                        0.0,
+                        -0.0,
                         0.0
                     ]
                 },
                 "scale": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         1.0,
                         1.0,
@@ -183,20 +228,24 @@
             "2793209983870067202": {
                 "fileID": {
                     "type": 2,
+                    "valueType_dbg": "llong",
                     "value": 2793209983870067202
                 },
                 "type": 2,
-                "typeName": "Sprite Renderer",
+                "typeName_dbg": "Sprite Renderer",
                 "isActive": {
                     "type": 3,
+                    "valueType_dbg": "bool",
                     "value": true
                 },
                 "texture": {
                     "type": 6,
+                    "valueType_dbg": "asset_pointer",
                     "value": 1
                 },
                 "shader": {
                     "type": 6,
+                    "valueType_dbg": "asset_pointer",
                     "value": 523457802578
                 }
             }
@@ -205,23 +254,25 @@
     "1843326191436406351": {
         "name": "g2",
         "fileID": 1843326191436406351,
-        "isActive": true,
         "children": null,
         "parent": 9031918811702177016,
         "components": {
             "2089595455726154934": {
                 "fileID": {
                     "type": 2,
+                    "valueType_dbg": "llong",
                     "value": 2089595455726154934
                 },
                 "type": 1,
-                "typeName": "Transform",
+                "typeName_dbg": "Transform",
                 "isActive": {
                     "type": 3,
+                    "valueType_dbg": "bool",
                     "value": true
                 },
                 "position": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         1.0,
                         0.0,
@@ -230,14 +281,16 @@
                 },
                 "rotation": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         0.0,
-                        0.0,
+                        -0.0,
                         0.0
                     ]
                 },
                 "scale": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         1.0,
                         1.0,
@@ -248,20 +301,24 @@
             "2427328159606555459": {
                 "fileID": {
                     "type": 2,
+                    "valueType_dbg": "llong",
                     "value": 2427328159606555459
                 },
                 "type": 2,
-                "typeName": "Sprite Renderer",
+                "typeName_dbg": "Sprite Renderer",
                 "isActive": {
                     "type": 3,
+                    "valueType_dbg": "bool",
                     "value": true
                 },
                 "texture": {
                     "type": 6,
+                    "valueType_dbg": "asset_pointer",
                     "value": 1
                 },
                 "shader": {
                     "type": 6,
+                    "valueType_dbg": "asset_pointer",
                     "value": 523457802578
                 }
             }
@@ -270,7 +327,6 @@
     "372753053572842229": {
         "name": "g3",
         "fileID": 372753053572842229,
-        "isActive": true,
         "children": [
             7681289098198248308
         ],
@@ -279,16 +335,19 @@
             "5858961467875820993": {
                 "fileID": {
                     "type": 2,
+                    "valueType_dbg": "llong",
                     "value": 5858961467875820993
                 },
                 "type": 1,
-                "typeName": "Transform",
+                "typeName_dbg": "Transform",
                 "isActive": {
                     "type": 3,
+                    "valueType_dbg": "bool",
                     "value": true
                 },
                 "position": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         0.0,
                         0.0,
@@ -297,14 +356,16 @@
                 },
                 "rotation": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         0.0,
-                        0.0,
+                        -0.0,
                         0.0
                     ]
                 },
                 "scale": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         1.0,
                         1.0,
@@ -317,23 +378,25 @@
     "7681289098198248308": {
         "name": "g4",
         "fileID": 7681289098198248308,
-        "isActive": true,
         "children": null,
         "parent": 372753053572842229,
         "components": {
             "4385668834473209250": {
                 "fileID": {
                     "type": 2,
+                    "valueType_dbg": "llong",
                     "value": 4385668834473209250
                 },
                 "type": 1,
-                "typeName": "Transform",
+                "typeName_dbg": "Transform",
                 "isActive": {
                     "type": 3,
+                    "valueType_dbg": "bool",
                     "value": true
                 },
                 "position": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         0.0,
                         0.0,
@@ -342,6 +405,56 @@
                 },
                 "rotation": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
+                    "value": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ]
+                },
+                "scale": {
+                    "type": 5,
+                    "valueType_dbg": "vec3",
+                    "value": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                }
+            }
+        }
+    },
+    "9040818435526139541": {
+        "name": "Cube",
+        "fileID": 9040818435526139541,
+        "children": null,
+        "parent": -1,
+        "components": {
+            "8328927249715006722": {
+                "fileID": {
+                    "type": 2,
+                    "valueType_dbg": "llong",
+                    "value": 8328927249715006722
+                },
+                "type": 1,
+                "typeName_dbg": "Transform",
+                "isActive": {
+                    "type": 3,
+                    "valueType_dbg": "bool",
+                    "value": true
+                },
+                "position": {
+                    "type": 5,
+                    "valueType_dbg": "vec3",
+                    "value": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "rotation": {
+                    "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         0.0,
                         0.0,
@@ -350,11 +463,36 @@
                 },
                 "scale": {
                     "type": 5,
+                    "valueType_dbg": "vec3",
                     "value": [
                         1.0,
                         1.0,
                         1.0
                     ]
+                }
+            },
+            "5759905510439832436": {
+                "fileID": {
+                    "type": 2,
+                    "valueType_dbg": "llong",
+                    "value": 5759905510439832436
+                },
+                "type": 4,
+                "typeName_dbg": "Mesh Renderer",
+                "isActive": {
+                    "type": 3,
+                    "valueType_dbg": "bool",
+                    "value": true
+                },
+                "model": {
+                    "type": 6,
+                    "valueType_dbg": "asset_pointer",
+                    "value": 11645431234
+                },
+                "shader": {
+                    "type": 6,
+                    "valueType_dbg": "asset_pointer",
+                    "value": 5
                 }
             }
         }

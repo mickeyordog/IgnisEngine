@@ -6,7 +6,12 @@ SceneIterator::SceneIterator(Scene& scene) {
     {
         objectStack.push({*gameObjectIt, 0});
     }
-    current = objectStack.top();
+
+    if (objectStack.empty()) {
+        current = { nullptr, -1 };
+    } else {
+        current = objectStack.top();
+    }
 }
 
 GameObject* SceneIterator::getNext(bool skipChildren)
@@ -41,7 +46,7 @@ SceneIteratorInfo SceneIterator::getNextInfo(bool skipChildren)
 
 Scene::Scene()
 {
-    
+
 }
 
 Scene::~Scene()

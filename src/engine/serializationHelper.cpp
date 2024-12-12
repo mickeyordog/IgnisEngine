@@ -51,7 +51,23 @@ enum ComponentType SerializationHelper::stringToComponentType(const char* name)
     return ComponentType::UNKNOWN;
 }
 
-void SerializationHelper::serializeScene(Scene& scene)
+const char* fieldTypeToStr(FieldType fieldType)
+{
+    switch (fieldType)
+    {
+    case FieldType::FLOAT_FIELD: return "float";
+    case FieldType::INT_FIELD: return "int";
+    case FieldType::LLONG_FIELD: return "llong";
+    case FieldType::BOOL_FIELD: return "bool";
+    case FieldType::STRING_FIELD: return "string";
+    case FieldType::VEC3_FIELD: return "vec3";
+    case FieldType::ASSET_POINTER_FIELD: return "asset_pointer";
+    case FieldType::COMPONENT_POINTER_FIELD: return "component_pointer";
+    default: return "unknown";
+    }
+}
+
+void SerializationHelper::serializeScene(Scene& scene, const std::filesystem::path& path)
 {
     int currentID = 0;
     nlohmann::ordered_json rootJson;
@@ -80,10 +96,11 @@ void SerializationHelper::serializeScene(Scene& scene)
             nlohmann::ordered_json componentJson;
             componentJson["fileID"] = component->fileID;
             componentJson["type"] = static_cast<int>(component->getType());
-            componentJson["typeName"] = componentTypeToString(component->getType());
+            componentJson["typeName_dbg"] = componentTypeToString(component->getType());
             for (const FieldDescription& desc : component->getFields()) {
                 nlohmann::ordered_json fieldJson;
                 fieldJson["type"] = static_cast<int>(desc.type);
+                fieldJson["valueType_dbg"] = fieldTypeToStr(desc.type);
                 switch (desc.type) {
                     case FieldType::INT_FIELD:
                         fieldJson["value"] = *(int*)desc.ptr;
@@ -119,7 +136,7 @@ void SerializationHelper::serializeScene(Scene& scene)
         rootJson[std::to_string(currentObject->fileID)] = objectJson;
     }
 
-    std::ofstream o("../assets/savedScene.scene"); // where should this path come from?
+    std::ofstream o(path);
     o << std::setw(4) << rootJson << std::endl;
 }
 
@@ -190,7 +207,7 @@ Scene* SerializationHelper::deserializeScene(const nlohmann::ordered_json& scene
             }
         }
     }
-
+    scene->mainCamera = scene->findCamera(); // might want better way to do this, like storing it in file
     return scene;
 }
 

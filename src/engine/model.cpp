@@ -90,6 +90,7 @@ std::vector<Texture*> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType
     std::vector<Texture*> textures;
     for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
     {
+        // Would be nice if this was the full path so I didn't need to carry around the directory
         aiString path;
         mat->GetTexture(type, i, &path);
         std::string filepathStr = path.C_Str();

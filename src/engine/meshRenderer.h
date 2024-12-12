@@ -11,7 +11,7 @@ class MeshRenderer : public ComponentVisual {
 public:
     // MeshRenderer(Texture* texture, Shader* shader);
     MeshRenderer(Model* model, Shader* shader);
-    ~MeshRenderer();
+    virtual ~MeshRenderer();
     virtual void start() override;
     virtual void update(float dt) override;
     virtual void render() override;

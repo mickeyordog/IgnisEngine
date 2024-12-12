@@ -22,21 +22,24 @@ struct FieldDescription
     const char* name;
     FieldType type;
     void* ptr;
-    std::function<void(void)> postUpdateFunction;
-    const char* validFileExtension; // This should be replaced with an AssetType
+    std::function<void(void)> postUpdateFunction; // When I make the fielddescriptions static, might need to pass in component to function
 
-    FieldDescription(const char* name, FieldType type, void* ptr, const std::function<void(void)> postUpdateFunction = []() { }, const char* validFileExtension = "")
-        : name(name), type(type), ptr(ptr), postUpdateFunction(postUpdateFunction), validFileExtension(validFileExtension) { }
+    const char* validFileExtension; // This should be replaced with an AssetType
+    std::function<bool(void)> showConditionFunction;
+
+    FieldDescription(const char* name, FieldType type, void* ptr, const std::function<void(void)> postUpdateFunction = []() { }, const char* validFileExtension = "", const std::function<bool(void)> showConditionFunction = []() { return true; })
+        : name(name), type(type), ptr(ptr), postUpdateFunction(postUpdateFunction), validFileExtension(validFileExtension), showConditionFunction(showConditionFunction) { }
 };
 
 enum class ComponentType
 {
-    CAMERA = 0,
-    TRANSFORM = 1,
-    SPRITE_RENDERER = 2,
-    ANIMATOR = 3,
-    MESH_RENDERER = 4,
-    FIRST_PERSON_CONTROLLER = 5,
+    CAMERA,
+    TRANSFORM,
+    SPRITE_RENDERER,
+    ANIMATOR,
+    MESH_RENDERER,
+    FIRST_PERSON_CONTROLLER,
+    LIGHT,
     UNKNOWN
 };
 

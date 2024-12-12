@@ -9,8 +9,10 @@
 
 class Model : public Asset {
 public:
-    // don't like having to pass around directory like this
     Model(const aiScene* assimpScene, const std::filesystem::path& directory);
+    // TODO: another constructor where I can just pass in the mesh(es)
+    // Maybe would even be cleaner if Model only got the meshes passed in, and 
+    // parsing the aiScene was done in assetManager
 
     void render(Shader& shader);
     virtual ~Model() override;

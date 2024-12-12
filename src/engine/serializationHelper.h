@@ -21,7 +21,7 @@ public:
     static const char* componentTypeToString(enum ComponentType type);
     static enum ComponentType stringToComponentType(const char* name);
 
-    static void serializeScene(Scene& scene);
+    static void serializeScene(Scene& scene, const std::filesystem::path& path);
     static Scene* deserializeScene(const nlohmann::ordered_json& sceneJson);
     static AnimationController* deserializeAnimationController(const nlohmann::ordered_json& animControllerJson);
     static AnimationClip* deserializeAnimationClip(const nlohmann::ordered_json& animClipJson);

@@ -32,7 +32,6 @@ public:
     virtual Asset* clone() override { return new Scene(*this); }
     virtual AssetType getAssetType() const override { return AssetType::SCENE; }
 
-
     void addRootGameObject(GameObject* gameObject);
     void startGameObjects();
     void updateGameObjects(float dt);
