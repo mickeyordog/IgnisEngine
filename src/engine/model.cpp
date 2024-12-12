@@ -53,6 +53,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, const std::filesyste
         }
         else
         {
+            std::cout << "Model does not contain texture coordinates!" << std::endl;
             vertex.TexCoords = { 0.0f, 0.0f };
         }
         vertices.push_back(vertex);

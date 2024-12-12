@@ -8,10 +8,10 @@ SpriteRenderer::SpriteRenderer(Texture* texture, Shader* shader) : texture(textu
 
     // x, y, z, u, v
     const float vertices[] = {
-        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,   // top right
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f   // top left
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f,   // top right
+        0.5f, -0.5f, 0.0f, 1.0f, 1.0f,  // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom left
+        -0.5f, 0.5f, 0.0f, 0.0f, 0.0f   // top left
     };
     const unsigned int indices[] = {
         0, 1, 3, 

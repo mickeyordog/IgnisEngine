@@ -97,7 +97,7 @@ Asset* AssetManager::loadAndRegisterAsset(const IgnisGUID guid, const AssetFilep
     {
         ret = loadAnimationClip(info.actualFilePath);
     }
-    else if (info.metaExtension == "obj")
+    else if (info.metaExtension == "obj" || info.metaExtension == "fbx")
     {
         ret = loadModel(info.actualFilePath);
     }
@@ -131,7 +131,8 @@ void AssetManager::recursivelyRegisterAllAssetsInDirectory(const char* directory
 
 Texture* AssetManager::loadTexture(const std::string& filepath)
 {
-    stbi_set_flip_vertically_on_load(true); // can prob remove this and change flipping back on image part
+    // Don't flip vertically so we match up with uv coordinates
+    // stbi_set_flip_vertically_on_load(true); // can prob remove this and change flipping back on image part
     int width, height, numChannels;
     unsigned char* data = stbi_load(filepath.c_str(), &width, &height, &numChannels, 0);
     if (data == NULL)
@@ -199,7 +200,7 @@ AnimationClip* AssetManager::loadAnimationClip(const std::string& filepath)
 Model* AssetManager::loadModel(const std::string& filepath)
 {
     Assimp::Importer importer;
-    // consider also flags aiProcess_GenNormals and aiProcess_OptimizeMeshes
+    // consider also flags aiProcess_GenNormals and aiProcess_OptimizeMeshes and aiProcess_JoinIdenticalVertices  
     const aiScene* scene = importer.ReadFile(filepath, aiProcess_Triangulate | aiProcess_FlipUVs);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
