@@ -12,7 +12,7 @@ enum class LightType {
 };
 
 struct DirectionalLight {
-    Vec3 direction;
+    Vec3 direction; // Don't need direction or position, that comes from transform
 };
 struct PointLight {
     Vec3 position;
@@ -37,22 +37,28 @@ union LightData {
 
 class LightComponent : public ComponentVisual {
 public:
-    LightComponent();
+    LightComponent(LightType lightType);
     virtual ~LightComponent();
+    
     virtual void start() override;
     virtual void update(float dt) override;
     virtual void render() override;
-    virtual Shader& getShader() override { return *shader; };
+    virtual Shader* getShader() override { return shader; };
 
     virtual enum ComponentType getType() override { return ComponentType::LIGHT; };
-    virtual std::vector<FieldDescription>& getFields() override { return fields; };
+    virtual const std::vector<FieldDescription>& getFields() override { return fields; };
+
+    void setShaderUniforms(Shader& shader, int lightIndex = 0) const;
 
 private:
     std::vector<FieldDescription> fields = {
         { GET_NAME(shader), FieldType::ASSET_POINTER_FIELD, &shader, []() { }, ".shader" },
+        { GET_NAME(color), FieldType::VEC3_FIELD, &color},
+        { GET_NAME(lightType), FieldType::INT_FIELD, &lightType}, // not sure how I can make this work, do i need a custom enum field where i pass in the options
     };
-    Shader* shader;
-    Color3 color;
-    LightType lightType;
-    LightData lightData;
+
+    Shader* shader = nullptr; // Do I need this? I think it's only necessary if the light itself is displayed, which I might want later
+    Color3 color = { 1.0f, 1.0f, 1.0f };
+    LightType lightType = LightType::DIRECTIONAL;
+    LightData lightData = { .directionalLight = { { 1.0f, 0.0f, 0.0f } } };
 };

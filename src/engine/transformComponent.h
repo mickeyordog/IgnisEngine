@@ -40,7 +40,7 @@ public:
     Vec3 getLocalUp() { return globalMatrix.getLocalUp(); };
     const Quat& getRotation() { return rotation; };
 
-    virtual std::vector<FieldDescription>& getFields() override { return fields; };
+    virtual const std::vector<FieldDescription>& getFields() override { return fields; };
     virtual enum ComponentType getType() override { return ComponentType::TRANSFORM; };
 
     TransformComponent* parentTransform = nullptr;

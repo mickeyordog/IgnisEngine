@@ -83,3 +83,10 @@ void Shader::setInt(const char* name, int value) const
     GLuint uniformLocation = glGetUniformLocation(this->id, name);
     glUniform1i(uniformLocation, value);
 }
+
+void Shader::setVec3(const char* name, const Vec3& value) const
+{ 
+    this->use();
+    GLuint uniformLocation = glGetUniformLocation(this->id, name);
+    glUniform3fv(uniformLocation, 1, &value.x());
+}

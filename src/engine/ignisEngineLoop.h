@@ -23,6 +23,7 @@
 #include "animatorComponent.h"
 #include "renderTexture.h"
 #include "assetManager.h"
+#include "lightComponent.h"
 
 #include <imfilebrowser.h>
 
@@ -132,7 +133,7 @@ void beginEngineMainLoop()
     SerializationHelper::registerComponentClass({ ComponentType::ANIMATOR, "Animator", []() { return new AnimatorComponent(); } });
     SerializationHelper::registerComponentClass({ ComponentType::MESH_RENDERER, "Mesh Renderer", []() { return new MeshRenderer((Model*)AssetManager::loadOrGetAsset(11645431234), (Shader*)AssetManager::loadOrGetAsset(5)); } });
     SerializationHelper::registerComponentClass({ ComponentType::FIRST_PERSON_CONTROLLER, "First Person Controller", []() { return new FirstPersonController(5.0, 180.0); } });
-
+    SerializationHelper::registerComponentClass({ ComponentType::LIGHT, "Light", []() { return new LightComponent(LightType::DIRECTIONAL); } });
 
     /*
     GameObject g0("g0");
@@ -164,11 +165,19 @@ void beginEngineMainLoop()
     SerializationHelper::serializeScene(scene);
     */
     
+    // Scene currently has two first person controllers on camera, how did that happen when I loaded scene?
     Scene scene = *(Scene*)AssetManager::loadOrGetAsset(43540);
     scene.mainCamera->gameObject->addComponentOfType(ComponentType::FIRST_PERSON_CONTROLLER);
     GameObject* cube = new GameObject("Cube");
     cube->addComponentOfType(ComponentType::MESH_RENDERER);
     scene.addRootGameObject(cube);
+    GameObject* dirLight = new GameObject("DirLight");
+    LightComponent* lightComponent = (LightComponent*)cube->addComponentOfType(ComponentType::LIGHT);
+    scene.addRootGameObject(dirLight);
+    scene.lights.push_back(lightComponent);
+
+    // scene runtime file should hold onto the lights being used (rn will just be all of them),
+    // then ig could pass them to the camera for rendering. But render loop should also be taken out of camera
 
 #pragma region lightmapper
 //     lm_context* ctx = lmCreate(

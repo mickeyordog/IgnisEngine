@@ -12,10 +12,10 @@ public:
     virtual void start() override;
     virtual void update(float dt) override;
     virtual void render() override;
-    virtual Shader& getShader() override { return *shader; };
+    virtual Shader* getShader() override { return shader; };
 
     virtual enum ComponentType getType() override { return ComponentType::SPRITE_RENDERER; };
-    virtual std::vector<FieldDescription>& getFields() override { return fields; };
+    virtual const std::vector<FieldDescription>& getFields() override { return fields; };
 
 private:
     // TODO: thinking about how I want to reference texture and shader. Should prob be using handle instead of pointer.

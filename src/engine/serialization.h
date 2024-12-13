@@ -24,7 +24,7 @@ struct FieldDescription
     void* ptr;
     std::function<void(void)> postUpdateFunction; // When I make the fielddescriptions static, might need to pass in component to function
 
-    const char* validFileExtension; // This should be replaced with an AssetType
+    const char* validFileExtension; // TODO: This should be replaced with an AssetType
     std::function<bool(void)> showConditionFunction;
 
     FieldDescription(const char* name, FieldType type, void* ptr, const std::function<void(void)> postUpdateFunction = []() { }, const char* validFileExtension = "", const std::function<bool(void)> showConditionFunction = []() { return true; })

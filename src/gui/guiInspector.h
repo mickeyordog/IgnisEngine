@@ -14,7 +14,7 @@ void showComponent(Component* component) {
     if (!ImGui::TreeNode((void*)component, "%s", SerializationHelper::componentTypeToString(component->getType())))
         return;
 
-    for (FieldDescription& f : component->getFields())
+    for (const FieldDescription& f : component->getFields())
     {
         switch (f.type)
         {

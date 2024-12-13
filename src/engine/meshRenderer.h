@@ -15,10 +15,10 @@ public:
     virtual void start() override;
     virtual void update(float dt) override;
     virtual void render() override;
-    virtual Shader& getShader() override { return *shader; };
+    virtual Shader* getShader() override { return shader; };
 
     virtual enum ComponentType getType() override { return ComponentType::MESH_RENDERER; };
-    virtual std::vector<FieldDescription>& getFields() override { return fields; };
+    virtual const std::vector<FieldDescription>& getFields() override { return fields; };
 
 private:
     std::vector<FieldDescription> fields = {

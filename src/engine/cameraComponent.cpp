@@ -27,6 +27,7 @@ void CameraComponent::update(float dt)
 
 }
 
+// TODO: remove render loop from camera
 void CameraComponent::renderScene(Scene& scene)
 {
     // outputTexture->bind();
@@ -54,8 +55,23 @@ void CameraComponent::renderScene(Scene& scene)
                 continue;
             ComponentVisual* visualComponent = (ComponentVisual*)component.get();
 
-            Shader& shader = visualComponent->getShader();
-            shader.setUniform("mvp", mvp.getData());
+            Shader* shader = visualComponent->getShader();
+            if (shader == nullptr)
+                continue;
+            shader->setUniform("mvp", mvp.getData());
+
+            for (const auto& light : scene.lights)
+            {
+                light->setShaderUniforms(*shader);
+            }
+            // might move these, only needed for lit 3d shader
+            shader->setUniform("model", model.getData());
+            shader->setInt("numDirLights", 1);
+            shader->setInt("numPointLights", 0);
+            shader->setInt("numSpotLights", 0);
+            shader->setFloat("shininess", 32.0f);
+            shader->setVec3("ambient", Vec3(0.1f, 0.1f, 0.1f));
+            shader->setUniform("viewPos", glm::translate(glm::mat4(1.0f), gameObject->transform->getPosition().getData()));
 
             visualComponent->render();
         }

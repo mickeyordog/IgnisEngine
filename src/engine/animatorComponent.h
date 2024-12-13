@@ -18,7 +18,7 @@ public:
     virtual void update(float dt) override;
     virtual enum ComponentType getType() override { return ComponentType::ANIMATOR; };
 
-    virtual std::vector<FieldDescription>& getFields() override { return fields; };
+    virtual const std::vector<FieldDescription>& getFields() override { return fields; };
 
 private:
     std::vector<FieldDescription> fields = {

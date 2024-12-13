@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "asset.h"
+#include "vec3.h"
 
 class Shader : public Asset {
 public:
@@ -17,6 +18,7 @@ public:
     // TODO: uniform helpers
     void setFloat(const char* name, float value) const;
     void setInt(const char* name, int value) const;
+    void setVec3(const char* name, const Vec3& value) const;
 
 
     unsigned int id;

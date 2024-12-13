@@ -5,6 +5,7 @@
 #include "asset.h"
 #include "gameObject.h"
 #include "cameraComponent.h"
+#include "lightComponent.h"
 
 struct SceneIteratorInfo {
     GameObject* gameObject;
@@ -25,6 +26,8 @@ private:
 
 // TODO: maybe want to generate a collection of all assets the scene needs, as a loading optimization so we don't unload from one to another
 // Otherwise, could just unload all assets, then iterate through new scene to load all new ones
+// TODO: the way I'm using the scene is not really an asset since it's changing. There should be another class that
+// deals with the stuff that changes I think, meanwhile the scene asset class should be unique per .scene file
 class Scene : public Asset {
 public:
     Scene();
@@ -42,6 +45,7 @@ public:
     CameraComponent* findCamera();
     void render();
     CameraComponent* mainCamera = nullptr;
+    std::vector<LightComponent*> lights; // might want to do this a different way
 
 private:
     std::vector<GameObject*> rootObjects; // TODO: replace these all with unique_ptr's, same with transform's children so they'll delete automatically. Also need to replace all iterations over scene with SceneIterator, and just return normal ptr from it

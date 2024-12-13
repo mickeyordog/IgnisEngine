@@ -15,7 +15,7 @@ public:
     virtual enum ComponentType getType() = 0;
 
     void setField(const FieldDescription& field, void* value);
-    virtual std::vector<FieldDescription>& getFields() { return fields; };
+    virtual const std::vector<FieldDescription>& getFields() { return fields; };
     GameObject* gameObject;
 
     virtual bool isVisual() { return false; }

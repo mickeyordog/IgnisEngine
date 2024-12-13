@@ -11,7 +11,7 @@ public:
     virtual void update(float dt) override = 0;
 
     virtual bool isPy() override { return true; }
-    virtual std::vector<FieldDescription>& getFields() override { return fields; };
+    virtual const std::vector<FieldDescription>& getFields() override { return fields; };
 
 private:
     std::vector<FieldDescription> fields = { };
