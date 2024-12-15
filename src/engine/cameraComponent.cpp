@@ -30,7 +30,7 @@ void CameraComponent::update(float dt)
 // TODO: remove render loop from camera
 void CameraComponent::renderScene(Scene& scene)
 {
-    // outputTexture->bind();
+    outputTexture->bind();
     glClearColor(1.0, 0.7, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -60,9 +60,9 @@ void CameraComponent::renderScene(Scene& scene)
                 continue;
             shader->setUniform("mvp", mvp.getData());
 
-            for (const auto& light : scene.lights)
-            {
-                light->setShaderUniforms(*shader);
+            // This should be distinguishing between light type. Might need a sep list for each, maybe could add it in lightcomponent ctor
+            for (int i = 0; i < scene.lights.size(); i++) {
+                scene.lights[i]->setShaderUniforms(*shader, i);
             }
             // might move these, only needed for lit 3d shader
             shader->setUniform("model", model.getData());
@@ -71,13 +71,13 @@ void CameraComponent::renderScene(Scene& scene)
             shader->setInt("numSpotLights", 0);
             shader->setFloat("shininess", 32.0f);
             shader->setVec3("ambient", Vec3(0.1f, 0.1f, 0.1f));
-            shader->setUniform("viewPos", glm::translate(glm::mat4(1.0f), gameObject->transform->getPosition().getData()));
+            shader->setVec3("viewPos", gameObject->transform->getPosition().getData());
 
             visualComponent->render();
         }
     }
         
-    // outputTexture->unbind();
+    outputTexture->unbind();
 }
 
 void CameraComponent::setProjectionMatrix()

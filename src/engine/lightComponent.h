@@ -50,6 +50,10 @@ public:
 
     void setShaderUniforms(Shader& shader, int lightIndex = 0) const;
 
+    Color3 color = { 1.0f, 1.0f, 1.0f };
+    LightType lightType = LightType::DIRECTIONAL;
+    LightData lightData = { .directionalLight = { { 1.0f, 0.0f, 0.0f } } };
+    
 private:
     std::vector<FieldDescription> fields = {
         { GET_NAME(shader), FieldType::ASSET_POINTER_FIELD, &shader, []() { }, ".shader" },
@@ -58,7 +62,4 @@ private:
     };
 
     Shader* shader = nullptr; // Do I need this? I think it's only necessary if the light itself is displayed, which I might want later
-    Color3 color = { 1.0f, 1.0f, 1.0f };
-    LightType lightType = LightType::DIRECTIONAL;
-    LightData lightData = { .directionalLight = { { 1.0f, 0.0f, 0.0f } } };
 };

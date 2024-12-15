@@ -41,6 +41,12 @@ void processInput(SDLContext& sdlContext, bool& quit) {
         if (e.type == SDL_QUIT)
         {
             quit = true;
+        } else if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
+        {
+            int width = e.window.data1;
+            int height = e.window.data2;
+            glViewport(0, 0, width, height);
+            // Update any other necessary components here, such as projection matrices. Will need to pass this to camera
         }
     }
     InputHandler::getInstance().updateKeys();
@@ -132,7 +138,7 @@ void beginEngineMainLoop()
     SerializationHelper::registerComponentClass({ ComponentType::SPRITE_RENDERER, "Sprite Renderer", []() { return new SpriteRenderer((Texture*)AssetManager::loadOrGetAsset(1), (Shader*)AssetManager::loadOrGetAsset(523457802578)); } });
     SerializationHelper::registerComponentClass({ ComponentType::ANIMATOR, "Animator", []() { return new AnimatorComponent(); } });
     SerializationHelper::registerComponentClass({ ComponentType::MESH_RENDERER, "Mesh Renderer", []() { return new MeshRenderer((Model*)AssetManager::loadOrGetAsset(11645431234), (Shader*)AssetManager::loadOrGetAsset(5)); } });
-    SerializationHelper::registerComponentClass({ ComponentType::FIRST_PERSON_CONTROLLER, "First Person Controller", []() { return new FirstPersonController(5.0, 180.0); } });
+    SerializationHelper::registerComponentClass({ ComponentType::FIRST_PERSON_CONTROLLER, "First Person Controller", []() { return new FirstPersonController(5.0, 90.0); } });
     SerializationHelper::registerComponentClass({ ComponentType::LIGHT, "Light", []() { return new LightComponent(LightType::DIRECTIONAL); } });
 
     /*
@@ -167,12 +173,12 @@ void beginEngineMainLoop()
     
     // Scene currently has two first person controllers on camera, how did that happen when I loaded scene?
     Scene scene = *(Scene*)AssetManager::loadOrGetAsset(43540);
-    scene.mainCamera->gameObject->addComponentOfType(ComponentType::FIRST_PERSON_CONTROLLER);
-    GameObject* cube = new GameObject("Cube");
-    cube->addComponentOfType(ComponentType::MESH_RENDERER);
-    scene.addRootGameObject(cube);
+    // scene.mainCamera->gameObject->addComponentOfType(ComponentType::FIRST_PERSON_CONTROLLER);
+    // GameObject* cube = new GameObject("Cube");
+    // cube->addComponentOfType(ComponentType::MESH_RENDERER);
+    // scene.addRootGameObject(cube);
     GameObject* dirLight = new GameObject("DirLight");
-    LightComponent* lightComponent = (LightComponent*)cube->addComponentOfType(ComponentType::LIGHT);
+    LightComponent* lightComponent = (LightComponent*)dirLight->addComponentOfType(ComponentType::LIGHT);
     scene.addRootGameObject(dirLight);
     scene.lights.push_back(lightComponent);
 

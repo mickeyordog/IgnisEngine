@@ -54,7 +54,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 void main()
 {
     vec3 norm = normalize(Normal);
-    vec3 viewDir = normalize(viewPos - FragPos);
+    vec3 viewDir = normalize(FragPos - viewPos);
     vec3 result = ambient * vec3(texture(texture_diffuse1, TexCoords));
 
     // directional lighting
@@ -72,15 +72,15 @@ void main()
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir) {
     vec3 lightDir = normalize(-light.direction);
-    // diffuse shading
+
     float diff = max(dot(normal, lightDir), 0.0);
-    // specular shading
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-    // combine results
     vec3 diffuse = light.color * diff * vec3(texture(texture_diffuse1, TexCoords));
+
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(/*-*/viewDir, reflectDir), 0.0), shininess);
     vec3 specular = light.color * spec * vec3(texture(texture_diffuse1, TexCoords));
-    return (diffuse + specular);
+
+    return diffuse + specular;
 }
 
 // calculates the color when using a point light.
