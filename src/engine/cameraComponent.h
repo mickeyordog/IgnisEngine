@@ -21,8 +21,9 @@ public:
     void renderScene(Scene& scene);
     RenderTexture& getOutputTexture() { return *outputTexture; }
 
-private:
+    int width, height;
     void setProjectionMatrix();
+private:
     void updateOutputTexture();
 
     std::vector<FieldDescription> fields = { 
@@ -32,6 +33,5 @@ private:
     };
     RenderTexture* outputTexture = nullptr;
     Mat4 projectionMatrix = Mat4(1.0f);
-    int width, height;
     bool orthographic;
 };

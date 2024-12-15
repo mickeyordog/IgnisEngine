@@ -48,7 +48,7 @@ DearImGuiContext::DearImGuiContext(SDLContext *sdlContext, GLContext *glContext)
         colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
         colors[ImGuiCol_FrameBg] = ImVec4(0.238f, 0.238f, 0.238f, 1.00f);
         colors[ImGuiCol_FrameBgHovered] = ImVec4(0.359f, 0.359f, 0.359f, 1.00f);
-        colors[ImGuiCol_FrameBgActive] = ImVec4(0.508f, 0.508f, 0.508f, 1.00f);
+        colors[ImGuiCol_FrameBgActive] = ImVec4(0.409f, 0.409f, 0.409f, 1.00f);
         colors[ImGuiCol_TitleBg] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
         colors[ImGuiCol_TitleBgActive] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
         colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);

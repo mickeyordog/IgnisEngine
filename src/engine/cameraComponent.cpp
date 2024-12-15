@@ -60,17 +60,31 @@ void CameraComponent::renderScene(Scene& scene)
                 continue;
             shader->setUniform("mvp", mvp.getData());
 
-            // This should be distinguishing between light type. Might need a sep list for each, maybe could add it in lightcomponent ctor
+            int numDirLights = 0;
+            int numPointLights = 0;
+            int numSpotLights = 0;
             for (int i = 0; i < scene.lights.size(); i++) {
                 scene.lights[i]->setShaderUniforms(*shader, i);
+                switch (scene.lights[i]->lightType)
+                {
+                    case LightType::DIRECTIONAL:
+                        numDirLights++;
+                        break;
+                    case LightType::POINT:
+                        numPointLights++;
+                        break;
+                    case LightType::SPOTLIGHT:
+                        numSpotLights++;
+                        break;
+                }
             }
             // might move these, only needed for lit 3d shader
             shader->setUniform("model", model.getData());
-            shader->setInt("numDirLights", 1);
-            shader->setInt("numPointLights", 0);
-            shader->setInt("numSpotLights", 0);
+            shader->setInt("numDirLights", numDirLights);
+            shader->setInt("numPointLights", numPointLights);
+            shader->setInt("numSpotLights", numSpotLights);
             shader->setFloat("shininess", 32.0f);
-            shader->setVec3("ambient", Vec3(0.1f, 0.1f, 0.1f));
+            shader->setVec3("ambient", Vec3(0.2f, 0.2f, 0.12));
             shader->setVec3("viewPos", gameObject->transform->getPosition().getData());
 
             visualComponent->render();

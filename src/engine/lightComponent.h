@@ -12,17 +12,14 @@ enum class LightType {
 };
 
 struct DirectionalLight {
-    Vec3 direction; // Don't need direction or position, that comes from transform
+
 };
 struct PointLight {
-    Vec3 position;
     float falloffConstant;
     float falloffLinear;
     float falloffQuadratic;
 };
 struct SpotLight {
-    Vec3 position;
-    Vec3 direction;
     float innerCutoff;
     float outerCutoff;
     float falloffConstant;
@@ -52,8 +49,8 @@ public:
 
     Color3 color = { 1.0f, 1.0f, 1.0f };
     LightType lightType = LightType::DIRECTIONAL;
-    LightData lightData = { .directionalLight = { { 1.0f, 0.0f, 0.0f } } };
-    
+    LightData lightData = { };
+
 private:
     std::vector<FieldDescription> fields = {
         { GET_NAME(shader), FieldType::ASSET_POINTER_FIELD, &shader, []() { }, ".shader" },

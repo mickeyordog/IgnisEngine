@@ -16,5 +16,5 @@ void runIgnisEngineGui(Scene& scene) {
 
     showGuiFileSystemPanel();
 
-    showGuiScenePanel(scene.mainCamera->getOutputTexture());
+    showGuiScenePanel(scene);
 }
