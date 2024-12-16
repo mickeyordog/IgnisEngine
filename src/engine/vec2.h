@@ -25,6 +25,7 @@ public:
 
     Vec2& operator+=(const Vec2& other) { data.x += other.x(); data.y += other.y(); return *this; };
     Vec2& operator*=(float x) { data.x *= x; data.y *= x; return *this; }
+    bool operator!=(const Vec2& other) const { return getData() != other.getData(); }
 
     static const Vec2 RIGHT;
     static const Vec2 UP;
@@ -32,6 +33,11 @@ public:
 private:
     glm::vec2 data;
 };
+
+
+inline Vec2 operator-(const Vec2& v1, const Vec2& v2) {
+    return Vec2(v1.getData() - v2.getData());
+}
 
 inline std::ostream& operator<<(std::ostream& str, Vec2 const& v)
 {

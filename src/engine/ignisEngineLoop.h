@@ -32,10 +32,11 @@
 #endif
 
 void processInput(SDLContext& sdlContext, bool& quit) {
+    // TODO: move to sdlContext
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0)
     {
-        // TODO: io.WantMouseCapture etc for imgui
+        // TODO: io.WantCaptureMouse wantCaptureKeyboard etc for imgui
         ImGui_ImplSDL2_ProcessEvent(&e);
         sdlContext.handleEvents(&e);
         if (e.type == SDL_QUIT)
@@ -49,7 +50,15 @@ void processInput(SDLContext& sdlContext, bool& quit) {
             // Update any other necessary components here, such as projection matrices. Will need to pass this to camera
         }
     }
-    InputHandler::getInstance().updateKeys();
+    int mouseX, mouseY;
+    // This isn't currently working, thinks imgui using mouse when I'm over scene render texture
+    // if (ImGui::GetIO().WantCaptureMouse) {
+    //     mouseX = (int)InputHandler::getInstance().getMousePos().x();
+    //     mouseY = (int)InputHandler::getInstance().getMousePos().y();
+    // } else {
+        SDL_GetMouseState(&mouseX, &mouseY);
+    // }
+    InputHandler::getInstance().updateState(SDL_GetKeyboardState(nullptr), Vec2(mouseX, mouseY));
 }
 
 #include <thread>

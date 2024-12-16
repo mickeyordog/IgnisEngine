@@ -20,6 +20,18 @@ void showGuiScenePanel(Scene& scene)
         scene.mainCamera->setProjectionMatrix();
     }
     RenderTexture& renderTexture = scene.mainCamera->getOutputTexture();
-    ImGui::Image((ImTextureID)(intptr_t)renderTexture.texture, windowSize, { 0,1 }, { 1,0 });
+    ImGui::ImageButton("ScenePanel", (ImTextureID)(intptr_t)renderTexture.texture, windowSize, { 0,1 }, { 1,0 });
+    // how to get rid of button padding?
+
+    bool isHovered = ImGui::IsItemHovered();
+    bool isFocused = ImGui::IsItemFocused();
+    ImVec2 mousePositionAbsolute = ImGui::GetMousePos();
+    ImVec2 screenPositionAbsolute = ImGui::GetItemRectMin();
+    ImVec2 mousePositionRelative = ImVec2(mousePositionAbsolute.x - screenPositionAbsolute.x, mousePositionAbsolute.y - screenPositionAbsolute.y);
+    ImGui::Text("Is mouse over screen? %s", isHovered ? "Yes" : "No");
+    ImGui::Text("Is screen focused? %s", isFocused ? "Yes" : "No");
+    ImGui::Text("Position: %f, %f", mousePositionRelative.x, mousePositionRelative.y);
+    ImGui::Text("Mouse clicked: %s", ImGui::IsMouseDown(ImGuiMouseButton_Left) ? "Yes" : "No");
+
     ImGui::End();
 }

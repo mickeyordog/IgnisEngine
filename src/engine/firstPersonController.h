@@ -21,4 +21,5 @@ private:
     };
 
     float movementSpeed, rotationSpeed;
+    const float MOUSE_SENSITIVITY = 0.1f;
 };

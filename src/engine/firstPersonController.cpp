@@ -60,6 +60,7 @@ void FirstPersonController::update(float dt)
     {
         rotationY -= this->rotationSpeed * dt;
     }
+    rotationY -= InputHandler::getInstance().getMouseDelta().x() * this->rotationSpeed * MOUSE_SENSITIVITY * dt;
     gameObject->transform->rotateAround(Vec3::UP, rotationY);
 
     float rotationX = 0.0;
@@ -71,6 +72,7 @@ void FirstPersonController::update(float dt)
     {
         rotationX -= this->rotationSpeed * dt;
     }
+    rotationX += InputHandler::getInstance().getMouseDelta().y() * this->rotationSpeed * MOUSE_SENSITIVITY * dt;
     gameObject->transform->rotateAroundLocal(Vec3::RIGHT, rotationX);
 
 }
