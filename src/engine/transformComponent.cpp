@@ -50,24 +50,28 @@ void TransformComponent::setScale(const Vec3& scale)
 void TransformComponent::setEulerRotation(const Vec3& eulerRotationDegrees)
 {
     rotation = Quat::fromEuler(eulerRotationDegrees);
+    guiEulerAngles = eulerRotationDegrees; // TODO: This should only really happen in editor
     updateMatrix();
 }
 
 void TransformComponent::rotateAround(const Vec3& axis, float angleDegrees)
 {
     rotation.rotateAboutAxis(axis, angleDegrees);
+    guiEulerAngles = Quat::toEuler(rotation); // TODO: This should only really happen in editor
     updateMatrix();
 }
 
 void TransformComponent::rotateAroundLocal(const Vec3& axis, float angleDegrees)
 {
     rotation.rotateAboutAxisLocal(axis, angleDegrees);
+    guiEulerAngles = Quat::toEuler(rotation); // TODO: This should only really happen in editor
     updateMatrix();
 }
 
 void TransformComponent::lookAt(const Vec3& target, const Vec3& up)
 {
     rotation.lookAt(position, target, up);
+    guiEulerAngles = Quat::toEuler(rotation); // TODO: This should only really happen in editor
     updateMatrix();
 }
 
@@ -104,9 +108,6 @@ void TransformComponent::updateMatrix()
     Mat4 scaleMatrix = Mat4(1.0f);
     scaleMatrix.scale(scale);
     this->globalMatrix = parentMatrix * translationMatrix * rotationMatrix * scaleMatrix;
-
-    // TODO: This should only really happen in editor
-    guiEulerAngles = Quat::toEuler(rotation);
 
     updateChildTransforms();
 }

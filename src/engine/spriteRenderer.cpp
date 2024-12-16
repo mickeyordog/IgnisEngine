@@ -14,8 +14,8 @@ SpriteRenderer::SpriteRenderer(Texture* texture, Shader* shader) : texture(textu
         -0.5f, 0.5f, 0.0f, 0.0f, 0.0f   // top left
     };
     const unsigned int indices[] = {
-        0, 1, 3, 
-        1, 2, 3 
+        0, 3, 1, 
+        1, 3, 2
     };
 
     glGenVertexArrays(1, &this->VAO);
