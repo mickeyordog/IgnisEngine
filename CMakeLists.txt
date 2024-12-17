@@ -73,8 +73,18 @@ endif()
 find_package(glm CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
 
+# Jolt
+if (APPLE)
+    set(Jolt_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/Jolt)
+elseif (WIN32)
+    set(Jolt_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/Jolt)
+endif()
+find_package(Jolt CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE Jolt::Jolt)
+
 include(FetchContent)
 set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/libs CACHE PATH "" FORCE)
+
 # assimp
 FetchContent_Declare(assimp
 GIT_REPOSITORY https://github.com/assimp/assimp.git
@@ -87,7 +97,7 @@ FetchContent_MakeAvailable(assimp)
 target_include_directories(${PROJECT_NAME} PRIVATE libs/assimp-src/include)
 target_link_libraries(${PROJECT_NAME} PRIVATE assimp)
 
-set(SRC_DIRECTORIES engine visual util audio scripting_system gui)
+set(SRC_DIRECTORIES engine visual util audio scripting_system gui physics)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
 foreach(DIR ${SRC_PATHS})
     add_subdirectory(${DIR})

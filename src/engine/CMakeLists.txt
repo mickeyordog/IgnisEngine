@@ -65,6 +65,7 @@ target_include_directories(
         ../visual
         ../scripting-system
         ../util
+        ../physics
         ${STB_IMAGE_PATH}
         ${IMGUI_PATH}
         ${LIGHTMAPPER_PATH}

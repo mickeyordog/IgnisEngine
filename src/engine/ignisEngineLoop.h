@@ -24,6 +24,7 @@
 #include "renderTexture.h"
 #include "assetManager.h"
 #include "lightComponent.h"
+#include "joltContext.h"
 
 #include <imfilebrowser.h>
 
@@ -234,6 +235,8 @@ void beginEngineMainLoop()
     float deltaTime = 0;
 
     scene.startGameObjects();
+
+    JoltContext joltContext;
 
 #pragma region imfilebrowser
     ImGui::FileBrowser fileDialog(ImGuiFileBrowserFlags_NoModal);
