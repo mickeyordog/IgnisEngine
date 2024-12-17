@@ -13,4 +13,7 @@ public:
     void render();
 
     ImGuiIO& getIO();
+
+private:
+    void setStyling();
 };

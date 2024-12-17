@@ -7,14 +7,18 @@
 #include "guiSceneView.h"
 #include "scene.h"
 
-void runIgnisEngineGui(Scene& scene) {
+void runIgnisEngineGui(Scene& scene, bool& inGameView) {
     static std::unordered_set<GameObject*> selectedGameObjects;
+    if (inGameView)
+        ImGui::BeginDisabled();
 
     showGuiHierarchyPanel(scene, selectedGameObjects);
 
     showGuiInspectorPanel(selectedGameObjects);
 
     showGuiFileSystemPanel();
+    if (inGameView)
+        ImGui::EndDisabled();
 
-    showGuiScenePanel(scene);
+    showGuiScenePanel(scene, inGameView);
 }

@@ -20,13 +20,13 @@ private:
 #pragma endregion
 
 public:
-    void updateState(const Uint8* currentKeyStates, Vec2 mousePos);
+    void updateState(const Uint8* currentKeyStates, Vec2 mouseDelta);
     bool keyPressed(SDL_Scancode key);
     Vec2 getMousePos() { return mousePos; }
-    Vec2 getMouseDelta() { return mousePos - lastMousePos; }
+    Vec2 getMouseDelta() { return mouseDelta; }
 private:
     const Uint8* currentKeyStates;
     Vec2 mousePos = Vec2(0.0f);
-    Vec2 lastMousePos = Vec2(0.0f);
+    Vec2 mouseDelta = Vec2(0.0f);
     bool firstUpdate = true;
 };

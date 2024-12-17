@@ -6,6 +6,8 @@
 
 #include <SDL.h>
 #include "SDLContext.h"
+#include <inputHandler.h>
+#include <imgui_impl_sdl2.h>
 
 // THERE WAS MORE OS SPECIFIC STUFF IN EXAMPLE, CHECK THAT IF OS NOT WORKING
 SDLContext::SDLContext(const char* name, int width, int height)
@@ -49,6 +51,8 @@ SDLContext::SDLContext(const char* name, int width, int height)
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
+    // SDL_SetRelativeMouseMode(SDL_TRUE);
+
 	this->window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE );
 	if (this->window == NULL)
 	{
@@ -62,16 +66,56 @@ SDLContext::~SDLContext()
 	SDL_Quit();
 }
 
-void SDLContext::handleEvents(SDL_Event* e)
+void SDLContext::handleEvents(bool& quit, bool& inGameView)
 {
-	if (e->type == SDL_WINDOWEVENT)
-	{
-	}
+    InputHandler::getInstance().updateState(nullptr, Vec2(0.0f));
+    Vec2 mouseDelta = Vec2(0.0f);
+    SDL_Event e;
+    while (SDL_PollEvent(&e) != 0) {
+        ImGui_ImplSDL2_ProcessEvent(&e);
+        if (e.type == SDL_QUIT) {
+            quit = true;
+        } else if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED) {
+            int width = e.window.data1;
+            int height = e.window.data2;
+            glViewport(0, 0, width, height);
+            // Update any other necessary components here, such as projection matrices. Will need to pass this to camera
+        }
+        if (!ImGui::GetIO().WantCaptureMouse && inGameView) {
+            if (e.type == SDL_MOUSEMOTION && SDL_GetRelativeMouseMode() == SDL_TRUE) {
+                mouseDelta = Vec2(e.motion.xrel, e.motion.yrel);
+            }
+        }
+        if (!ImGui::GetIO().WantCaptureKeyboard && inGameView) {
+            if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_F4) {
+                    captureMouse(false);
+                    inGameView = false;
+                }
+            }
+        }
+    }
+    const Uint8* currentKeyStates = nullptr;
+    if (!ImGui::GetIO().WantCaptureKeyboard) {
+        currentKeyStates = SDL_GetKeyboardState(nullptr);
+    }
+    InputHandler::getInstance().updateState(currentKeyStates, mouseDelta);
 }
 
 void SDLContext::swapWindow()
 {
 	SDL_GL_SwapWindow(this->window);
+}
+
+void SDLContext::captureMouse(bool capture) { 
+    if (capture) {
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+        ImGui::SetNextFrameWantCaptureMouse(false);
+        ImGui::SetNextFrameWantCaptureKeyboard(false);
+    } else {
+        SDL_SetRelativeMouseMode(SDL_FALSE);
+        // ImGui::SetWindowFocus(nullptr);
+    }
 }
 
 SDL_Window *SDLContext::getWindow()

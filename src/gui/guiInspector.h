@@ -41,7 +41,7 @@ void showComponent(Component* component) {
             {
                 if (filepath.extension().string() != f.validFileExtension)
                     continue;
-                if (ImGui::Selectable(filepath.c_str())) {
+                if (ImGui::Selectable(filepath.string().c_str())) {
                     *(Asset**)f.ptr = (Asset*)AssetManager::loadOrGetAsset(guid);
                 }
             }

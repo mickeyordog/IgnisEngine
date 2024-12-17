@@ -31,42 +31,13 @@
 #include "../libs/emscripten/emscripten_mainloop_stub.h" // uncomment later
 #endif
 
-void processInput(SDLContext& sdlContext, bool& quit) {
-    // TODO: move to sdlContext
-    SDL_Event e;
-    while (SDL_PollEvent(&e) != 0)
-    {
-        // TODO: io.WantCaptureMouse wantCaptureKeyboard etc for imgui
-        ImGui_ImplSDL2_ProcessEvent(&e);
-        sdlContext.handleEvents(&e);
-        if (e.type == SDL_QUIT)
-        {
-            quit = true;
-        } else if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
-        {
-            int width = e.window.data1;
-            int height = e.window.data2;
-            glViewport(0, 0, width, height);
-            // Update any other necessary components here, such as projection matrices. Will need to pass this to camera
-        }
-    }
-    int mouseX, mouseY;
-    // This isn't currently working, thinks imgui using mouse when I'm over scene render texture
-    // if (ImGui::GetIO().WantCaptureMouse) {
-    //     mouseX = (int)InputHandler::getInstance().getMousePos().x();
-    //     mouseY = (int)InputHandler::getInstance().getMousePos().y();
-    // } else {
-        SDL_GetMouseState(&mouseX, &mouseY);
-    // }
-    InputHandler::getInstance().updateState(SDL_GetKeyboardState(nullptr), Vec2(mouseX, mouseY));
-}
-
 #include <thread>
 #include <chrono>
 #include <future>
 #include <mutex>
 void beginEngineMainLoop()
 {
+    // TODO: make these singletons or static so can be accessed without having to pass to game update code
     SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);
     DearImGuiContext dearImGuiContext(&sdlContext, &glContext);
@@ -272,13 +243,14 @@ void beginEngineMainLoop()
 #pragma endregion
 
     bool quit = false;
+    bool inGameView = false; // Would ideally like to just handle this in UI and not need this
 #ifdef __EMSCRIPTEN__
     EMSCRIPTEN_MAINLOOP_BEGIN
 #else
     while (!quit)
 #endif
     {
-        processInput(sdlContext, quit);
+        sdlContext.handleEvents(quit, inGameView);
 
         deltaTime = frameTimer.readAndReset();
         // std::cout << 1.0f/deltaTime << " fps" << std::endl;
@@ -342,7 +314,7 @@ void beginEngineMainLoop()
         }
 #pragma endregion
 
-        runIgnisEngineGui(scene);
+        runIgnisEngineGui(scene, inGameView);
 
         // TODO: also need fixed timestep
         scene.updateGameObjects(deltaTime); // this should actually only happen in game build or during play mode

@@ -75,7 +75,7 @@ Asset* AssetManager::loadAndRegisterAsset(const IgnisGUID guid, const std::files
 {
     Asset* ret = nullptr;
     for (const auto& [assetType, extSet] : assetTypeToValidExts) {
-        if (extSet.find(filepath.extension()) != extSet.end())
+        if (extSet.find(filepath.extension().string()) != extSet.end())
         {
             switch (assetType) {
                 case AssetType::SHADER:
@@ -131,7 +131,7 @@ void AssetManager::recursivelyRegisterAllAssetsInDirectory(const std::filesystem
                 // check if it's a valid asset extension
                 for (const auto& pair : assetTypeToValidExts) {
                     const auto& extSet = pair.second;
-                    const std::string ext = entry.path().extension();
+                    const std::string ext = entry.path().extension().string();
                     if (extSet.find(ext) != extSet.end()) {
                         // Check if meta file already exists
                         std::filesystem::path metaPath = entry.path();
@@ -162,7 +162,7 @@ Texture* AssetManager::loadTexture(const std::filesystem::path& filepath)
     // Don't flip vertically so we match up with uv coordinates
     // stbi_set_flip_vertically_on_load(true); // can prob remove this and change flipping back on image part
     int width, height, numChannels;
-    unsigned char* data = stbi_load(filepath.c_str(), &width, &height, &numChannels, 0);
+    unsigned char* data = stbi_load(filepath.string().c_str(), &width, &height, &numChannels, 0);
     if (data == NULL)
     {
         std::cout << "Failed to load texture" << std::endl;
@@ -229,7 +229,7 @@ Model* AssetManager::loadModel(const std::filesystem::path& filepath)
 {
     Assimp::Importer importer;
     // consider also flags aiProcess_GenNormals and aiProcess_OptimizeMeshes and aiProcess_JoinIdenticalVertices  
-    const aiScene* scene = importer.ReadFile(filepath, aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = importer.ReadFile(filepath.string(), aiProcess_Triangulate | aiProcess_FlipUVs);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;

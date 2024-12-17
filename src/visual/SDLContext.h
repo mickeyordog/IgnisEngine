@@ -7,8 +7,9 @@ public:
     SDLContext(const char* name, int width, int height);
     ~SDLContext();
 
-    void handleEvents(SDL_Event* e);
+    void handleEvents(bool& quit, bool& inGameView);
     void swapWindow();
+    void captureMouse(bool capture);
     SDL_Window* getWindow();
     const char* glsl_version; // Should be in GLContext but whatever
 

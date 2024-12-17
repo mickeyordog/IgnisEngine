@@ -5,10 +5,10 @@
 #include <imgui.h>
 #include "scene.h"
 
-void showGuiScenePanel(Scene& scene)
+void showGuiScenePanel(Scene& scene, bool& inGameView)
 {
-    ImGui::Begin("Scene");
-    ImVec2 windowSize = ImGui::GetWindowSize();
+    ImGui::Begin("SceneView");
+    ImVec2 windowSize = ImGui::GetContentRegionAvail();
     // windowSize.x = std::min(windowSize.x, windowSize.y);
     // windowSize.y = std::min(windowSize.x, windowSize.y);
     // When going fullscreen something about the viewport seems messed up for some reason
@@ -20,18 +20,18 @@ void showGuiScenePanel(Scene& scene)
         scene.mainCamera->setProjectionMatrix();
     }
     RenderTexture& renderTexture = scene.mainCamera->getOutputTexture();
-    ImGui::ImageButton("ScenePanel", (ImTextureID)(intptr_t)renderTexture.texture, windowSize, { 0,1 }, { 1,0 });
-    // how to get rid of button padding?
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+    if (ImGui::ImageButton("SceneViewPanel", (ImTextureID)(intptr_t)renderTexture.texture, windowSize, { 0, 1 }, { 1, 0 })) {
+        inGameView = true;
+    }
+    ImGui::PopStyleVar(2);
 
-    bool isHovered = ImGui::IsItemHovered();
-    bool isFocused = ImGui::IsItemFocused();
-    ImVec2 mousePositionAbsolute = ImGui::GetMousePos();
-    ImVec2 screenPositionAbsolute = ImGui::GetItemRectMin();
-    ImVec2 mousePositionRelative = ImVec2(mousePositionAbsolute.x - screenPositionAbsolute.x, mousePositionAbsolute.y - screenPositionAbsolute.y);
-    ImGui::Text("Is mouse over screen? %s", isHovered ? "Yes" : "No");
-    ImGui::Text("Is screen focused? %s", isFocused ? "Yes" : "No");
-    ImGui::Text("Position: %f, %f", mousePositionRelative.x, mousePositionRelative.y);
-    ImGui::Text("Mouse clicked: %s", ImGui::IsMouseDown(ImGuiMouseButton_Left) ? "Yes" : "No");
+    if (inGameView) { // TODO: call sdlctx.captureMouse(true) here
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+        ImGui::SetNextFrameWantCaptureMouse(false);
+        ImGui::SetNextFrameWantCaptureKeyboard(false);
+    }
 
     ImGui::End();
 }
