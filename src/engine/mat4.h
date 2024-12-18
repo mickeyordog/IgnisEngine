@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/string_cast.hpp>
 #include "serialization.h"
 #include "vec3.h"
 
@@ -39,8 +38,8 @@ inline Vec3 operator*(const Mat4& mat, const Vec3& vec)
     return Vec3(mat.getData() * vec.getData());
 }
 
-inline std::ostream& operator<<(std::ostream& str, Mat4 const& v)
-{
-    str << glm::to_string(v.getData());
-    return str;
-}
+// inline std::ostream& operator<<(std::ostream& str, Mat4 const& v)
+// {
+//     str << glm::to_string(v.getData());
+//     return str;
+// }

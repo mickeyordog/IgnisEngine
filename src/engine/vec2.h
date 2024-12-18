@@ -4,7 +4,6 @@
 #include <sstream>
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/string_cast.hpp>
 #include "serialization.h"
 #include "quat.h"
 
@@ -40,8 +39,8 @@ inline Vec2 operator-(const Vec2& v1, const Vec2& v2) {
     return Vec2(v1.getData() - v2.getData());
 }
 
-inline std::ostream& operator<<(std::ostream& str, Vec2 const& v)
-{
-    str << glm::to_string(v.getData());
-    return str;
-}
+// inline std::ostream& operator<<(std::ostream& str, Vec2 const& v)
+// {
+//     str << glm::to_string(v.getData());
+//     return str;
+// }

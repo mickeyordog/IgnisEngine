@@ -14,6 +14,7 @@
 # Custom stuff
 build/
 vcpkg/
+vcpkg_installed/
 **/__pycache__
 *.pyc
 *.DS_Store

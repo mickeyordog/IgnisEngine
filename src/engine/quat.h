@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include <vector>
-#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include "serialization.h"
 
 struct Mat4;

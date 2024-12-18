@@ -4,7 +4,7 @@
 
 Mat4 Quat::toMat4() const 
 { 
-    return Mat4(glm::toMat4(data)); 
+    return Mat4(glm::mat4_cast(data)); 
 }
 
 void Quat::lookAt(const Vec3& position, const Vec3& target, const Vec3& up)
