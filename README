@@ -14,6 +14,9 @@ WINDOWS:
 - ./vcpkg install glew:x64-windows-static
 - ./vcpkg install glm:x64-windows-static
 - ./vcpkg install nlohmann-json:x64-windows-static
+- ./vcpkg install "joltphysics[core,debugrenderer,profiler]:x64-windows-static"
+
+You may need to git pull inside your vcpkg directory if you have no updated in awhile, and rerun the bootstrap if you cannot e.g. see joltphysics profiler
 
 Install cmake, navigate to project root
 

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.26.3)
-set (CMAKE_CXX_STANDARD 17) # need 17 for imfilebrowser, but could otherwise use 14 for make_unique
+set (CMAKE_CXX_STANDARD 20)
 add_compile_options("$<$<CONFIG:DEBUG>:-DDEBUG>")
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Needed to avoid "Mismatch Detected for 'RuntimeLibrary'"
 
 project(IgnisEngine VERSION 0.1
                     DESCRIPTION "Game engine"
