@@ -97,6 +97,16 @@ FetchContent_MakeAvailable(assimp)
 target_include_directories(${PROJECT_NAME} PRIVATE libs/assimp-src/include)
 target_link_libraries(${PROJECT_NAME} PRIVATE assimp)
 
+# tracy
+FetchContent_Declare(tracy
+GIT_REPOSITORY https://github.com/wolfpld/tracy.git
+GIT_TAG 5d542dc
+GIT_SHALLOW TRUE
+GIT_PROGRESS TRUE)
+option(TRACY_ENABLE "" ON)
+FetchContent_MakeAvailable(tracy)
+target_link_libraries(${PROJECT_NAME} PRIVATE TracyClient)
+
 set(SRC_DIRECTORIES engine visual util audio scripting_system gui physics)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)
 foreach(DIR ${SRC_PATHS})

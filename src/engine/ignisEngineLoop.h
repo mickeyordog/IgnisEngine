@@ -36,8 +36,11 @@
 #include <chrono>
 #include <future>
 #include <mutex>
+
+#include "tracy/Tracy.hpp"
 void beginEngineMainLoop()
 {
+    TracyNoop;
     // TODO: make these singletons or static so can be accessed without having to pass to game update code
     SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);
