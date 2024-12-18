@@ -18,3 +18,4 @@ vcpkg/
 *.pyc
 *.DS_Store
 libs/
+CMakeUserPresets.json

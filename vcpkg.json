@@ -1,0 +1,16 @@
+{
+  "dependencies": [
+    "glew",
+    "glm",
+    "nlohmann-json",
+    "sdl2",
+    {
+      "name": "joltphysics",
+      "default-features": false,
+      "features": [
+        "debugrenderer",
+        "profiler"
+      ]
+    }
+  ]
+}

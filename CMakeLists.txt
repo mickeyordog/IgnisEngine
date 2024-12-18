@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.26.3)
 set (CMAKE_CXX_STANDARD 20)
 add_compile_options("$<$<CONFIG:DEBUG>:-DDEBUG>")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Needed to avoid "Mismatch Detected for 'RuntimeLibrary'"
+set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
 
 project(IgnisEngine VERSION 0.1
                     DESCRIPTION "Game engine"
@@ -14,11 +15,11 @@ add_executable(${PROJECT_NAME} src/main.cpp)
 #     list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/Windows/)
 # endif()
 
-if (APPLE)
-    set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/sdl2)
-elseif (WIN32)
-    set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/sdl2)
-endif()
+# if (APPLE)
+#     set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/sdl2)
+# elseif (WIN32)
+#     set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/sdl2)
+# endif()
 find_package(SDL2 CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
@@ -58,11 +59,11 @@ target_link_libraries(IMGUI PUBLIC SDL2::SDL2)
 target_include_directories(${PROJECT_NAME} PUBLIC ${IMGUI_PATH})
 target_link_libraries(${PROJECT_NAME} PUBLIC IMGUI)
 
-if (APPLE)
-    set(nlohmann_json_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/nlohmann_json)
-elseif (WIN32)
-    set(nlohmann_json_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/nlohmann_json)
-endif()
+# if (APPLE)
+#     set(nlohmann_json_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/nlohmann_json)
+# elseif (WIN32)
+#     set(nlohmann_json_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/nlohmann_json)
+# endif()
 find_package(nlohmann_json CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
 
