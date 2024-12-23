@@ -5,6 +5,7 @@
 #include "component.h"
 #include "renderTexture.h"
 #include "mat4.h"
+#include "gameObject.h"
 
 class Scene;
 class CameraComponent : public Component {
@@ -21,8 +22,11 @@ public:
     void renderScene(Scene& scene);
     RenderTexture& getOutputTexture() { return *outputTexture; }
 
-    int width, height;
+    Mat4 getView() const { return gameObject->transform->getMatrix().inverted(); }
+    Mat4 getProjection() const { return projectionMatrix; }
+
     void setProjectionMatrix();
+    int width, height;
 private:
     void updateOutputTexture();
 

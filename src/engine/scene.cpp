@@ -94,5 +94,6 @@ CameraComponent* Scene::findCamera()
 
 void Scene::render()
 {
+    // TODO: move render loop from camera into here
     mainCamera->renderScene(*this);
 }

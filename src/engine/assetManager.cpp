@@ -116,9 +116,6 @@ void AssetManager::recursivelyRegisterAllAssetsInDirectory(const std::filesystem
         if (entry.is_regular_file()) {
             if (entry.path().extension().compare(META_EXT) == 0)
             {
-                // TODO: this uses std::string which textbook guy said not to. However it only does it once per game startup so probably fine. But maybe look into removing, I couldn't figure it out
-                // solution: just use filesystem::path, don't need to store all these separate stringse
-
                 std::ifstream f(entry.path());
                 nlohmann::json json = nlohmann::json::parse(f);
                 IgnisGUID guid = json[GUID_STR];

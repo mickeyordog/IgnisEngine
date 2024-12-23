@@ -40,6 +40,8 @@ private:
     inline static std::unordered_map<IgnisGUID, std::filesystem::path> registeredAssetMetaFilepaths; // Is this the right way to smart ptr to c string?
     inline static const std::unordered_map<AssetType, std::unordered_set<std::string>> assetTypeToValidExts {
         {AssetType::SHADER, {".shader"}},
+        {AssetType::VERT_SHADER, {".vs"}},
+        {AssetType::FRAG_SHADER, {".fs"}},
         {AssetType::TEXTURE, {".png"}},
         {AssetType::MODEL, {".fbx"}},
         {AssetType::SCENE, {".scene"}},

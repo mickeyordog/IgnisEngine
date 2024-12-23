@@ -15,6 +15,7 @@
 #include <Jolt/Physics/Collision/Shape/SphereShape.h>
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Body/BodyActivationListener.h>
+#include "physicsDebugRenderer.h"
 
 JPH_SUPPRESS_WARNINGS
 
@@ -23,4 +24,6 @@ using namespace JPH::literals;
 class JoltContext {
 public:
     JoltContext();
+
+    JPH::PhysicsSystem physics_system;
 };

@@ -20,6 +20,8 @@ public:
     void setInt(const char* name, int value) const;
     void setVec3(const char* name, const Vec3& value) const;
 
-
+    unsigned int getID() const { return id; }
+    
+private:
     unsigned int id;
 };

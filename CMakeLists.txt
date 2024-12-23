@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 3.26.3)
 set (CMAKE_CXX_STANDARD 20)
+# disable cpp rtti so jolt will link, should maybe undo this later
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 add_compile_options("$<$<CONFIG:DEBUG>:-DDEBUG>")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Needed to avoid "Mismatch Detected for 'RuntimeLibrary'"
 if (WIN32)
     set(VCPKG_TARGET_TRIPLET x64-windows-static)
 elseif (APPLE)
     set(VCPKG_TARGET_TRIPLET arm64-osx)
-    set(CMAKE_BUILD_RPATH /Library/Frameworks)
+    # set(CMAKE_BUILD_RPATH /Library/Frameworks)
 endif()
 set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
 include($ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
@@ -91,30 +93,32 @@ target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
 find_package(Jolt CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Jolt::Jolt)
 
-include(FetchContent)
-set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/libs CACHE PATH "" FORCE)
+# include(FetchContent)
+# set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/libs CACHE PATH "" FORCE)
 
 # assimp
-FetchContent_Declare(assimp
-GIT_REPOSITORY https://github.com/assimp/assimp.git
-GIT_TAG master)
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE) # potentially would want to turn this on for release build
-set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(assimp)
-target_include_directories(${PROJECT_NAME} PRIVATE libs/assimp-src/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE assimp)
+# FetchContent_Declare(assimp
+# GIT_REPOSITORY https://github.com/assimp/assimp.git
+# GIT_TAG master)
+# set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+# set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+# set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE) # potentially would want to turn this on for release build
+# set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
+# FetchContent_MakeAvailable(assimp)
+# target_include_directories(${PROJECT_NAME} PRIVATE libs/assimp-src/include)
+find_package(assimp CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE assimp::assimp)
 
 # tracy
-FetchContent_Declare(tracy
-GIT_REPOSITORY https://github.com/wolfpld/tracy.git
-GIT_TAG 5d542dc
-GIT_SHALLOW TRUE
-GIT_PROGRESS TRUE)
-option(TRACY_ENABLE "" ON)
-FetchContent_MakeAvailable(tracy)
-target_link_libraries(${PROJECT_NAME} PRIVATE TracyClient)
+# FetchContent_Declare(tracy
+# GIT_REPOSITORY https://github.com/wolfpld/tracy.git
+# GIT_TAG 5d542dc
+# GIT_SHALLOW TRUE
+# GIT_PROGRESS TRUE)
+# option(TRACY_ENABLE "" ON)
+# FetchContent_MakeAvailable(tracy)
+find_package(Tracy CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE Tracy::TracyClient)
 
 set(SRC_DIRECTORIES engine visual util audio scripting_system gui physics)
 list(TRANSFORM SRC_DIRECTORIES PREPEND "src/" OUTPUT_VARIABLE SRC_PATHS)

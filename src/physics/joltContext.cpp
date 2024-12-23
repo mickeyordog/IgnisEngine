@@ -212,7 +212,6 @@ JoltContext::JoltContext() {
     ObjectLayerPairFilterImpl object_vs_object_layer_filter;
 
     // Now we can create the actual physics system.
-    JPH::PhysicsSystem physics_system;
     physics_system.Init(cMaxBodies, cNumBodyMutexes, cMaxBodyPairs, cMaxContactConstraints, broad_phase_layer_interface, object_vs_broadphase_layer_filter, object_vs_object_layer_filter);
 
     // A body activation listener gets notified when bodies activate and go to sleep

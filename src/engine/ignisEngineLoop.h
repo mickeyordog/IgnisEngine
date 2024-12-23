@@ -38,6 +38,7 @@
 #include <mutex>
 
 #include "tracy/Tracy.hpp"
+#include <physicsDebugRenderer.h>
 void beginEngineMainLoop()
 {
     TracyNoop;
@@ -240,6 +241,10 @@ void beginEngineMainLoop()
     scene.startGameObjects();
 
     JoltContext joltContext;
+    // TODO: pass in triangle shader
+    PhysicsDebugRenderer physicsDebugRenderer(&scene.mainCamera->getOutputTexture(), (Shader*)AssetManager::loadOrGetAsset(2749550006828703289), (Shader*)AssetManager::loadOrGetAsset(3100363658458281692), scene.mainCamera);
+    JPH::BodyManager::DrawSettings drawSettings;
+    joltContext.physics_system.DrawBodies(drawSettings, &physicsDebugRenderer);
 
 #pragma region imfilebrowser
     ImGui::FileBrowser fileDialog(ImGuiFileBrowserFlags_NoModal);
@@ -325,10 +330,13 @@ void beginEngineMainLoop()
         // TODO: also need fixed timestep
         scene.updateGameObjects(deltaTime); // this should actually only happen in game build or during play mode
         glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        scene.render();
+        // scene.render();
         dearImGuiContext.render();
+        joltContext.physics_system.DrawBodies(drawSettings, &physicsDebugRenderer);
 
         sdlContext.swapWindow();
+
+        physicsDebugRenderer.NextFrame();
     }
 #ifdef __EMSCRIPTEN__
     EMSCRIPTEN_MAINLOOP_END;

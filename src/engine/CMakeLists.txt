@@ -55,7 +55,7 @@ target_link_libraries(
         IMGUI
         glm::glm
         visual
-        assimp
+        assimp::assimp
 )
 
 target_include_directories(
@@ -69,5 +69,5 @@ target_include_directories(
         ${STB_IMAGE_PATH}
         ${IMGUI_PATH}
         ${LIGHTMAPPER_PATH}
-        assimp
+        assimp::assimp
 )

@@ -2,8 +2,6 @@
   "dependencies": [
     "glew",
     "glm",
-    "nlohmann-json",
-    "sdl2",
     {
       "name": "joltphysics",
       "default-features": false,
@@ -11,6 +9,10 @@
         "debugrenderer",
         "profiler"
       ]
-    }
+    },
+    "nlohmann-json",
+    "sdl2",
+    "assimp",
+    "tracy"
   ]
 }

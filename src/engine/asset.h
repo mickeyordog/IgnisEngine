@@ -8,6 +8,8 @@ typedef unsigned long long FileID;
 // OTHER OPTION is that I could just check file extension
 enum class AssetType { // TODO: not positive I want to do it like this, don't think Unity stores this, and will need to do this manually for each new type
     SHADER,
+    VERT_SHADER,
+    FRAG_SHADER,
     MATERIAL,
     TEXTURE,
     MODEL,
