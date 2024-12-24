@@ -18,6 +18,7 @@ add_library(engine
     model.cpp
     quat.cpp
     renderTexture.cpp
+    rigidBodyComponent.cpp
     shader.cpp
     spriteRenderer.cpp
     serializationHelper.cpp
@@ -49,13 +50,14 @@ target_link_libraries(
     engine
     PUBLIC
         SDL2::SDL2
-        # OpenGL::GL
-        # GLEW::glew_s
+        OpenGL::GL
+        GLEW::GLEW
         STB_IMAGE
         IMGUI
         glm::glm
         visual
         assimp::assimp
+        reactphysics3d
 )
 
 target_include_directories(

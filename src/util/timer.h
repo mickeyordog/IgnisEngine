@@ -7,8 +7,10 @@ public:
     void reset();
     float read();
     float readAndReset();
+    double readHiRes();
+    double readHiResAndReset();
 
 private:
     Uint64 startTicks;
-    float ticksPerSec; 
+    double ticksPerSec; 
 };

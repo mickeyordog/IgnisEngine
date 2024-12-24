@@ -24,12 +24,12 @@
 #include "renderTexture.h"
 #include "assetManager.h"
 #include "lightComponent.h"
-#include "joltContext.h"
+#include "physicsContext.h"
 
 #include <imfilebrowser.h>
 
 #ifdef __EMSCRIPTEN__
-#include "../libs/emscripten/emscripten_mainloop_stub.h" // uncomment later
+#include "../libs/emscripten/emscripten_mainloop_stub.h"
 #endif
 
 #include <thread>
@@ -39,6 +39,11 @@
 
 #include "tracy/Tracy.hpp"
 #include <physicsDebugRenderer.h>
+
+struct State {
+
+};
+
 void beginEngineMainLoop()
 {
     TracyNoop;
@@ -155,12 +160,7 @@ void beginEngineMainLoop()
     SerializationHelper::serializeScene(scene);
     */
     
-    // Scene currently has two first person controllers on camera, how did that happen when I loaded scene?
     Scene scene = *(Scene*)AssetManager::loadOrGetAsset(43540);
-    // scene.mainCamera->gameObject->addComponentOfType(ComponentType::FIRST_PERSON_CONTROLLER);
-    // GameObject* cube = new GameObject("Cube");
-    // cube->addComponentOfType(ComponentType::MESH_RENDERER);
-    // scene.addRootGameObject(cube);
     GameObject* dirLight = new GameObject("DirLight");
     LightComponent* lightComponent = (LightComponent*)dirLight->addComponentOfType(ComponentType::LIGHT);
     lightComponent->lightType = LightType::SPOTLIGHT;
@@ -236,15 +236,18 @@ void beginEngineMainLoop()
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     Timer frameTimer;
-    float deltaTime = 0;
+
+    const double DT = 0.01;
+    double timeElapsed = 0.0;
+    double accumulator = 0.0;
+
+    State previousState;
+    State currentState;
 
     scene.startGameObjects();
 
-    JoltContext joltContext;
-    // TODO: pass in triangle shader
-    PhysicsDebugRenderer physicsDebugRenderer(&scene.mainCamera->getOutputTexture(), (Shader*)AssetManager::loadOrGetAsset(2749550006828703289), (Shader*)AssetManager::loadOrGetAsset(3100363658458281692), scene.mainCamera);
-    JPH::BodyManager::DrawSettings drawSettings;
-    joltContext.physics_system.DrawBodies(drawSettings, &physicsDebugRenderer);
+    PhysicsContext physicsContext(true);
+    PhysicsDebugRenderer physicsDebugRenderer(&scene.mainCamera->getOutputTexture(), (Shader*)AssetManager::loadOrGetAsset(2749550006828703289), (Shader*)AssetManager::loadOrGetAsset(3100363658458281692), scene.mainCamera, physicsContext.debugRenderer);
 
 #pragma region imfilebrowser
     ImGui::FileBrowser fileDialog(ImGuiFileBrowserFlags_NoModal);
@@ -263,7 +266,26 @@ void beginEngineMainLoop()
     {
         sdlContext.handleEvents(quit, inGameView);
 
-        deltaTime = frameTimer.readAndReset();
+        double frameTime = frameTimer.readHiResAndReset();
+
+        if (frameTime > 0.25)
+            frameTime = 0.25;
+
+        accumulator += frameTime;
+
+        while (accumulator >= DT) {
+            previousState = currentState;
+            /* currentState = */physicsContext.update(DT);
+            timeElapsed += DT;
+            accumulator -= DT;
+        }
+
+        const double alpha = accumulator / DT;
+
+        // State state = currentState * alpha +
+        //     previousState * (1.0 - alpha);
+        // and then render this state
+
         // std::cout << 1.0f/deltaTime << " fps" << std::endl;
         dearImGuiContext.newFrame();
 
@@ -327,16 +349,13 @@ void beginEngineMainLoop()
 
         runIgnisEngineGui(scene, inGameView);
 
-        // TODO: also need fixed timestep
-        scene.updateGameObjects(deltaTime); // this should actually only happen in game build or during play mode
+        scene.updateGameObjects(frameTime); // this should actually only happen in game build or during play mode
         glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        // scene.render();
+        scene.render();
+        physicsDebugRenderer.draw();
         dearImGuiContext.render();
-        joltContext.physics_system.DrawBodies(drawSettings, &physicsDebugRenderer);
 
         sdlContext.swapWindow();
-
-        physicsDebugRenderer.NextFrame();
     }
 #ifdef __EMSCRIPTEN__
     EMSCRIPTEN_MAINLOOP_END;

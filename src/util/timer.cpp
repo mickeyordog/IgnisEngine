@@ -3,7 +3,7 @@
 
 Timer::Timer()
 {
-    this->ticksPerSec = (float)SDL_GetPerformanceFrequency();
+    this->ticksPerSec = (double)SDL_GetPerformanceFrequency();
     reset();
 }
 
@@ -19,13 +19,21 @@ void Timer::reset()
 
 float Timer::read()
 {
-    Uint64 currentTicks = SDL_GetPerformanceCounter();
-    return (currentTicks - this->startTicks) / this->ticksPerSec;
+    return (float)readHiRes();
 }
 
 float Timer::readAndReset()
 {
-    float time = read();
+    return (float)readHiResAndReset();
+}
+
+double Timer::readHiRes() {
+    Uint64 currentTicks = SDL_GetPerformanceCounter();
+    return (currentTicks - this->startTicks) / this->ticksPerSec;
+}
+
+double Timer::readHiResAndReset() {
+    double time = readHiRes();
     reset();
     return time;
 }

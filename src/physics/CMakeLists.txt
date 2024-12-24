@@ -1,17 +1,19 @@
 add_library(physics
-    joltContext.cpp
+    physicsContext.cpp
     physicsDebugRenderer.cpp
 )
 
 target_link_libraries(
     physics
     PUBLIC
-        Jolt::Jolt
+        reactphysics3d
+        OpenGL::GL
+        GLEW::GLEW
 )
 
 target_include_directories(
     physics
     PUBLIC 
-        Jolt::Jolt
+        reactphysics3d
         ../engine
 )

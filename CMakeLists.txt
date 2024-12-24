@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.26.3)
 set (CMAKE_CXX_STANDARD 20)
-# disable cpp rtti so jolt will link, should maybe undo this later
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 add_compile_options("$<$<CONFIG:DEBUG>:-DDEBUG>")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Needed to avoid "Mismatch Detected for 'RuntimeLibrary'"
 if (WIN32)
@@ -84,17 +82,16 @@ target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
 find_package(glm CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
 
-# Jolt
-# if (APPLE)
-#     set(Jolt_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/arm64-osx/share/Jolt)
-# elseif (WIN32)
-#     set(Jolt_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows-static/share/Jolt)
-# endif()
-find_package(Jolt CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE Jolt::Jolt)
+include(FetchContent)
+set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/libs CACHE PATH "" FORCE)
 
-# include(FetchContent)
-# set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/libs CACHE PATH "" FORCE)
+# reactphysics3d
+FetchContent_Declare(reactphysics3d
+GIT_REPOSITORY https://github.com/DanielChappuis/reactphysics3d.git
+GIT_TAG master)
+FetchContent_MakeAvailable(reactphysics3d)
+target_include_directories(${PROJECT_NAME} PRIVATE libs/reactphysics3d-src/include)
+target_link_libraries(${PROJECT_NAME} PRIVATE reactphysics3d)
 
 # assimp
 # FetchContent_Declare(assimp
