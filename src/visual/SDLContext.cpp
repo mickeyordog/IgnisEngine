@@ -50,8 +50,9 @@ SDLContext::SDLContext(const char* name, int width, int height)
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-
-    // SDL_SetRelativeMouseMode(SDL_TRUE);
+    
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
 	this->window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE );
 	if (this->window == NULL)
@@ -88,7 +89,7 @@ void SDLContext::handleEvents(bool& quit, bool& inGameView)
         }
         if (!ImGui::GetIO().WantCaptureKeyboard && inGameView) {
             if (e.type == SDL_KEYDOWN) {
-                if (e.key.keysym.sym == SDLK_F4) {
+                if (e.key.keysym.sym == SDLK_ESCAPE) {
                     captureMouse(false);
                     inGameView = false;
                 }

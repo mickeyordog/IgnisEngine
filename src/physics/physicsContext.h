@@ -15,5 +15,6 @@ private:
     rp3d::PhysicsCommon physicsCommon;
     rp3d::PhysicsWorld* world;
     rp3d::RigidBody* body;
+    rp3d::RigidBody* floor;
     bool debugEnabled;
 };

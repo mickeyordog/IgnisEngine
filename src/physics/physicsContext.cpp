@@ -9,9 +9,15 @@ PhysicsContext::PhysicsContext(bool debugEnabled) : debugEnabled(debugEnabled) {
     rp3d::Transform transform(position, orientation);
     body = world->createRigidBody(transform);
 
+    floor = world->createRigidBody(rp3d::Transform({0, 0, 0}, rp3d::Quaternion::identity()));
+    floor->setType(rp3d::BodyType::STATIC);
+    floor->addCollider(physicsCommon.createBoxShape(rp3d::Vector3(10, 0.1, 10)), rp3d::Transform::identity());
+
     body->addCollider(physicsCommon.createSphereShape(1.0), rp3d::Transform::identity());
-    world->setIsGravityEnabled(false);
+    body->getCollider(0)->getMaterial().setBounciness(1.0);
+    // world->setIsGravityEnabled(false);
     if (debugEnabled) {
+        floor->setIsDebugEnabled(true);
         body->setIsDebugEnabled(true);
         world->setIsDebugRenderingEnabled(true);
         debugRenderer = &world->getDebugRenderer();
@@ -36,6 +42,6 @@ void PhysicsContext::update(double deltaTime) {
     const rp3d::Vector3& position = transform.getPosition();
 
     // Display the position of the body
-    std::cout << "Body Position: (" << position.x << ", " <<
-        position.y << ", " << position.z << ")" << std::endl;
+    // std::cout << "Body Position: (" << position.x << ", " <<
+    //     position.y << ", " << position.z << ")" << std::endl;
 }
