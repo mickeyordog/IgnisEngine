@@ -12,6 +12,7 @@ struct Quat {
 public:
     Quat() : data() { };
     Quat(glm::quat data) : data(data) { };
+    Quat(float x, float y, float z, float w) : data(x, y, z, w) { };
 
     Mat4 toMat4() const;
 

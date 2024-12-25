@@ -61,6 +61,7 @@ Scene::~Scene()
 void Scene::addRootGameObject(GameObject* gameObject)
 {
     this->rootObjects.push_back(gameObject);
+    gameObject->scene = this;
 }
 
 void Scene::startGameObjects()

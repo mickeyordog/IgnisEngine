@@ -1,6 +1,7 @@
 add_library(physics
     physicsContext.cpp
     physicsDebugRenderer.cpp
+    physicsEventListener.cpp
 )
 
 target_link_libraries(

@@ -25,6 +25,7 @@
 #include "assetManager.h"
 #include "lightComponent.h"
 #include "physicsContext.h"
+#include "rigidBodyComponent.h"
 
 #include <imfilebrowser.h>
 
@@ -51,6 +52,7 @@ void beginEngineMainLoop()
     SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);
     DearImGuiContext dearImGuiContext(&sdlContext, &glContext);
+    PhysicsContext physicsContext(true);
 
     AssetManager::recursivelyRegisterAllAssetsInDirectory("../assets");
 
@@ -129,6 +131,7 @@ void beginEngineMainLoop()
     SerializationHelper::registerComponentClass({ ComponentType::MESH_RENDERER, "Mesh Renderer", []() { return new MeshRenderer((Model*)AssetManager::loadOrGetAsset(11645431234), (Shader*)AssetManager::loadOrGetAsset(6016548490632296826)); } });
     SerializationHelper::registerComponentClass({ ComponentType::FIRST_PERSON_CONTROLLER, "First Person Controller", []() { return new FirstPersonController(5.0, 90.0); } });
     SerializationHelper::registerComponentClass({ ComponentType::LIGHT, "Light", []() { return new LightComponent(LightType::SPOTLIGHT); } });
+    SerializationHelper::registerComponentClass({ ComponentType::RIGID_BODY, "RigidBody", [&]() { return new RigidBodyComponent(physicsContext.world); } });
 
     /*
     GameObject g0("g0");
@@ -160,12 +163,12 @@ void beginEngineMainLoop()
     SerializationHelper::serializeScene(scene);
     */
     
-    Scene scene = *(Scene*)AssetManager::loadOrGetAsset(43540);
+    Scene* scene = (Scene*)AssetManager::loadOrGetAsset(43540);
     GameObject* dirLight = new GameObject("DirLight");
     LightComponent* lightComponent = (LightComponent*)dirLight->addComponentOfType(ComponentType::LIGHT);
     lightComponent->lightType = LightType::SPOTLIGHT;
-    scene.addRootGameObject(dirLight);
-    scene.lights.push_back(lightComponent);
+    scene->addRootGameObject(dirLight);
+    scene->lights.push_back(lightComponent);
 
     // scene runtime file should hold onto the lights being used (rn will just be all of them),
     // then ig could pass them to the camera for rendering. But render loop should also be taken out of camera
@@ -244,10 +247,9 @@ void beginEngineMainLoop()
     State previousState;
     State currentState;
 
-    scene.startGameObjects();
+    scene->startGameObjects();
 
-    PhysicsContext physicsContext(true);
-    PhysicsDebugRenderer physicsDebugRenderer(&scene.mainCamera->getOutputTexture(), (Shader*)AssetManager::loadOrGetAsset(2749550006828703289), (Shader*)AssetManager::loadOrGetAsset(3100363658458281692), scene.mainCamera, physicsContext.debugRenderer);
+    PhysicsDebugRenderer physicsDebugRenderer(&scene->mainCamera->getOutputTexture(), (Shader*)AssetManager::loadOrGetAsset(2749550006828703289), (Shader*)AssetManager::loadOrGetAsset(3100363658458281692), scene->mainCamera, physicsContext.debugRenderer);
 
 #pragma region imfilebrowser
     ImGui::FileBrowser fileDialog(ImGuiFileBrowserFlags_NoModal);
@@ -347,11 +349,11 @@ void beginEngineMainLoop()
         }
 #pragma endregion
 
-        runIgnisEngineGui(scene, inGameView);
+        runIgnisEngineGui(*scene, inGameView);
 
-        scene.updateGameObjects(frameTime); // this should actually only happen in game build or during play mode
+        scene->updateGameObjects(frameTime); // this should actually only happen in game build or during play mode
         glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        scene.render();
+        scene->render();
         physicsDebugRenderer.draw();
         dearImGuiContext.render();
 

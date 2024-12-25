@@ -16,10 +16,12 @@ public:
     virtual void start() override;
     virtual void update(float dt) override;
 
+    void set(const Vec3& position, const Quat& rotation);
     void setPosition(const Vec3& position);
     void translate(const Vec3& translation);
     void translateLocal(const Vec3& translation);
     void setScale(const Vec3& scale);
+    void setRotation(const Quat& rotation);
     void setEulerRotation(const Vec3& eulerRotation);
     void rotateAround(const Vec3& axis, float angleDegrees);
     void rotateAroundLocal(const Vec3& axis, float angleDegrees);

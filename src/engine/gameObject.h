@@ -9,6 +9,8 @@
 #include "asset.h"
 #include "serialization.h"
 
+class Scene;
+
 class GameObject {
 public:
     GameObject(std::string name, FileID fileID = -1);
@@ -23,7 +25,8 @@ public:
     Component* getComponentOfType(ComponentType type);
     const std::vector<std::unique_ptr<Component>>& getComponents() { return this->components; }
 
-    TransformComponent* transform; // TODO: can use transform->isActive instead of separate bool for gameobject
+    TransformComponent* transform;
+    Scene* scene;
 
     std::string name;
     FileID fileID;

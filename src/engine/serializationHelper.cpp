@@ -152,6 +152,7 @@ Scene* SerializationHelper::deserializeScene(const nlohmann::ordered_json& scene
         GameObject* gameObject = new GameObject(name, fileID);
         fileIDToGameObjectMap[gameObject->fileID] = gameObject;
         insertionOrder.push_back(gameObject->fileID);
+        gameObject->scene = scene;
     }
     for (FileID fileID : insertionOrder) {
         GameObject* gameObject = fileIDToGameObjectMap[fileID];

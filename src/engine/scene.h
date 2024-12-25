@@ -38,7 +38,6 @@ public:
     void addRootGameObject(GameObject* gameObject);
     void startGameObjects();
     void updateGameObjects(float dt);
-    // TODO: iterator for traversing entire scene tree
     const std::vector<GameObject*>& getRootGameObjects() const { return this->rootObjects; }
     SceneIterator getIterator() { return SceneIterator(*this); }
 
@@ -46,6 +45,7 @@ public:
     void render();
     CameraComponent* mainCamera = nullptr;
     std::vector<LightComponent*> lights; // might want to do this a different way
+    double frameAlpha = 0.0; // Represents how far between the previous and current frame we are
 
 private:
     std::vector<GameObject*> rootObjects; // TODO: replace these all with unique_ptr's, same with transform's children so they'll delete automatically. Also need to replace all iterations over scene with SceneIterator, and just return normal ptr from it

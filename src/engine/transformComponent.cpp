@@ -1,6 +1,7 @@
 #include "transformComponent.h"
 
 #include <iostream>
+#include "scene.h"
 
 TransformComponent::TransformComponent()
 {
@@ -20,6 +21,13 @@ void TransformComponent::start()
 void TransformComponent::update(float dt)
 {
 
+}
+
+void TransformComponent::set(const Vec3& position, const Quat& rotation) { 
+    this->position = position;
+    this->rotation = rotation;
+    guiEulerAngles = Quat::toEuler(rotation); // TODO: This should only really happen in editor
+    updateMatrix();
 }
 
 void TransformComponent::setPosition(const Vec3& position)
@@ -44,6 +52,12 @@ void TransformComponent::translateLocal(const Vec3& translation)
 void TransformComponent::setScale(const Vec3& scale)
 {
     this->scale = scale;
+    updateMatrix();
+}
+
+void TransformComponent::setRotation(const Quat& rotation) { 
+    this->rotation = rotation;
+    guiEulerAngles = Quat::toEuler(rotation); // TODO: This should only really happen in editor
     updateMatrix();
 }
 
@@ -79,6 +93,7 @@ void TransformComponent::addChildTransform(TransformComponent* transform)
 {
     this->childTransforms.push_back(transform);
     transform->parentTransform = this;
+    transform->gameObject->scene = gameObject->scene;
 }
 
 void TransformComponent::removeChildTransform(TransformComponent* transform)

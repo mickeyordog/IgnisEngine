@@ -10,7 +10,7 @@ public:
     virtual void start() override = 0;
     virtual void update(float dt) override = 0;
 
-    virtual bool isPy() override { return true; }
+    // virtual bool isPy() override { return true; }
     virtual const std::vector<FieldDescription>& getFields() override { return fields; };
 
 private:

@@ -40,6 +40,7 @@ enum class ComponentType
     MESH_RENDERER,
     FIRST_PERSON_CONTROLLER,
     LIGHT,
+    RIGID_BODY,
     UNKNOWN
 };
 

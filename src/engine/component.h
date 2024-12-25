@@ -10,7 +10,7 @@ class Component {
 public:
     Component();
     virtual ~Component() = default;
-    virtual void start() = 0;
+    virtual void start() = 0; // TODO: this is not currently being called if added after start of game
     virtual void update(float dt) = 0;
     virtual enum ComponentType getType() = 0;
 
@@ -19,7 +19,6 @@ public:
     GameObject* gameObject;
 
     virtual bool isVisual() { return false; }
-    virtual bool isPy() { return false; }
     bool isActive = true;
     FileID fileID;
 
