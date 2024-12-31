@@ -52,7 +52,7 @@ void PhysicsDebugRenderer::drawLines() {
     glDisable(GL_CULL_FACE);
     glDrawArrays(GL_LINES, 0, lines.size() * 2);
     glLineWidth(1.0f);
-    glEnable(GL_CULL_FACE);
+    // glEnable(GL_CULL_FACE);
 
     // cleanup
     glDeleteVertexArrays(1, &VAO);
@@ -96,7 +96,7 @@ void PhysicsDebugRenderer::drawTriangles() {
     glDrawArrays(GL_TRIANGLES, 0, tris.size() * 3);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glLineWidth(1.0f);
-    glEnable(GL_CULL_FACE);
+    // glEnable(GL_CULL_FACE);
 
     // cleanup
     glDeleteVertexArrays(1, &VAO);

@@ -45,6 +45,16 @@ void GameObject::update(float dt) {
     }
 }
 
+void GameObject::fixedUpdate(float dt) { 
+    if (!transform->isActive)
+        return;
+
+    for (auto& component : this->components) {
+        if (component->isActive)
+            component->fixedUpdate(dt);
+    }
+}
+
 void GameObject::render() {
     // loop through vis components and call render
     // but how should I set uniforms?
@@ -54,7 +64,7 @@ Component* GameObject::addComponentOfType(ComponentType type)
 {
     Component* component = SerializationHelper::getNewComponent(type);
     this->components.push_back(std::unique_ptr<Component>(component));
-    component->gameObject = this;
+    component->gameObject = this; // Problem: gameObject is not set when the ctor of component is running
     return component;
 }
 

@@ -14,9 +14,9 @@ public:
     rp3d::PhysicsWorld* world;
     rp3d::DebugRenderer* debugRenderer;
 
+    bool debugEnabled;
 private:
     rp3d::RigidBody* body;
     rp3d::RigidBody* floor;
     PhysicsEventListener eventListener;
-    bool debugEnabled;
 };

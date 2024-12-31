@@ -10,8 +10,9 @@ class Component {
 public:
     Component();
     virtual ~Component() = default;
-    virtual void start() = 0; // TODO: this is not currently being called if added after start of game
-    virtual void update(float dt) = 0;
+    virtual void start() { }; // TODO: this is not currently being called if added after start of game
+    virtual void update(float dt) { }; // Potential problem: not calling update on base class
+    virtual void fixedUpdate(float dt) { };
     virtual enum ComponentType getType() = 0;
 
     void setField(const FieldDescription& field, void* value);

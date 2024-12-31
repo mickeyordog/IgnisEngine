@@ -21,8 +21,8 @@ public:
     virtual const std::vector<FieldDescription>& getFields() override { return fields; };
 
 private:
-    std::vector<FieldDescription> fields = {
-        { GET_NAME(model), FieldType::ASSET_POINTER_FIELD, &model, []() { }, ".fbx" },
+    std::vector<FieldDescription> fields = { // TODO: replace with gltf
+        { GET_NAME(model), FieldType::ASSET_POINTER_FIELD, &model, []() { }, ".glb" },
         { GET_NAME(shader), FieldType::ASSET_POINTER_FIELD, &shader, []() { }, ".shader" }
     };
     // GLuint VAO, VBO;

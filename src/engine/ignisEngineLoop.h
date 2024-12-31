@@ -41,10 +41,6 @@
 #include "tracy/Tracy.hpp"
 #include <physicsDebugRenderer.h>
 
-struct State {
-
-};
-
 void beginEngineMainLoop()
 {
     TracyNoop;
@@ -128,10 +124,10 @@ void beginEngineMainLoop()
     SerializationHelper::registerComponentClass({ ComponentType::TRANSFORM, "Transform", []() { return new TransformComponent(); } });
     SerializationHelper::registerComponentClass({ ComponentType::SPRITE_RENDERER, "Sprite Renderer", []() { return new SpriteRenderer((Texture*)AssetManager::loadOrGetAsset(1), (Shader*)AssetManager::loadOrGetAsset(523457802578)); } });
     SerializationHelper::registerComponentClass({ ComponentType::ANIMATOR, "Animator", []() { return new AnimatorComponent(); } });
-    SerializationHelper::registerComponentClass({ ComponentType::MESH_RENDERER, "Mesh Renderer", []() { return new MeshRenderer((Model*)AssetManager::loadOrGetAsset(11645431234), (Shader*)AssetManager::loadOrGetAsset(6016548490632296826)); } });
+    SerializationHelper::registerComponentClass({ ComponentType::MESH_RENDERER, "Mesh Renderer", []() { return new MeshRenderer((Model*)AssetManager::loadOrGetAsset(8149236788311433390), (Shader*)AssetManager::loadOrGetAsset(6016548490632296826)); } });
     SerializationHelper::registerComponentClass({ ComponentType::FIRST_PERSON_CONTROLLER, "First Person Controller", []() { return new FirstPersonController(5.0, 90.0); } });
     SerializationHelper::registerComponentClass({ ComponentType::LIGHT, "Light", []() { return new LightComponent(LightType::SPOTLIGHT); } });
-    SerializationHelper::registerComponentClass({ ComponentType::RIGID_BODY, "RigidBody", [&]() { return new RigidBodyComponent(physicsContext.world); } });
+    SerializationHelper::registerComponentClass({ ComponentType::RIGID_BODY, "RigidBody", [&]() { return new RigidBodyComponent(&physicsContext); } });
 
     /*
     GameObject g0("g0");
@@ -240,12 +236,9 @@ void beginEngineMainLoop()
 
     Timer frameTimer;
 
-    const double DT = 0.01;
+    const double DT = 1.0 / 60.0;
     double timeElapsed = 0.0;
     double accumulator = 0.0;
-
-    State previousState;
-    State currentState;
 
     scene->startGameObjects();
 
@@ -269,24 +262,17 @@ void beginEngineMainLoop()
         sdlContext.handleEvents(quit, inGameView);
 
         double frameTime = frameTimer.readHiResAndReset();
-
         if (frameTime > 0.25)
             frameTime = 0.25;
-
         accumulator += frameTime;
-
         while (accumulator >= DT) {
-            previousState = currentState;
-            /* currentState = */physicsContext.update(DT);
+            physicsContext.update(DT);
+            scene->fixedUpdateGameObjects(DT); // This could potentially be optimized since few objs need to fixed update
             timeElapsed += DT;
             accumulator -= DT;
         }
-
         const double alpha = accumulator / DT;
-
-        // State state = currentState * alpha +
-        //     previousState * (1.0 - alpha);
-        // and then render this state
+        scene->frameAlpha = alpha;
 
         // std::cout << 1.0f/deltaTime << " fps" << std::endl;
         dearImGuiContext.newFrame();

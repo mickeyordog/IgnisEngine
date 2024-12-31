@@ -5,11 +5,11 @@ PhysicsContext::PhysicsContext(bool debugEnabled) : debugEnabled(debugEnabled) {
     world->setEventListener(&eventListener);
 
     // Create a rigid body in the world
-    body = world->createRigidBody(rp3d::Transform({0, 5, 0}, rp3d::Quaternion::identity()));
+    body = world->createRigidBody(rp3d::Transform({-5, 0, 0}, rp3d::Quaternion::identity()));
     body->addCollider(physicsCommon.createSphereShape(1.0), rp3d::Transform::identity());
     body->getCollider(0)->getMaterial().setBounciness(1.0);
 
-    floor = world->createRigidBody(rp3d::Transform({0, 0, 0}, rp3d::Quaternion::identity()));
+    floor = world->createRigidBody(rp3d::Transform({0, -5, 0}, rp3d::Quaternion::identity()));
     floor->setType(rp3d::BodyType::STATIC);
     floor->addCollider(physicsCommon.createBoxShape(rp3d::Vector3(10, 0.1, 10)), rp3d::Transform::identity());
 

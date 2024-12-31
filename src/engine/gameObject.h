@@ -18,6 +18,7 @@ public:
 
     void start();
     void update(float dt);
+    void fixedUpdate(float dt);
     void render();
 
     Component* addComponentOfType(ComponentType type);

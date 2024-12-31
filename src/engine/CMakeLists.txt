@@ -71,5 +71,6 @@ target_include_directories(
         ${STB_IMAGE_PATH}
         ${IMGUI_PATH}
         ${LIGHTMAPPER_PATH}
+        ${TINYGLTF_PATH}
         assimp::assimp
 )

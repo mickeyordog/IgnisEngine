@@ -82,6 +82,14 @@ target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
 find_package(glm CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
 
+# tiny-gltf
+set(TINYGLTF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/cross-platform/tinygltf)
+set(TINYGLTF_HEADER_ONLY ON CACHE INTERNAL "" FORCE)
+set(TINYGLTF_INSTALL OFF CACHE INTERNAL "" FORCE)
+set(TINYGLTF_BUILD_LOADER_EXAMPLE OFF CACHE INTERNAL "" FORCE)
+add_subdirectory(${TINYGLTF_PATH})
+target_include_directories(${PROJECT_NAME} PRIVATE ${TINYGLTF_PATH})
+
 include(FetchContent)
 set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/libs CACHE PATH "" FORCE)
 

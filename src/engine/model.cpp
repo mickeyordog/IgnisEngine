@@ -4,14 +4,92 @@
 
 Model::Model(const aiScene* assimpScene, const std::filesystem::path& directory)
 {
-    // double factor(0.0);
-    // if (assimpScene->mMetaData->Get("UnitScaleFactor", factor)) {
-    //     std::cout << "Unit scale factor is " << factor << std::endl;
-    // }
-    // else {
-    //     std::cout << "Failed to get unit scale factor!" << std::endl;
-    // }
     processNode(assimpScene->mRootNode, assimpScene, directory);
+}
+
+// Not working, try with a simpler mesh like just one triangle
+Mesh Model::processMesh(const tinygltf::Model& model, const tinygltf::Mesh& mesh) {
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture*> textures;
+    for (size_t i = 0; i < mesh.primitives.size(); ++i) {
+        const tinygltf::Primitive& primitive = mesh.primitives[i];
+
+        // indices
+        {
+            const tinygltf::Accessor& indexAccessor = model.accessors[primitive.indices];
+            const tinygltf::BufferView& indexBufferView = model.bufferViews[indexAccessor.bufferView];
+            const tinygltf::Buffer& indexBuffer = model.buffers[indexBufferView.buffer];
+            int start = indexBufferView.byteOffset + indexAccessor.byteOffset;
+            int end = start + indexBufferView.byteLength;
+            for (int i = start; i < end; i += 2) { // +2 because unsigned short, use byteStride instead
+                unsigned short* index = (unsigned short*)&indexBuffer.data[i];
+                indices.push_back(*index);
+            }
+        }
+
+        // vertices
+        std::vector<Vec3> positions;
+        std::vector<Vec3> normals;
+        std::vector<Vec2> texCoords;
+        for (const auto& attrib : primitive.attributes) {
+            // maybe also want to be checking that data is correct type
+            const tinygltf::Accessor& accessor = model.accessors[attrib.second];
+            const tinygltf::BufferView& bufferView = model.bufferViews[accessor.bufferView];
+            const tinygltf::Buffer& buffer = model.buffers[bufferView.buffer];
+            int start = bufferView.byteOffset + accessor.byteOffset;
+            int end = start + bufferView.byteLength;
+            for (int i = start; i < end;) {
+                if (attrib.first.compare("POSITION") == 0) {
+                    Vec3* vec = (Vec3*)&buffer.data[i];
+                    positions.push_back(*vec);
+                    i += sizeof(Vec3);
+                } else if (attrib.first.compare("NORMAL") == 0) {
+                    Vec3* vec = (Vec3*)&buffer.data[i];
+                    normals.push_back(*vec);
+                    i += sizeof(Vec3);
+                } else if (attrib.first.compare("TEXCOORD_0") == 0) {
+                    Vec2* vec = (Vec2*)&buffer.data[i];
+                    texCoords.push_back(*vec);
+                    i += sizeof(Vec2);
+                }
+            }
+        }
+        for (size_t i = 0; i < positions.size(); ++i) {
+            Vertex vertex;
+            vertex.Position = positions[i];
+            vertex.Normal = normals[i];
+            vertex.TexCoords = texCoords[i];
+            vertices.push_back(vertex);
+        }
+
+        // textures
+        for (const tinygltf::Texture& tex : model.textures) {
+            if (tex.source > -1) {
+                const tinygltf::Image& image = model.images[tex.source];
+                // don't like this new here, would be better if texture was external file
+                // text version seems to use external texture, not sure if binary version can do that   
+                textures.push_back(new Texture(image.image.data(), image.width, image.height, image.component, TextureType::DIFFUSE));
+            }
+        }
+    }
+    return Mesh(vertices, indices, textures);
+}
+
+void Model::processNode(const tinygltf::Model& model, const tinygltf::Node& node) {
+    if ((node.mesh >= 0) && (node.mesh < model.meshes.size())) {
+        meshes.push_back(processMesh(model, model.meshes[node.mesh]));
+    }
+    for (size_t i = 0; i < node.children.size(); i++) {
+        processNode(model, model.nodes[node.children[i]]);
+    }
+}
+
+Model::Model(const tinygltf::Model& model, const std::filesystem::path& directory) { 
+    const tinygltf::Scene& scene = model.scenes[model.defaultScene];
+    for (size_t i = 0; i < scene.nodes.size(); ++i) {
+        processNode(model, model.nodes[scene.nodes[i]]);
+    }
 }
 
 Model::~Model()

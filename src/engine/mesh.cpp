@@ -1,4 +1,5 @@
 #include "mesh.h"
+#include <iostream>
 #include <string>
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
@@ -60,7 +61,7 @@ void Mesh::setupMesh()
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() *
-                 sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
+                 sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
     // vertex positions
     glEnableVertexAttribArray(0);
@@ -77,4 +78,17 @@ void Mesh::setupMesh()
                           (void*)offsetof(Vertex, TexCoords));
 
     glBindVertexArray(0);
+
+    // print indices
+    for (int i = 0; i < indices.size(); i++) {
+        std::cout << "Index " << i << ": " << indices[i] << std::endl;
+    }
+    // print vertices
+    // for (int i = 0; i < vertices.size(); i++) {
+    //     std::cout << "Vertex " << i << ": " << vertices[i].Position.x() << ", " << vertices[i].Position.y() << ", " << vertices[i].Position.z() << std::endl;
+    // }
+    // print normals
+    // for (int i = 0; i < vertices.size(); i++) {
+    //     std::cout << "Normal " << i << ": " << vertices[i].Normal.x() << ", " << vertices[i].Normal.y() << ", " << vertices[i].Normal.z() << std::endl;
+    // }
 }

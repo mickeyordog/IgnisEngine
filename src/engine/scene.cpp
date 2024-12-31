@@ -71,6 +71,7 @@ void Scene::startGameObjects()
     {
         gameObject->start();
     }
+    started = true;
 }
 
 void Scene::updateGameObjects(float dt)
@@ -79,6 +80,14 @@ void Scene::updateGameObjects(float dt)
     while (GameObject* gameObject = it.getNext())
     {
         gameObject->update(dt);
+    }
+}
+
+void Scene::fixedUpdateGameObjects(float dt) { 
+    SceneIterator it = getIterator();
+    while (GameObject* gameObject = it.getNext())
+    {
+        gameObject->fixedUpdate(dt);
     }
 }
 

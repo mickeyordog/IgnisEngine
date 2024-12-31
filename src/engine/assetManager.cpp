@@ -11,7 +11,14 @@
 #include "texture.h"
 #include "serializationHelper.h"
 #include "animationController.h"
-#include <randomNumberGenerator.h>
+#include "randomNumberGenerator.h"
+
+// Define these only in *one* .cc file.
+#define TINYGLTF_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+// #define TINYGLTF_NOEXCEPTION // optional. disable exception handling.
+#include "tiny_gltf.h"
 
 
 // TODO: need to go through here and everywhere assets loaded to make sure they can handle being passed nullptr if not found
@@ -222,50 +229,41 @@ AnimationClip* AssetManager::loadAnimationClip(const std::filesystem::path& file
     return SerializationHelper::deserializeAnimationClip(animClipJson);
 }
 
-Model* AssetManager::loadModel(const std::filesystem::path& filepath)
+Model* AssetManager::loadModel(const std::filesystem::path& filepath, bool isBinary)
 {
-    Assimp::Importer importer;
-    // consider also flags aiProcess_GenNormals and aiProcess_OptimizeMeshes and aiProcess_JoinIdenticalVertices  
-    const aiScene* scene = importer.ReadFile(filepath.string(), aiProcess_Triangulate | aiProcess_FlipUVs);
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-    {
-        std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+    // Assimp::Importer importer;
+    // const aiScene* scene = importer.ReadFile(filepath.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph | aiProcess_GenNormals);
+    // if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    // {
+    //     std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+        // return nullptr;
+    // }
+
+    tinygltf::Model model;
+    tinygltf::TinyGLTF loader;
+    std::string err;
+    std::string warn;
+
+    bool ret;
+    if (isBinary) {
+        ret = loader.LoadBinaryFromFile(&model, &err, &warn, filepath.string()); // for binary glTF(.glb)
+    } else {
+        ret = loader.LoadASCIIFromFile(&model, &err, &warn, filepath.string()); // for text gltf
+    }
+
+    if (!warn.empty()) {
+        printf("Warn: %s\n", warn.c_str());
+    }
+
+    if (!err.empty()) {
+        printf("Err: %s\n", err.c_str());
+    }
+
+    if (!ret) {
+        printf("Failed to parse glTF\n");
         return nullptr;
     }
 
-    // TODO: ideally would replace all strings here with filepath types. Can use .stem() and .extension() instead of manual decomposition
     std::filesystem::path path(filepath);
-    return new Model(scene, path.parent_path().string());
+    return new Model(model, path.parent_path().string());
 }
-
-// AssetFilepathInfo AssetManager::getFileExtensionInfoFromFilePath(const std::filesystem::path& filepath)
-// {
-//     // Maybe I could store type in file and avoid doing this nonsense
-//     int lastDotIndex = -1;
-//     int secondLastDotIndex = -1;
-//     for (int i = filepath.string().length() - 1; i >= 0; i--)
-//     {
-//         if (filepath.string()[i] == '.')
-//         {
-//             if (lastDotIndex == -1)
-//             {
-//                 lastDotIndex = i;
-//             }
-//             else
-//             {
-//                 secondLastDotIndex = i;
-//                 break;
-//             }
-//         }
-//     }
-//     if (secondLastDotIndex == -1)
-//     {
-//         // TODO: need better way of dealing with errors like this
-//         std::cout << "Error: file name " << filepath << " has incorrect format" << std::endl;
-//     }
-
-//     std::string pathWithoutMetaExtension = filepath.string().substr(0, secondLastDotIndex);
-//     std::string metaExtension = filepath.string().substr(secondLastDotIndex + 1, lastDotIndex - secondLastDotIndex - 1);
-//     std::string actualFileExtension = filepath.string().substr(0, lastDotIndex);
-//     return { filepath, pathWithoutMetaExtension, metaExtension, actualFileExtension };
-// }

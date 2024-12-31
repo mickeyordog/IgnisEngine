@@ -4,7 +4,7 @@
 #include "texture.h"
 #include "stb_image.h"
 
-Texture::Texture(unsigned char* data, int width, int height, int numChannels, TextureType type) : width(width), height(height), type(type)
+Texture::Texture(const unsigned char* data, int width, int height, int numChannels, TextureType type) : width(width), height(height), type(type)
 {
     glGenTextures(1, &this->textureHandle);
     glActiveTexture(GL_TEXTURE0);

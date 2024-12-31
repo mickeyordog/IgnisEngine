@@ -31,6 +31,7 @@ struct FieldDescription
         : name(name), type(type), ptr(ptr), postUpdateFunction(postUpdateFunction), validFileExtension(validFileExtension), showConditionFunction(showConditionFunction) { }
 };
 
+// I could actually maybe just generate a guid for each component type and use that for serialization
 enum class ComponentType
 {
     CAMERA,

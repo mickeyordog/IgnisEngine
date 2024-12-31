@@ -22,7 +22,7 @@ public:
 
 private:
     GLuint VAO, VBO, EBO;
-    std::vector<Vertex> vertices;
+    std::vector<Vertex> vertices; // I don't really need to keep these around after sending to gpu, just need # of indices
     std::vector<unsigned int> indices;
     std::vector<Texture*> textures; // TODO: ideally these are shared ptrs
     void setupMesh();

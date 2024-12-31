@@ -34,7 +34,7 @@ private:
     static Scene* loadScene(const std::filesystem::path& filepath);
     static AnimationController* loadAnimationController(const std::filesystem::path& filepath);
     static AnimationClip* loadAnimationClip(const std::filesystem::path& filepath);
-    static Model* loadModel(const std::filesystem::path& filepath);
+    static Model* loadModel(const std::filesystem::path& filepath, bool isBinary = true);
 
     inline static std::unordered_map<IgnisGUID, std::unique_ptr<Asset>> loadedAssets;
     inline static std::unordered_map<IgnisGUID, std::filesystem::path> registeredAssetMetaFilepaths; // Is this the right way to smart ptr to c string?
@@ -43,7 +43,7 @@ private:
         {AssetType::VERT_SHADER, {".vs"}},
         {AssetType::FRAG_SHADER, {".fs"}},
         {AssetType::TEXTURE, {".png"}},
-        {AssetType::MODEL, {".fbx"}},
+        {AssetType::MODEL, {".glb", ".gltf"}},
         {AssetType::SCENE, {".scene"}},
     };
 
