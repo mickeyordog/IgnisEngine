@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iostream>
 #include <assimp/Importer.hpp>
+#include <assimp/cimport.h>
 #include "texture.h"
 #include "serializationHelper.h"
 #include "animationController.h"
@@ -15,10 +16,10 @@
 
 // Define these only in *one* .cc file.
 #define TINYGLTF_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
+//#define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 // #define TINYGLTF_NOEXCEPTION // optional. disable exception handling.
-#include "tiny_gltf.h"
+#include <tinygltf/tiny_gltf.h>
 
 
 // TODO: need to go through here and everywhere assets loaded to make sure they can handle being passed nullptr if not found
@@ -119,6 +120,7 @@ Asset* AssetManager::loadAndRegisterAsset(const IgnisGUID guid, const std::files
 
 void AssetManager::recursivelyRegisterAllAssetsInDirectory(const std::filesystem::path& directoryPath)
 {
+    std::cout << directoryPath.parent_path();
     for (const auto& entry : std::filesystem::recursive_directory_iterator(directoryPath)) {
         if (entry.is_regular_file()) {
             if (entry.path().extension().compare(META_EXT) == 0)
@@ -231,39 +233,42 @@ AnimationClip* AssetManager::loadAnimationClip(const std::filesystem::path& file
 
 Model* AssetManager::loadModel(const std::filesystem::path& filepath, bool isBinary)
 {
-    // Assimp::Importer importer;
-    // const aiScene* scene = importer.ReadFile(filepath.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph | aiProcess_GenNormals);
-    // if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-    // {
-    //     std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
-        // return nullptr;
-    // }
+     Assimp::Importer importer;
+     const aiScene* scene = importer.ReadFile(filepath.string(), aiProcess_Triangulate | aiProcess_FlipUVs/* | aiProcess_JoinIdenticalVertices | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph | aiProcess_GenNormals*/);
+     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+     {
+         std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+         return nullptr;
+     }
+     Model* model = new Model(scene, filepath.parent_path().string());
+     //aiReleaseImport(scene); // Seems to crash when I do this? Maybe it gets deleted automatically
+     return model;
 
-    tinygltf::Model model;
-    tinygltf::TinyGLTF loader;
-    std::string err;
-    std::string warn;
+    //tinygltf::Model model;
+    //tinygltf::TinyGLTF loader;
+    //std::string err;
+    //std::string warn;
 
-    bool ret;
-    if (isBinary) {
-        ret = loader.LoadBinaryFromFile(&model, &err, &warn, filepath.string()); // for binary glTF(.glb)
-    } else {
-        ret = loader.LoadASCIIFromFile(&model, &err, &warn, filepath.string()); // for text gltf
-    }
+    //bool ret;
+    //if (isBinary) {
+    //    ret = loader.LoadBinaryFromFile(&model, &err, &warn, filepath.string()); // for binary glTF(.glb)
+    //} else {
+    //    ret = loader.LoadASCIIFromFile(&model, &err, &warn, filepath.string()); // for text gltf
+    //}
 
-    if (!warn.empty()) {
-        printf("Warn: %s\n", warn.c_str());
-    }
+    //if (!warn.empty()) {
+    //    printf("Warn: %s\n", warn.c_str());
+    //}
 
-    if (!err.empty()) {
-        printf("Err: %s\n", err.c_str());
-    }
+    //if (!err.empty()) {
+    //    printf("Err: %s\n", err.c_str());
+    //}
 
-    if (!ret) {
-        printf("Failed to parse glTF\n");
-        return nullptr;
-    }
+    //if (!ret) {
+    //    printf("Failed to parse glTF\n");
+    //    return nullptr;
+    //}
 
-    std::filesystem::path path(filepath);
-    return new Model(model, path.parent_path().string());
+    //std::filesystem::path path(filepath);
+    //return new Model(model, path.parent_path().string());
 }

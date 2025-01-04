@@ -2,9 +2,9 @@
 
 #include <stdio.h>
 #include <iostream>
-#include <imgui.h>
-#include <imgui_impl_sdl2.h>
-#include <imgui_impl_opengl3.h>
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_sdl2.h>
+#include <imgui/imgui_impl_opengl3.h>
 #include "SDLContext.h"
 #include "GLContext.h"
 #include "dearImGuiContext.h"
@@ -27,7 +27,7 @@
 #include "physicsContext.h"
 #include "rigidBodyComponent.h"
 
-#include <imfilebrowser.h>
+//#include <imfilebrowser.h>
 
 #ifdef __EMSCRIPTEN__
 #include "../libs/emscripten/emscripten_mainloop_stub.h"
@@ -38,19 +38,19 @@
 #include <future>
 #include <mutex>
 
-#include "tracy/Tracy.hpp"
 #include <physicsDebugRenderer.h>
 
 void beginEngineMainLoop()
 {
-    TracyNoop;
+    //TracyNoop;
     // TODO: make these singletons or static so can be accessed without having to pass to game update code
     SDLContext sdlContext("Ignis Engine", 800, 800);
     GLContext glContext(&sdlContext);
     DearImGuiContext dearImGuiContext(&sdlContext, &glContext);
     PhysicsContext physicsContext(true);
 
-    AssetManager::recursivelyRegisterAllAssetsInDirectory("../assets");
+    // TODO: maybe copy assets (into zip?) or handle this path somehow
+    AssetManager::recursivelyRegisterAllAssetsInDirectory("C:\\Users\\micke\\source\\repos\\IgnisEngine\\IgnisEngine\\assets");
 
 // TODO: try writing and loading a couple big files async vs not and see if time difference
 /*
@@ -160,11 +160,11 @@ void beginEngineMainLoop()
     */
     
     Scene* scene = (Scene*)AssetManager::loadOrGetAsset(43540);
-    GameObject* dirLight = new GameObject("DirLight");
-    LightComponent* lightComponent = (LightComponent*)dirLight->addComponentOfType(ComponentType::LIGHT);
-    lightComponent->lightType = LightType::SPOTLIGHT;
-    scene->addRootGameObject(dirLight);
-    scene->lights.push_back(lightComponent);
+    //GameObject* dirLight = new GameObject("DirLight");
+    //LightComponent* lightComponent = (LightComponent*)dirLight->addComponentOfType(ComponentType::LIGHT);
+    //lightComponent->lightType = LightType::SPOTLIGHT;
+    //scene->addRootGameObject(dirLight);
+    //scene->lights.push_back(lightComponent);
 
     // scene runtime file should hold onto the lights being used (rn will just be all of them),
     // then ig could pass them to the camera for rendering. But render loop should also be taken out of camera
@@ -242,14 +242,16 @@ void beginEngineMainLoop()
 
     scene->startGameObjects();
 
-    PhysicsDebugRenderer physicsDebugRenderer(&scene->mainCamera->getOutputTexture(), (Shader*)AssetManager::loadOrGetAsset(2749550006828703289), (Shader*)AssetManager::loadOrGetAsset(3100363658458281692), scene->mainCamera, physicsContext.debugRenderer);
+    //PhysicsDebugRenderer physicsDebugRenderer(&scene->mainCamera->getOutputTexture(), (Shader*)AssetManager::loadOrGetAsset(2749550006828703289), (Shader*)AssetManager::loadOrGetAsset(3100363658458281692), scene->mainCamera, physicsContext.debugRenderer);
 
+    /*
 #pragma region imfilebrowser
     ImGui::FileBrowser fileDialog(ImGuiFileBrowserFlags_NoModal);
     // (optional) set browser properties
     fileDialog.SetTitle("title");
     fileDialog.SetTypeFilters({ ".h", ".cpp" });
 #pragma endregion
+    */
 
     bool quit = false;
     bool inGameView = false; // Would ideally like to just handle this in UI and not need this
@@ -266,7 +268,7 @@ void beginEngineMainLoop()
             frameTime = 0.25;
         accumulator += frameTime;
         while (accumulator >= DT) {
-            physicsContext.update(DT);
+            //physicsContext.update(DT);
             scene->fixedUpdateGameObjects(DT); // This could potentially be optimized since few objs need to fixed update
             timeElapsed += DT;
             accumulator -= DT;
@@ -277,6 +279,7 @@ void beginEngineMainLoop()
         // std::cout << 1.0f/deltaTime << " fps" << std::endl;
         dearImGuiContext.newFrame();
 
+        /*
 #pragma region imfilebrowser
         if (ImGui::Begin("dummy window"))
         {
@@ -292,7 +295,9 @@ void beginEngineMainLoop()
             fileDialog.ClearSelected();
         }
 #pragma endregion
+*/
 #pragma region Dear Imgui Remove This
+        /*
         static bool show_demo_window = false;
         static bool show_another_window = false;
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
@@ -333,6 +338,7 @@ void beginEngineMainLoop()
             // ImGui::Image((void*)(uintptr_t)renderTexture.texture, ImVec2(renderTexture.width, renderTexture.height));
             ImGui::End();
         }
+        */
 #pragma endregion
 
         runIgnisEngineGui(*scene, inGameView);
@@ -340,7 +346,7 @@ void beginEngineMainLoop()
         scene->updateGameObjects(frameTime); // this should actually only happen in game build or during play mode
         glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         scene->render();
-        physicsDebugRenderer.draw();
+        //physicsDebugRenderer.draw();
         dearImGuiContext.render();
 
         sdlContext.swapWindow();

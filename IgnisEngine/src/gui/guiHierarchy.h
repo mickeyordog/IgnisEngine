@@ -2,7 +2,7 @@
 
 #include <stack>
 #include <unordered_set>
-#include <imgui.h>
+#include <imgui/imgui.h>
 #include "scene.h"
 
 void showGuiHierarchyPanel(Scene& scene, std::unordered_set<GameObject*>& selectedObjects)

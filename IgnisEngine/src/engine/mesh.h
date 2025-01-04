@@ -18,6 +18,11 @@ public:
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
          std::vector<Texture*> textures);
     ~Mesh();
+    //Mesh(const Mesh&) = delete;
+    //Mesh& operator=(const Mesh&) = delete;
+    //Mesh(Mesh&&) = default;
+    //Mesh& operator=(Mesh&&) = default;
+
     void render(const Shader& shader); // this shader should maybe come from material instead
 
 private:

@@ -7,7 +7,7 @@
 #include <SDL.h>
 #include "SDLContext.h"
 #include <inputHandler.h>
-#include <imgui_impl_sdl2.h>
+#include <imgui/imgui_impl_sdl2.h>
 
 // THERE WAS MORE OS SPECIFIC STUFF IN EXAMPLE, CHECK THAT IF OS NOT WORKING
 SDLContext::SDLContext(const char* name, int width, int height)

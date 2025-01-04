@@ -1,6 +1,6 @@
 #include "firstPersonController.h"
 #include "inputHandler.h"
-#include "gameObject.cpp"
+#include "gameObject.h"
 
 FirstPersonController::FirstPersonController(float movementSpeed, float rotationSpeed) : movementSpeed(movementSpeed), rotationSpeed(rotationSpeed)
 {

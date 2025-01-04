@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include "tiny_gltf.h"
+#include "tinygltf/tiny_gltf.h"
 #include "shader.h"
 #include "mesh.h"
 

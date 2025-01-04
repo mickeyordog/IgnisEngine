@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <stdio.h>
-#include <imgui.h>
+#include <imgui/imgui.h>
 #include "scene.h"
 
 void showGuiScenePanel(Scene& scene, bool& inGameView)

@@ -111,7 +111,7 @@ void Model::processNode(aiNode* node, const aiScene* scene, const std::filesyste
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(processMesh(mesh, scene, directory));
+        meshes.push_back(std::move(processMesh(mesh, scene, directory)));
     }
 
     // then do the same for each of its children
@@ -160,7 +160,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, const std::filesyste
         std::vector<Texture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, TextureType::SPECULAR, directory);
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
-    return Mesh(vertices, indices, textures);
+    return std::move(Mesh(vertices, indices, textures)); // Why does this still call ctor???
 }
 
 std::vector<Texture*> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType textureType, const std::filesystem::path& directory)

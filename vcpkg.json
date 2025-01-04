@@ -1,0 +1,10 @@
+{
+  "dependencies": [
+    "assimp",
+    "glew",
+    "glm",
+    "nlohmann-json",
+    "sdl2",
+    "tracy"
+  ]
+}

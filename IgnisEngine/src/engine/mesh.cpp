@@ -9,9 +9,9 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
 }
 
 Mesh::~Mesh() { 
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+    //glDeleteVertexArrays(1, &VAO);
+    //glDeleteBuffers(1, &VBO);
+    //glDeleteBuffers(1, &EBO);
 }
 
 void Mesh::render(const Shader& shader)
@@ -83,10 +83,10 @@ void Mesh::setupMesh()
     for (int i = 0; i < indices.size(); i++) {
         std::cout << "Index " << i << ": " << indices[i] << std::endl;
     }
-    // print vertices
-    // for (int i = 0; i < vertices.size(); i++) {
-    //     std::cout << "Vertex " << i << ": " << vertices[i].Position.x() << ", " << vertices[i].Position.y() << ", " << vertices[i].Position.z() << std::endl;
-    // }
+     //print vertices
+     for (int i = 0; i < vertices.size(); i++) {
+         std::cout << "Vertex " << i << ": " << vertices[i].Position.x() << ", " << vertices[i].Position.y() << ", " << vertices[i].Position.z() << std::endl;
+     }
     // print normals
     // for (int i = 0; i < vertices.size(); i++) {
     //     std::cout << "Normal " << i << ": " << vertices[i].Normal.x() << ", " << vertices[i].Normal.y() << ", " << vertices[i].Normal.z() << std::endl;
