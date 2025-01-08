@@ -7,6 +7,8 @@ GLContext::GLContext(SDLContext *sdlContext)
     if (this->context == NULL)
     {
         printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "OpenGL context could not be created!", nullptr);
+        exit(EXIT_FAILURE);
     }
     if (SDL_GL_MakeCurrent(sdlContext->getWindow(), this->context) != 0)
     {

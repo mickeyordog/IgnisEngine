@@ -5,9 +5,31 @@
 #endif
 
 #include <SDL.h>
+#include <SDL_vulkan.h>
+#include <vulkan/vulkan.hpp>
 #include "SDLContext.h"
 #include <inputHandler.h>
 #include <imgui/imgui_impl_sdl2.h>
+#include <iostream>
+
+#define IGNIS_USE_VULKAN TRUE
+
+VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
+    auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+    if (func != nullptr) {
+        return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+    }
+    else {
+        return VK_ERROR_EXTENSION_NOT_PRESENT;
+    }
+}
+
+void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator) {
+    auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+    if (func != nullptr) {
+        func(instance, debugMessenger, pAllocator);
+    }
+}
 
 // THERE WAS MORE OS SPECIFIC STUFF IN EXAMPLE, CHECK THAT IF OS NOT WORKING
 SDLContext::SDLContext(const char* name, int width, int height)
@@ -17,20 +39,78 @@ SDLContext::SDLContext(const char* name, int width, int height)
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 	}
 	
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-    // GL ES 2.0 + GLSL 100
-    this->glsl_version = "#version 100";
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-#elif defined(__APPLE__)
-    // GL 3.2 Core + GLSL 150
-    this->glsl_version = "#version 150";
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); // Always required on Mac
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+#if IGNIS_USE_VULKAN
+    if (SDL_Vulkan_LoadLibrary(nullptr) < 0) {
+        printf("SDL could not load Vulkan! SDL Error: %s\n", SDL_GetError());
+    }
+    window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
+    if (window == nullptr)
+    {
+        printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
+    }
+    // From here on would prob be in vulkan context
+    VkInstance instance; // Should be field
+
+    const std::vector<const char*> validationLayers = {
+        "VK_LAYER_KHRONOS_validation"
+    };
+
+#ifdef NDEBUG
+    const bool enableValidationLayers = false;
+#else
+    const bool enableValidationLayers = true;
+#endif
+
+    VkApplicationInfo appInfo{};
+    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    appInfo.pApplicationName = "My Game";
+    appInfo.applicationVersion = VK_MAKE_VERSION(0, 1, 0);
+    appInfo.pEngineName = "Ignis Engine";
+    appInfo.engineVersion = VK_MAKE_VERSION(0, 1, 0);
+    appInfo.apiVersion = VK_API_VERSION_1_0;
+
+    uint32_t extensionCount;
+	if (SDL_Vulkan_GetInstanceExtensions(window, &extensionCount, nullptr) < 0) {
+		throw std::runtime_error("failed to get required Vulkan extensions from SDL!");
+	}
+    //std::vector<const char*> extensionNames(extensionCount);
+    const char** extensionNames = nullptr;
+    extensionNames = new const char* [extensionCount];
+	if (SDL_Vulkan_GetInstanceExtensions(window, &extensionCount, extensionNames/*.data()*/) < 0) {
+		throw std::runtime_error("failed to get required Vulkan extensions from SDL!");
+	}
+	//for (const char* extensionName : extensionNames) {
+	//	printf("Extension: %s\n", extensionName);
+	//}
+
+    VkInstanceCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    createInfo.pApplicationInfo = &appInfo;
+    createInfo.enabledExtensionCount = extensionCount;
+    createInfo.ppEnabledExtensionNames = extensionNames/*.data()*/;
+    createInfo.enabledLayerCount = 0;
+	createInfo.ppEnabledLayerNames = nullptr;
+    createInfo.pNext = nullptr;
+    if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create instance!");
+    }
+
+    uint32_t extensionPropCount = 0;
+    vkEnumerateInstanceExtensionProperties(nullptr, &extensionPropCount, nullptr);
+    std::vector<VkExtensionProperties> extensions(extensionPropCount);
+    vkEnumerateInstanceExtensionProperties(nullptr, &extensionPropCount, extensions.data());
+    std::cout << "available extensions:\n";
+    for (const auto& extension : extensions) {
+        std::cout << '\t' << extension.extensionName << '\n';
+    }
+    // If want to, can check that all required extensions are in this list
+    
+
+
+
+    
+    // cleanup
+    vkDestroyInstance(instance, nullptr);
 #else
     // GL 3.0 + GLSL 130
     this->glsl_version = "#version 130";
@@ -38,7 +118,6 @@ SDLContext::SDLContext(const char* name, int width, int height)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-#endif
 
 #ifdef DEBUG
     int contextFlags;
@@ -59,11 +138,15 @@ SDLContext::SDLContext(const char* name, int width, int height)
 	{
 		printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 	}
+#endif
 }
 
 SDLContext::~SDLContext()
 {
 	SDL_DestroyWindow(this->window);
+#if IGNIS_USE_VULKAN
+	SDL_Vulkan_UnloadLibrary();
+#endif
 	SDL_Quit();
 }
 

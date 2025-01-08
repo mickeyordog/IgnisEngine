@@ -269,7 +269,7 @@ void beginEngineMainLoop()
         accumulator += frameTime;
         while (accumulator >= DT) {
             //physicsContext.update(DT);
-            scene->fixedUpdateGameObjects(DT); // This could potentially be optimized since few objs need to fixed update
+            scene->fixedUpdateGameObjects((float)DT); // This could potentially be optimized since few objs need to fixed update
             timeElapsed += DT;
             accumulator -= DT;
         }
@@ -343,7 +343,7 @@ void beginEngineMainLoop()
 
         runIgnisEngineGui(*scene, inGameView);
 
-        scene->updateGameObjects(frameTime); // this should actually only happen in game build or during play mode
+        scene->updateGameObjects((float)frameTime); // this should actually only happen in game build or during play mode
         glContext.clear(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         scene->render();
         //physicsDebugRenderer.draw();

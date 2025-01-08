@@ -4,7 +4,12 @@
     "glew",
     "glm",
     "nlohmann-json",
-    "sdl2",
+    {
+      "name": "sdl2",
+      "features": [
+        "vulkan"
+      ]
+    },
     "tracy"
   ]
 }

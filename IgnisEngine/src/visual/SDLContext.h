@@ -4,6 +4,17 @@
 #include <SDL2/SDL.h>
 
 class SDLContext {
+//#pragma region Singleton
+//public:
+//    static SDLContext& getInstance() {
+//        static SDLContext instance;
+//        return instance;
+//    }
+//    SDLContext(SDLContext const&) = delete;
+//    void operator=(SDLContext const&) = delete;
+//private:
+//    SDLContext() {}
+//#pragma endregion
 public:
     SDLContext(const char* name, int width, int height);
     ~SDLContext();
