@@ -6,8 +6,8 @@ class RenderTexture {
 public:
     RenderTexture(int width, int height);
     ~RenderTexture();
-    void bind();
-    void unbind();
+    void bind() const;
+    void unbind() const;
     GLuint frameBuffer, renderBuffer, texture;
     int width, height;
 };

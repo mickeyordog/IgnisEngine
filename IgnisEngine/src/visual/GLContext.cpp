@@ -1,22 +1,20 @@
 #include "GLContext.h"
 #include <iostream>
 
-GLContext::GLContext(SDLContext *sdlContext)
+GLContext::GLContext(WindowContext *windowContext)
 {
-    this->context = SDL_GL_CreateContext(sdlContext->getWindow());
-    if (this->context == NULL)
+    this->context = SDL_GL_CreateContext(windowContext->getWindow());
+    if (this->context == nullptr)
     {
-        printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "OpenGL context could not be created!", nullptr);
-        exit(EXIT_FAILURE);
+        IGNIS_ERROR((std::string("OpenGL context could not be created! SDL error: ") + SDL_GetError()).c_str());
     }
-    if (SDL_GL_MakeCurrent(sdlContext->getWindow(), this->context) != 0)
+    if (SDL_GL_MakeCurrent(windowContext->getWindow(), this->context) != 0)
     {
-        printf("Unable to set current context! SDL Error: %s\n", SDL_GetError());
+        IGNIS_ERROR((std::string("Unable to set current context! SDL Error: ") + SDL_GetError()).c_str());
     }
     if (SDL_GL_SetSwapInterval(1) != 0)
     {
-        printf("Unable to set Swap Interval! SDL Error: %s\n", SDL_GetError());
+        IGNIS_ERROR((std::string("Unable to set Swap Interval! SDL Error: ") + SDL_GetError()).c_str());
     }
 
     glewExperimental = GL_TRUE;

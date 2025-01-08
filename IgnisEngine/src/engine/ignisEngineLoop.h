@@ -5,7 +5,7 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_sdl2.h>
 #include <imgui/imgui_impl_opengl3.h>
-#include "SDLContext.h"
+#include "windowContext.h"
 #include "GLContext.h"
 #include "dearImGuiContext.h"
 #include "gameObject.h"
@@ -26,6 +26,7 @@
 #include "lightComponent.h"
 #include "physicsContext.h"
 #include "rigidBodyComponent.h"
+#include "graphicsContext.h"
 
 //#include <imfilebrowser.h>
 
@@ -44,9 +45,15 @@ void beginEngineMainLoop()
 {
     //TracyNoop;
     // TODO: make these singletons or static so can be accessed without having to pass to game update code
-    SDLContext sdlContext("Ignis Engine", 800, 800);
-    GLContext glContext(&sdlContext);
-    DearImGuiContext dearImGuiContext(&sdlContext, &glContext);
+    WindowContext::init("Ignis Engine", 800, 800);
+    GraphicsContext::init();
+
+	GraphicsContext::deinit();
+	WindowContext::deinit();
+
+    return;
+    GLContext glContext(&WindowContext::getInstance());
+    DearImGuiContext dearImGuiContext(&WindowContext::getInstance(), &glContext);
     PhysicsContext physicsContext(true);
 
     // TODO: maybe copy assets (into zip?) or handle this path somehow
@@ -261,7 +268,7 @@ void beginEngineMainLoop()
     while (!quit)
 #endif
     {
-        sdlContext.handleEvents(quit, inGameView);
+        WindowContext::getInstance().handleEvents(quit, inGameView);
 
         double frameTime = frameTimer.readHiResAndReset();
         if (frameTime > 0.25)
@@ -349,7 +356,7 @@ void beginEngineMainLoop()
         //physicsDebugRenderer.draw();
         dearImGuiContext.render();
 
-        sdlContext.swapWindow();
+        WindowContext::getInstance().swapWindow();
     }
 #ifdef __EMSCRIPTEN__
     EMSCRIPTEN_MAINLOOP_END;

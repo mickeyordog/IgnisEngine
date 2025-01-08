@@ -1,12 +1,12 @@
 #pragma once
 
-#include "SDLContext.h"
+#include "windowContext.h"
 #include "GLContext.h"
 
 class DearImGuiContext
 {
 public:
-    DearImGuiContext(SDLContext *sdlContext, GLContext *glContext);
+    DearImGuiContext(WindowContext *sdlContext, GLContext *glContext);
     ~DearImGuiContext();
 
     void newFrame();

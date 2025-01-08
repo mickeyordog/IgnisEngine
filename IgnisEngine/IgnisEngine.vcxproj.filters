@@ -43,7 +43,8 @@
     <ClCompile Include="src\util\timer.cpp" />
     <ClCompile Include="src\visual\dearImGuiContext.cpp" />
     <ClCompile Include="src\visual\GLContext.cpp" />
-    <ClCompile Include="src\visual\SDLContext.cpp" />
+    <ClCompile Include="src\visual\windowContext.cpp" />
+    <ClCompile Include="src\visual\graphicsContext.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libs\imgui\imconfig.h" />
@@ -106,7 +107,8 @@
     <ClInclude Include="src\util\timer.h" />
     <ClInclude Include="src\visual\dearImGuiContext.h" />
     <ClInclude Include="src\visual\GLContext.h" />
-    <ClInclude Include="src\visual\SDLContext.h" />
+    <ClInclude Include="src\visual\windowContext.h" />
     <ClInclude Include="src\visual\shaderSource.h" />
+    <ClInclude Include="src\visual\graphicsContext.h" />
   </ItemGroup>
 </Project>

@@ -4,11 +4,11 @@
 #include <stdio.h>
 #include <string>
 #include <iostream>
-#include "SDLContext.h"
+#include "windowContext.h"
 
 class GLContext {
 public:
-    GLContext(SDLContext* window);
+    GLContext(WindowContext* windowContext);
     ~GLContext();
 
     void clear(float r, float g, float b, float a);

@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-DearImGuiContext::DearImGuiContext(SDLContext *sdlContext, GLContext *glContext)
+DearImGuiContext::DearImGuiContext(WindowContext *sdlContext, GLContext *glContext)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

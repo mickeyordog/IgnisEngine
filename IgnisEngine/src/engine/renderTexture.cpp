@@ -36,12 +36,12 @@ RenderTexture::~RenderTexture()
     glDeleteFramebuffers(1, &this->frameBuffer);
 }
 
-void RenderTexture::bind()
+void RenderTexture::bind() const
 {
     glBindFramebuffer(GL_FRAMEBUFFER, this->frameBuffer);
 }
 
-void RenderTexture::unbind()
+void RenderTexture::unbind() const
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
