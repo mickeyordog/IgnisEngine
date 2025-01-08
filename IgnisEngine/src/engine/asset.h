@@ -23,5 +23,5 @@ public:
     virtual ~Asset() = default;
     virtual Asset* clone() = 0;
     virtual AssetType getAssetType() const = 0;
-    IgnisGUID guid;
+    IgnisGUID guid = -1;
 };

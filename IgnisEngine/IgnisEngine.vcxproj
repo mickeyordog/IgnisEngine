@@ -31,6 +31,8 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>
+    </EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -38,12 +40,16 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>
+    </EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>
+    </EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -51,6 +57,8 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>
+    </EnableASAN>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -73,30 +81,34 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual;$(ProjectDir)libs;$(ProjectDir)libs-compiled\reactphysics3d\include;$(SolutionDir)vcpkg_installed\x64-windows\include\SDL2;$(ProjectDir)libs-compiled\vulkan\Include</IncludePath>
-    <SourcePath>$(VC_SourcePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual;$(ProjectDir)libs\imgui;$(ProjectDir)libs\stb_image;$(ProjectDir)libs\tinygltf</SourcePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual;</IncludePath>
+    <SourcePath>$(VC_SourcePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual</SourcePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(ProjectDir)libs-compiled\reactphysics3d\lib\$(Configuration)\</LibraryPath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)libs;$(ProjectDir)libs-compiled\reactphysics3d\include;$(SolutionDir)vcpkg_installed\x64-windows\include\SDL2;$(ProjectDir)libs-compiled\vulkan\Include</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual;$(ProjectDir)libs;$(ProjectDir)libs-compiled\reactphysics3d\include;$(SolutionDir)vcpkg_installed\x64-windows\include\SDL2;$(ProjectDir)libs-compiled\vulkan\Include</IncludePath>
-    <SourcePath>$(VC_SourcePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual;$(ProjectDir)libs\imgui;$(ProjectDir)libs\stb_image;$(ProjectDir)libs\tinygltf</SourcePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual;</IncludePath>
+    <SourcePath>$(VC_SourcePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual</SourcePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(ProjectDir)libs-compiled\reactphysics3d\lib\$(Configuration)\</LibraryPath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)libs;$(ProjectDir)libs-compiled\reactphysics3d\include;$(SolutionDir)vcpkg_installed\x64-windows\include\SDL2;$(ProjectDir)libs-compiled\vulkan\Include</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual;$(ProjectDir)libs;$(ProjectDir)libs-compiled\reactphysics3d\include;$(SolutionDir)vcpkg_installed\x64-windows\include\SDL2;$(ProjectDir)libs-compiled\vulkan\Include</IncludePath>
-    <SourcePath>$(VC_SourcePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual;$(ProjectDir)libs\imgui;$(ProjectDir)libs\stb_image;$(ProjectDir)libs\tinygltf</SourcePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual;</IncludePath>
+    <SourcePath>$(VC_SourcePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual</SourcePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(ProjectDir)libs-compiled\reactphysics3d\lib\$(Configuration)\</LibraryPath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)libs;$(ProjectDir)libs-compiled\reactphysics3d\include;$(SolutionDir)vcpkg_installed\x64-windows\include\SDL2;$(ProjectDir)libs-compiled\vulkan\Include</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual;$(ProjectDir)libs;$(ProjectDir)libs-compiled\reactphysics3d\include;$(SolutionDir)vcpkg_installed\x64-windows\include\SDL2;$(ProjectDir)libs-compiled\vulkan\Include</IncludePath>
-    <SourcePath>$(VC_SourcePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual;$(ProjectDir)libs\imgui;$(ProjectDir)libs\stb_image;$(ProjectDir)libs\tinygltf</SourcePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual;</IncludePath>
+    <SourcePath>$(VC_SourcePath);$(ProjectDir)src\audio;$(ProjectDir)src\engine;$(ProjectDir)src\gui;$(ProjectDir)src\physics;$(ProjectDir)src\util;$(ProjectDir)src\visual</SourcePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(ProjectDir)libs-compiled\reactphysics3d\lib\$(Configuration)\</LibraryPath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)libs;$(ProjectDir)libs-compiled\reactphysics3d\include;$(SolutionDir)vcpkg_installed\x64-windows\include\SDL2;$(ProjectDir)libs-compiled\vulkan\Include</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>true</VcpkgEnableManifest>
@@ -108,6 +120,10 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>Level1</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -125,6 +141,10 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>Level1</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,6 +162,10 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>Level1</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -159,6 +183,10 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>Level1</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
