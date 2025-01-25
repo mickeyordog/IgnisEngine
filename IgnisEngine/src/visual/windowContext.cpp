@@ -12,8 +12,6 @@
 #include <imgui/imgui_impl_sdl2.h>
 #include <iostream>
 
-#define IGNIS_USE_VULKAN TRUE
-
 // THERE WAS MORE OS SPECIFIC STUFF IN EXAMPLE, CHECK THAT IF OS NOT WORKING
 void WindowContext::init(const char* name, int width, int height)
 {
@@ -35,7 +33,7 @@ void WindowContext::init(const char* name, int width, int height)
     
 #else
     // GL 3.0 + GLSL 130
-    this->glsl_version = "#version 130";
+    getInstance().glsl_version = "#version 130";
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -55,8 +53,8 @@ void WindowContext::init(const char* name, int width, int height)
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
-	this->window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE );
-	if (this->window == NULL)
+    getInstance().window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE );
+	if (getInstance().window == NULL)
 	{
 		printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 	}

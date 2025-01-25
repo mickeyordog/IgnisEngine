@@ -1,6 +1,9 @@
 #include <iostream>
+#include <fstream>
+#include <filesystem>
 #include <map>
 #include <set>
+#include <shaderc/shaderc.hpp>
 
 #include "graphicsContext.h"
 #include "windowContext.h"
@@ -23,9 +26,15 @@ void GraphicsContext::init() {
 	selectPhysicalDevice();
 	createLogicalDevice();
 	createSwapChain();
+    createImageViews();
+    createGraphicsPipeline();
 }
 
 void GraphicsContext::deinit() {
+    for (auto& imageView : getInstance().swapChainImageViews) {
+        vkDestroyImageView(getInstance().device, imageView, nullptr);
+    }
+
     vkDestroySwapchainKHR(getInstance().device, getInstance().swapChain, nullptr);
 	vkDestroyDevice(getInstance().device, nullptr);
 
@@ -343,6 +352,13 @@ void GraphicsContext::createSwapChain() {
     if (vkCreateSwapchainKHR(getInstance().device, &createInfo, nullptr, &getInstance().swapChain) != VK_SUCCESS) {
         IGNIS_ERROR("Failed to create swap chain!");
     }
+
+    vkGetSwapchainImagesKHR(getInstance().device, getInstance().swapChain, &imageCount, nullptr);
+    getInstance().swapChainImages.resize(imageCount);
+    vkGetSwapchainImagesKHR(getInstance().device, getInstance().swapChain, &imageCount, getInstance().swapChainImages.data());
+
+	getInstance().swapChainImageFormat = surfaceFormat.format;
+	getInstance().swapChainExtent = extent;
 }
 
 SwapChainSupportDetails GraphicsContext::querySwapChainSupport(const VkPhysicalDevice& device) {
@@ -409,4 +425,46 @@ VkExtent2D GraphicsContext::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& cap
 
         return actualExtent;
     }
+}
+
+void GraphicsContext::createImageViews() {
+	getInstance().swapChainImageViews.resize(getInstance().swapChainImages.size());
+    for (size_t i = 0; i < getInstance().swapChainImages.size(); i++) {
+        VkImageViewCreateInfo createInfo{};
+        createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        createInfo.image = getInstance().swapChainImages[i];
+        createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        createInfo.format = getInstance().swapChainImageFormat;
+        createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        createInfo.subresourceRange.baseMipLevel = 0;
+        createInfo.subresourceRange.levelCount = 1;
+        createInfo.subresourceRange.baseArrayLayer = 0;
+        createInfo.subresourceRange.layerCount = 1;
+
+        if (vkCreateImageView(getInstance().device, &createInfo, nullptr, &getInstance().swapChainImageViews[i]) != VK_SUCCESS) {
+            IGNIS_ERROR("Failed to create image views!");
+        }
+    }
+}
+
+void GraphicsContext::createGraphicsPipeline() {
+    shaderc::Compiler compiler;
+    assert(compiler.IsValid());
+	std::filesystem::path vsPath = "C:\\Users\\micke\\source\\repos\\IgnisEngine\\IgnisEngine\\assets\\shaders\\vulkan_shader.vs";
+	std::filesystem::path fsPath = "C:\\Users\\micke\\source\\repos\\IgnisEngine\\IgnisEngine\\assets\\shaders\\vulkan_shader.fs";
+    std::ifstream vsFile(vsPath);
+    std::ifstream fsFile(fsPath);
+    std::string vsText;
+    std::string fsText;
+    vsFile >> vsText;
+    fsFile >> fsText;
+
+	
+	compiler.CompileGlslToSpv("C:\\Users\\micke\\source\\repos\\IgnisEngine\\IgnisEngine\\assets\\shaders\\vulkan_shader.vs", shaderc_glsl_vertex_shader, "vulkan_shader.vs");
+    compiler.CompileGlslToSpv("C:\\Users\\micke\\source\\repos\\IgnisEngine\\IgnisEngine\\assets\\shaders\\vulkan_shader.fs", shaderc_glsl_fragment_shader , "vulkan_shader.fs");
+
 }

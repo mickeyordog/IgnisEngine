@@ -46,12 +46,12 @@ void beginEngineMainLoop()
     //TracyNoop;
     // TODO: make these singletons or static so can be accessed without having to pass to game update code
     WindowContext::init("Ignis Engine", 800, 800);
-    GraphicsContext::init();
+ //   GraphicsContext::init();
 
-	GraphicsContext::deinit();
-	WindowContext::deinit();
+	//GraphicsContext::deinit();
+	//WindowContext::deinit();
 
-    return;
+ //   return;
     GLContext glContext(&WindowContext::getInstance());
     DearImGuiContext dearImGuiContext(&WindowContext::getInstance(), &glContext);
     PhysicsContext physicsContext(true);
